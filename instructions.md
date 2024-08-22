@@ -233,4 +233,4 @@ If you click on a sensor, you should see the current state. If this is seen, you
 
 <img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/214c7f2e410f9ddea350fc5a7455a1108269a6a5/images/pv-1.png">
 
-**Continue to part two of the instructions [here](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/4deef08b074269a138bc73ead2780d4e64415c58/instructions2.md).**
+**Continue to part two of the instructions [here](instructions2.md).**
