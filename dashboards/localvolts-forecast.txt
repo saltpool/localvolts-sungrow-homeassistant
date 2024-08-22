@@ -1,0 +1,62 @@
+type: custom:apexcharts-card
+update_delay: 3s
+update_interval: 15s
+graph_span: 24h
+span:
+  start: minute
+show:
+  last_updated: false
+header:
+  show: true
+  title: Forecast
+  show_states: false
+apex_config:
+  chart:
+    height: 335px
+  tooltip:
+    enabled: true
+    x:
+      show: false
+yaxis:
+  - id: dollars
+    decimals: 2
+    min: ~-0
+    max: ~0.5
+    apex_config:
+      forceNiceScale: true
+      title:
+        text: $
+        rotate: 0
+all_series_config:
+  type: area
+  curve: stepline
+  stroke_width: 0
+  extend_to: false
+  yaxis_id: dollars
+  float_precision: 2
+  unit: $
+  show:
+    legend_value: false
+    extremas: false
+    in_header: false
+series:
+  - entity: sensor.forecast
+    name: Buy Price
+    color: firebrick
+    data_generator: |
+      return entity.attributes.forecast.map((forecast) => {
+        return [new Date(forecast.intervalStart).getTime(), forecast.costsFlexUp];
+      })
+    show:
+      extremas: min+time
+  - entity: sensor.forecast
+    name: Sell Price
+    color: forestgreen
+    data_generator: |
+      return entity.attributes.forecast.map((forecast) => {
+        return [new Date(forecast.intervalStart).getTime(), forecast.earningsFlexUp];
+      })
+    show:
+      extremas: max+time
+view_layout:
+  position: main

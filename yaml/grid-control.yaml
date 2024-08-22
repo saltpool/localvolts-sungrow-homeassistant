@@ -1,0 +1,102 @@
+title: Grid Control
+path: grid-control
+icon: mdi:transmission-tower
+type: sections
+sections:
+  - type: grid
+    cards:
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: toggle
+        entity: input_button.force_charge_now
+        show_state: true
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: toggle
+        entity: input_button.force_discharge_now
+        show_state: true
+        name: Force Discharge
+      - type: markdown
+        content: Nightime
+        layout_options:
+          grid_columns: 2
+          grid_rows: auto
+      - type: markdown
+        content: Daytime
+        layout_options:
+          grid_columns: 2
+          grid_rows: auto
+      - type: tile
+        entity: input_number.grid_buy_price_night_spike_prep
+        color: red
+      - type: tile
+        entity: input_number.grid_buy_price_day
+        color: yellow
+        show_entity_picture: false
+      - type: tile
+        entity: input_number.grid_sell_price_night
+        color: green
+      - type: tile
+        entity: input_number.grid_buy_price_day_spike_prep
+        color: red
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: toggle
+        entity: switch.energy_control_on_off
+        name: Energy Control
+        show_state: true
+        icon: mdi:home-battery
+      - type: tile
+        entity: input_number.grid_sell_price_day
+        color: green
+  - type: grid
+    cards:
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: toggle
+        entity: input_button.stop_forced_discharge_100w_15
+        show_state: false
+        name: Stop Forced Discharge (100W/15% reserve)
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: toggle
+        entity: input_button.stop_forced_discharge_5kw_50
+        name: Stop Forced Discharge (5kW/50% reserve)
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: toggle
+        entity: input_button.stop_forced_discharge_5kw_0
+        name: Stop Forced Discharge (5kW/0% reserve)
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: toggle
+        entity: input_button.stop_forced_discharge_100w_0
+        show_state: false
+        name: Stop Forced Discharge (100W/0% reserve)
+  - type: grid
+    cards:
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: toggle
+        entity: input_button.sunrise_trigger
+        icon: mdi:sun-clock
+        show_state: true
+  - type: grid
+    cards: []
+cards: []

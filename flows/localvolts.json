@@ -1,0 +1,2274 @@
+[
+    {
+        "id": "3984eacf3f486b92",
+        "type": "tab",
+        "label": "Localvolts",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "f3d8e75e1aa09d62",
+        "type": "function",
+        "z": "3984eacf3f486b92",
+        "name": "Process Data",
+        "func": "// Data from Localvolts API \nlet dataIn = msg.payload;\n\n// Output data structure\nlet dataOut = {\n    intervalStart: null,\n    intervalEnd: null,\n    intervalDuration: null,\n    exportsAll: null,\n    importsAll: null,\n    demandMain: null,\n    demandPeriod: null,\n    demandInterval: null,\n    earningsAll: null,\n    earningsAllVar: null,\n    earningsAllFixed: null,\n    earningsAllVarRate: null,\n    earningsFlexUp: null,\n    earningsFlexDown: null,\n    costsAll: null,\n    costsAllVar: null,\n    costsAllFixed: null,\n    costsDemandMain: null,\n    costsAllVarRate: null,\n    costsFlexUp: null,\n    costsFlexDown: null,\n    exportsAllEmissions: null,\n    importsAllEmissions: null,\n    exportsAllZeroEE: null,\n    importsAllZeroEE: null,\n    quality: null,\n    forecast: []\n};\n\nlet forecastProperties = [\n    \"exportsAll\",\n    \"importsAll\",\n    \"demandMain\",\n    \"demandPeriod\",\n    \"demandInterval\",\n    \"earningsAll\",\n    \"earningsAllVar\",\n    \"earningsAllFixed\",\n    \"earningsAllVarRate\",\n    \"earningsFlexUp\",\n    \"earningsFlexDown\",\n    \"costsAll\",\n    \"costsAllVar\",\n    \"costsAllFixed\",\n    \"costsAllVarRate\",\n    \"costsFlexUp\",\n    \"costsFlexDown\",\n    \"exportsAllEmissions\",\n    \"importsAllEmissions\",\n    \"exportsAllZeroEE\",\n    \"importsAllZeroEE\"\n];\n\n//node.warn(dataIn);\n\n// Loop through all items to build forecast\nlet firstItem = true;\nfor (const property in dataIn) {\n\n    //Create item with normalised units\n    let dataItem = dataIn[property];\n    let itemOut = {};\n    for (const itemProperty in dataOut) {\n        if (firstItem && itemProperty != \"forecast\" && dataItem[itemProperty] != \"N/A\") {\n            dataOut[itemProperty] = normaliseValue(dataItem, itemProperty);\n        }\n\n        if (forecastProperties.includes(itemProperty) && dataItem[itemProperty] != \"N/A\") {\n            itemOut[itemProperty] = normaliseValue(dataItem, itemProperty);\n        }\n    }\n    firstItem = false;\n\n    // Calculate start of interval\n    let endTime = new Date(dataItem.intervalEnd);\n    let startTime = new Date(endTime);\n    startTime.setMinutes(endTime.getMinutes() - dataItem.intervalDuration);\n    itemOut.intervalStart = startTime;\n    itemOut.intervalEnd = endTime;\n\n    // Add item to forecast\n    dataOut.forecast.push(itemOut);\n}\n\n// Set start and end interval\ndataOut.intervalStart = dataOut.forecast[0].intervalStart;\ndataOut.intervalEnd = dataOut.forecast[0].intervalEnd;\n\n// Set flow context variable for end of the duration\nflow.set(\"lastIntervalMillis\", dataOut.intervalEnd.getTime());\nflow.set(\"dataIn\", dataIn);\nflow.set(\"localvolts\", dataOut);\n\n// Normalise values to a consistent unit\nfunction normaliseValue(item, property) {\n    let adjustedVal = item[property];\n\n    if (\n        property == \"earningsAllVarRate\" && item.earningsAllVarRateUnits == \"$/MWh\" ||\n        property == \"costsAllVarRate\" && item.costsAllVarRateUnits == \"$/MWh\" ||\n        property == \"exportsAllEmissions\" && item.exportsAllEmissionsUnits == \"kg-CO2e\" ||\n        property == \"importsAllEmissions\" && item.importsAllEmissionsUnits == \"kg-CO2e\"\n    ) { adjustedVal = item[property] * 1000; }\n    \n    else if (\n        property == \"exportsAll\" && item.exportsAllUnits == \"Wh\" ||\n        property == \"importsAll\" && item.importsAllUnits == \"Wh\" ||\n        property == \"demandMain\" && item.demandMainUnits == \"W\" \n    ) { adjustedVal = item[property] / 1000; }\n\n    else if (\n        property == \"earningsAll\" && item.earningsAllUnits == \"cents\" ||\n        property == \"earningsAllVar\" && item.earningsAllVarUnits == \"cents\" ||\n        property == \"earningsAllFixed\" && item.earningsAllFixedUnits == \"cents\" ||\n        property == \"earningsAllVarRate\" && item.earningsAllVarRateUnits == \"c/kWh\" ||\n        property == \"earningsFlexUp\" && item.earningsFlexUnits == \"c/kWh\" ||\n        property == \"earningsFlexDown\" && item.earningsFlexUnits == \"c/kWh\" ||\n        property == \"costsAll\" && item.costsAllUnits == \"cents\" ||\n        property == \"costsAllVar\" && item.costsAllVarUnits == \"cents\" ||\n        property == \"costsAllFixed\" && item.costsAllFixedUnits == \"cents\" ||\n        property == \"costsAllVarRate\" && item.costsAllVarRateUnits == \"c/kWh\" ||\n        property == \"costsFlexUp\" && item.costsFlexUnits == \"c/kWh\" ||\n        property == \"costsFlexDown\" && item.costsFlexUnits == \"c/kWh\" \n    ) { adjustedVal = item[property] / 100; }\n\n    else if (property == \"quality\") {\n        if (item[property] == \"Act\")        adjustedVal = \"Actual\"\n        else if (item[property] == \"Exp\")   adjustedVal = \"Expected\"\n        else if (item[property] == \"Fcst\")  adjustedVal = \"Forecast\"\n    }\n\n    return adjustedVal;\n}\n\nmsg.localvolts = dataOut;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 400,
+        "wires": [
+            [
+                "c5f3e4eea29c685e",
+                "584d1257a84ab234",
+                "a2696747c1ce5609",
+                "b4a727634a8ec4e3",
+                "1ebf43599b090f38",
+                "d84e93e438be0ff4",
+                "34693f84c4e40964",
+                "2a029a680d983b43",
+                "7557ffe2ec90c013"
+            ]
+        ]
+    },
+    {
+        "id": "cbae5d1464c88b85",
+        "type": "change",
+        "z": "3984eacf3f486b92",
+        "name": "Request Properties",
+        "rules": [
+            {
+                "t": "set",
+                "p": "NMI",
+                "pt": "msg",
+                "to": "*",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "partnerId",
+                "pt": "msg",
+                "to": "{partner_id}",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "apiKey",
+                "pt": "msg",
+                "to": "{API_key}",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "apiKeyFormatted",
+                "pt": "msg",
+                "to": "\"apikey \" & msg.apiKey",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 290,
+        "y": 220,
+        "wires": [
+            [
+                "d8b167bb4556e86a",
+                "5ce70f4a3ce256d2"
+            ]
+        ]
+    },
+    {
+        "id": "4d5ceebd5863ec2c",
+        "type": "inject",
+        "z": "3984eacf3f486b92",
+        "d": true,
+        "name": "Every 15 seconds",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "15",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 140,
+        "wires": [
+            [
+                "527ea1f5e213bf04"
+            ]
+        ]
+    },
+    {
+        "id": "5ce70f4a3ce256d2",
+        "type": "http request",
+        "z": "3984eacf3f486b92",
+        "name": "Localvolts API",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://api.localvolts.com/v1/customer/interval?NMI={{{NMI}}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "Authorization",
+                "keyValue": "",
+                "valueType": "msg",
+                "valueValue": "apiKeyFormatted"
+            },
+            {
+                "keyType": "other",
+                "keyValue": "partner",
+                "valueType": "msg",
+                "valueValue": "partnerId"
+            }
+        ],
+        "x": 320,
+        "y": 280,
+        "wires": [
+            [
+                "b807dccce650a840",
+                "b6f942f4c3c493e2"
+            ]
+        ]
+    },
+    {
+        "id": "527ea1f5e213bf04",
+        "type": "switch",
+        "z": "3984eacf3f486b92",
+        "name": "In New Interval?",
+        "property": "lastIntervalMillis",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "gt",
+                "v": "$millis()",
+                "vt": "jsonata"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 340,
+        "y": 140,
+        "wires": [
+            [],
+            [
+                "cbae5d1464c88b85"
+            ]
+        ]
+    },
+    {
+        "id": "d8b167bb4556e86a",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "NMI",
+        "entityConfig": "a5bd6e132be9a821",
+        "version": 0,
+        "state": "NMI",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 610,
+        "y": 60,
+        "wires": [
+            [
+                "2be01aa79c95d7c6"
+            ]
+        ]
+    },
+    {
+        "id": "c5f3e4eea29c685e",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Interval Duration",
+        "entityConfig": "5d395b31a51c0031",
+        "version": 0,
+        "state": "localvolts.intervalDuration",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 640,
+        "y": 180,
+        "wires": [
+            [
+                "bbf77602d953e31f"
+            ]
+        ]
+    },
+    {
+        "id": "584d1257a84ab234",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Exports (All)",
+        "entityConfig": "318a246ad49d95ee",
+        "version": 0,
+        "state": "localvolts.exportsAll",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 630,
+        "y": 240,
+        "wires": [
+            [
+                "60fde4642ce49f59"
+            ]
+        ]
+    },
+    {
+        "id": "60fde4642ce49f59",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Imports (All)",
+        "entityConfig": "1b3d13c4d6d67b9e",
+        "version": 0,
+        "state": "localvolts.importsAll",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 810,
+        "y": 240,
+        "wires": [
+            [
+                "ed121ca00739fdf5"
+            ]
+        ]
+    },
+    {
+        "id": "ed121ca00739fdf5",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Demand Main",
+        "entityConfig": "ca2a57d8b8318f80",
+        "version": 0,
+        "state": "localvolts.demandMain",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 1000,
+        "y": 240,
+        "wires": [
+            [
+                "5a88faa2acd350a1"
+            ]
+        ]
+    },
+    {
+        "id": "5a88faa2acd350a1",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Demand Period",
+        "entityConfig": "ea934e1714a17e2e",
+        "version": 0,
+        "state": "localvolts.demandPeriod",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 1200,
+        "y": 240,
+        "wires": [
+            [
+                "da0347e6ed0b5c5d"
+            ]
+        ]
+    },
+    {
+        "id": "da0347e6ed0b5c5d",
+        "type": "ha-binary-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Demand Interval",
+        "entityConfig": "a9848697fb825872",
+        "version": 0,
+        "state": "localvolts.demandInterval = 1",
+        "stateType": "jsonata",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 1400,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a2696747c1ce5609",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Earnings (All)",
+        "entityConfig": "61b96899f6802a76",
+        "version": 0,
+        "state": "localvolts.earningsAll",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 640,
+        "y": 300,
+        "wires": [
+            [
+                "3ca342f674c87692"
+            ]
+        ]
+    },
+    {
+        "id": "3ca342f674c87692",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Earnings (All Variable)",
+        "entityConfig": "f1aaddd17b2e7e8e",
+        "version": 0,
+        "state": "localvolts.earningsAllVar",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 860,
+        "y": 300,
+        "wires": [
+            [
+                "b7b2a717e223a664"
+            ]
+        ]
+    },
+    {
+        "id": "b7b2a717e223a664",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Earnings (All Fixed)",
+        "entityConfig": "d8de8af7994de9a4",
+        "version": 0,
+        "state": "localvolts.earningsAllFixed",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 1090,
+        "y": 300,
+        "wires": [
+            [
+                "9b705c7dbe13d81d"
+            ]
+        ]
+    },
+    {
+        "id": "9b705c7dbe13d81d",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Earnings Rate (All Variable)",
+        "entityConfig": "3fb7187c740f5de4",
+        "version": 0,
+        "state": "localvolts.earningsAllVarRate",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 1340,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1ebf43599b090f38",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Earnings Flex Up",
+        "entityConfig": "27e65ca947b64e90",
+        "version": 0,
+        "state": "localvolts.earningsFlexUp",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 650,
+        "y": 420,
+        "wires": [
+            [
+                "8ad43ea9abf253b9"
+            ]
+        ]
+    },
+    {
+        "id": "8ad43ea9abf253b9",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Earnings Flex Down",
+        "entityConfig": "7137c9f1c7cc4789",
+        "version": 0,
+        "state": "localvolts.earningsFlexDown",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 880,
+        "y": 420,
+        "wires": [
+            [
+                "263a9ee7afcf909a"
+            ]
+        ]
+    },
+    {
+        "id": "b4a727634a8ec4e3",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Costs (All)",
+        "entityConfig": "976157a268453106",
+        "version": 0,
+        "state": "localvolts.costsAll",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 630,
+        "y": 360,
+        "wires": [
+            [
+                "414375db207109ae"
+            ]
+        ]
+    },
+    {
+        "id": "414375db207109ae",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Costs (All Variable)",
+        "entityConfig": "28148d3f3570f1a8",
+        "version": 0,
+        "state": "localvolts.costsAllVar",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 830,
+        "y": 360,
+        "wires": [
+            [
+                "d0819fbf4ff333a7"
+            ]
+        ]
+    },
+    {
+        "id": "d0819fbf4ff333a7",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Costs (All Fixed)",
+        "entityConfig": "c0572c8f515b02aa",
+        "version": 0,
+        "state": "localvolts.costsAllFixed",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 1040,
+        "y": 360,
+        "wires": [
+            [
+                "a45392d3850e819b"
+            ]
+        ]
+    },
+    {
+        "id": "a45392d3850e819b",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Costs (Demand Main)",
+        "entityConfig": "0d17a8dd5defc634",
+        "version": 0,
+        "state": "localvolts.costsDemandMain",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 1260,
+        "y": 360,
+        "wires": [
+            [
+                "ce4258978cadfbd8"
+            ]
+        ]
+    },
+    {
+        "id": "ce4258978cadfbd8",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Cost Rate (All Variable)",
+        "entityConfig": "94b423b0a6c29c42",
+        "version": 0,
+        "state": "localvolts.costsAllVarRate",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 1510,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "263a9ee7afcf909a",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Costs Flex Up",
+        "entityConfig": "d3ce5a087359b9e5",
+        "version": 0,
+        "state": "localvolts.costsFlexUp",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 1100,
+        "y": 420,
+        "wires": [
+            [
+                "03e86b5dc58d0362"
+            ]
+        ]
+    },
+    {
+        "id": "03e86b5dc58d0362",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Costs Flex Down",
+        "entityConfig": "9f50ef7755e2065e",
+        "version": 0,
+        "state": "localvolts.costsFlexDown",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 1310,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d84e93e438be0ff4",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Exports (All Emissions)",
+        "entityConfig": "1d8dd1cb70ed146b",
+        "version": 0,
+        "state": "localvolts.exportsAllEmissions",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 670,
+        "y": 480,
+        "wires": [
+            [
+                "bf0e38e1c94c7600"
+            ]
+        ]
+    },
+    {
+        "id": "bf0e38e1c94c7600",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Imports (All Emissions)",
+        "entityConfig": "bceb64cd49725f58",
+        "version": 0,
+        "state": "localvolts.importsAllEmissions",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 920,
+        "y": 480,
+        "wires": [
+            [
+                "31f068f980115695"
+            ]
+        ]
+    },
+    {
+        "id": "31f068f980115695",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Exports (All Zero Emissions)",
+        "entityConfig": "fbc0e1465309be8c",
+        "version": 0,
+        "state": "localvolts.exportsAllZeroEE",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 1180,
+        "y": 480,
+        "wires": [
+            [
+                "e15edf077501d761"
+            ]
+        ]
+    },
+    {
+        "id": "e15edf077501d761",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Imports (All Zero Emissions)",
+        "entityConfig": "c69604c632130053",
+        "version": 0,
+        "state": "localvolts.importsAllZeroEE",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 1460,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "34693f84c4e40964",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Quality",
+        "entityConfig": "7039386029589400",
+        "version": 0,
+        "state": "localvolts.quality",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 620,
+        "y": 540,
+        "wires": [
+            [
+                "18754f4885070633"
+            ]
+        ]
+    },
+    {
+        "id": "2be01aa79c95d7c6",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Partner ID",
+        "entityConfig": "1fa7d7dee1a0a1ee",
+        "version": 0,
+        "state": "partnerId",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 770,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bbf77602d953e31f",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Interval Start",
+        "entityConfig": "eac1f55fd0d00a30",
+        "version": 0,
+        "state": "localvolts.intervalStart",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 810,
+        "y": 180,
+        "wires": [
+            [
+                "4dd150679d93ecb8"
+            ]
+        ]
+    },
+    {
+        "id": "4dd150679d93ecb8",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Interval End",
+        "entityConfig": "a198021cc732ccb5",
+        "version": 0,
+        "state": "localvolts.intervalEnd",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 970,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "18754f4885070633",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Forecast",
+        "entityConfig": "6614adb1b8ed8a79",
+        "version": 0,
+        "state": "$now()",
+        "stateType": "jsonata",
+        "attributes": [
+            {
+                "property": "forecast",
+                "value": "localvolts.forecast",
+                "valueType": "msg"
+            }
+        ],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 800,
+        "y": 540,
+        "wires": [
+            [
+                "5169bc3fdf2c8384"
+            ]
+        ]
+    },
+    {
+        "id": "b6f942f4c3c493e2",
+        "type": "switch",
+        "z": "3984eacf3f486b92",
+        "name": "Not Forecast?",
+        "property": "payload[0].quality",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "Fcst",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 320,
+        "y": 340,
+        "wires": [
+            [
+                "f3d8e75e1aa09d62"
+            ]
+        ]
+    },
+    {
+        "id": "479edb52fc9c9e22",
+        "type": "http in",
+        "z": "3984eacf3f486b92",
+        "name": "GET Refresh Data",
+        "url": "/localvolts/refresh",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 60,
+        "wires": [
+            [
+                "cd0ea6a8c5e5d4af",
+                "cbae5d1464c88b85"
+            ]
+        ]
+    },
+    {
+        "id": "cd0ea6a8c5e5d4af",
+        "type": "http response",
+        "z": "3984eacf3f486b92",
+        "name": "Response",
+        "statusCode": "200",
+        "headers": {},
+        "x": 360,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "b807dccce650a840",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Last Checked",
+        "entityConfig": "1b1c19bddf4cb4a7",
+        "version": 0,
+        "state": "$now()",
+        "stateType": "jsonata",
+        "attributes": [
+            {
+                "property": "status",
+                "value": "payload[0].quality = \"Fcst\" ? \"Forecast\" : \"Actual\"",
+                "valueType": "jsonata"
+            }
+        ],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 640,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5169bc3fdf2c8384",
+        "type": "ha-sensor",
+        "z": "3984eacf3f486b92",
+        "name": "Last Updated",
+        "entityConfig": "f64fc840e95f0f6a",
+        "version": 0,
+        "state": "$now()",
+        "stateType": "jsonata",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 990,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b2a668ccbf619e39",
+        "type": "file",
+        "z": "3984eacf3f486b92",
+        "name": "Log pricing data",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 940,
+        "y": 600,
+        "wires": [
+            [
+                "619aad086e86a9d3"
+            ]
+        ]
+    },
+    {
+        "id": "2a029a680d983b43",
+        "type": "function",
+        "z": "3984eacf3f486b92",
+        "name": "Filename for pricing - daily",
+        "func": "let now = new Date();\nlet timestamp = now.getHours().toString().padStart(2, '0') + \":\" + now.getMinutes().toString().padStart(2, '0');\nlet datestamp = now.getFullYear() + \"-\" + (now.getMonth() + 1).toString().padStart(2, '0') + \"-\" + now.getDate().toString().padStart(2, '0');\nlet datemonthstamp = now.getFullYear() + \"-\" + (now.getMonth() + 1).toString().padStart(2, '0');\n\nmsg.filename = \"/config/node-red/localvolts/\" + datemonthstamp + \"/\" + datestamp +\".csv\";\nmsg.payload = datestamp + \" \" + timestamp + \",\" + msg.localvolts.costsFlexUp + \",\" + msg.localvolts.earningsFlexUp;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 600,
+        "wires": [
+            [
+                "b2a668ccbf619e39"
+            ]
+        ]
+    },
+    {
+        "id": "619aad086e86a9d3",
+        "type": "debug",
+        "z": "3984eacf3f486b92",
+        "name": "Debug Pricing Logging",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1180,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "7557ffe2ec90c013",
+        "type": "function",
+        "z": "3984eacf3f486b92",
+        "name": "Filename for pricing - monthly",
+        "func": "let now = new Date();\nlet timestamp = now.getHours().toString().padStart(2, '0') + \":\" + now.getMinutes().toString().padStart(2, '0');\nlet datestamp = now.getFullYear() + \"-\" + (now.getMonth() + 1).toString().padStart(2, '0')  + \"-\" + now.getDate().toString().padStart(2, '0');\nlet datemonthstamp = now.getFullYear() + \"-\" + (now.getMonth() + 1).toString().padStart(2, '0');\n\nmsg.filename = \"/config/node-red/localvolts/\" + datemonthstamp + \".csv\";\nmsg.payload = datestamp + \" \" + timestamp + \",\" + msg.localvolts.costsFlexUp + \",\" + msg.localvolts.earningsFlexUp;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 640,
+        "wires": [
+            [
+                "b2a668ccbf619e39"
+            ]
+        ]
+    },
+    {
+        "id": "a753193a9babe568",
+        "type": "catch",
+        "z": "3984eacf3f486b92",
+        "name": "CatchAll",
+        "scope": null,
+        "uncaught": false,
+        "x": 100,
+        "y": 460,
+        "wires": [
+            [
+                "c14bd960fd24594e"
+            ]
+        ]
+    },
+    {
+        "id": "c14bd960fd24594e",
+        "type": "debug",
+        "z": "3984eacf3f486b92",
+        "name": "Flow Errors",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 290,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "a5bd6e132be9a821",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "NMI",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "NMI"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:meter-electric-outline"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "diagnostic"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            },
+            {
+                "property": "state_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "5d395b31a51c0031",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Interval Duration",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Interval Duration"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:clock-end"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "duration"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "min"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "318a246ad49d95ee",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Exports (All)",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Exports (All)"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:transmission-tower-import"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "energy"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "kWh"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "1b3d13c4d6d67b9e",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Imports (All)",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Imports (All)"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:transmission-tower-export"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "energy"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "kWh"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "ca2a57d8b8318f80",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Demand Main",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Demand Main"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cash-fast"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "power"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "kW"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "ea934e1714a17e2e",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Demand Period",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Demand Period"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cash-fast"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "duration"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "min"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "a9848697fb825872",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Demand Interval",
+        "version": "6",
+        "entityType": "binary_sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Demand Interval"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cash-fast"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "61b96899f6802a76",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Earnings (All)",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Earnings (All)"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cash-plus"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "monetary"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "USD"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "f1aaddd17b2e7e8e",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Earnings (All Variable)",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Earnings (All Variable)"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cash-plus"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "monetary"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "USD"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "d8de8af7994de9a4",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Earnings (All Fixed)",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Earnings (All Fixed)"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cash-plus"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "monetary"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "USD"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "3fb7187c740f5de4",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Earnings Rate (All Variable)",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Earnings Rate (All Variable)"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:home-export-outline"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "$/kWh"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "27e65ca947b64e90",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Earnings Flex Up",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Earnings Flex Up"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cash-plus"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "$/kWh"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "7137c9f1c7cc4789",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Earnings Flex Down",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Earnings Flex Down"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cash-plus"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "$/kWh"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "976157a268453106",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Costs (All)",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Costs (All)"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cash-minus"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "monetary"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "USD"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "28148d3f3570f1a8",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Costs (All Variable)",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Costs (All Variable)"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cash-minus"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "monetary"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "USD"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "c0572c8f515b02aa",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Costs (All Fixed)",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Costs (All Fixed)"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cash-minus"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "monetary"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "USD"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "0d17a8dd5defc634",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Costs (Demand Main)",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Costs (Demand Main)"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cash-minus"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "¢/kW/Day"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "94b423b0a6c29c42",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Cost Rate (All Variable)",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Cost Rate (All Variable)"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:home-import-outline"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "$/kWh"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "d3ce5a087359b9e5",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Costs Flex Up",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Costs Flex Up"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cash-minus"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "$/kWh"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "9f50ef7755e2065e",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Costs Flex Down",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Costs Flex Down"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cash-minus"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "$/kWh"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "1d8dd1cb70ed146b",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Exports (All Emissions)",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Exports (All Emissions)"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:factory"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "g-CO2e"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "bceb64cd49725f58",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Imports (All Emissions)",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Imports (All Emissions)"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:factory"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "g-CO2e"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "fbc0e1465309be8c",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Exports (All Zero Emissions)",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Exports (All Zero Emissions)"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:forest"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "%"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "c69604c632130053",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Imports (All Zero Emissions)",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Imports (All Zero Emissions)"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:forest"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "%"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "7039386029589400",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Quality",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Quality"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:percent"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            },
+            {
+                "property": "state_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "1fa7d7dee1a0a1ee",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Partner ID",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Partner ID"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:card-account-details-outline"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "diagnostic"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            },
+            {
+                "property": "state_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "eac1f55fd0d00a30",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Interval Start",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Interval Start"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:clock-start"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "timestamp"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "a198021cc732ccb5",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Interval End",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Interval End"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:clock-end"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "timestamp"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "6614adb1b8ed8a79",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Forecast",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Forecast"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:chart-line"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "timestamp"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "1b1c19bddf4cb4a7",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Last Checked",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Last Checked"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:clock-check"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "diagnostic"
+            },
+            {
+                "property": "device_class",
+                "value": "timestamp"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            },
+            {
+                "property": "state_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "f64fc840e95f0f6a",
+        "type": "ha-entity-config",
+        "z": "3984eacf3f486b92",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "8f7656e782e335fa",
+        "name": "Last Updated",
+        "version": "6",
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Last Updated"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:sync"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "diagnostic"
+            },
+            {
+                "property": "device_class",
+                "value": "timestamp"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            },
+            {
+                "property": "state_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "5165f8c6.cc4798",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "",
+        "connectionDelay": false,
+        "cacheJson": false,
+        "heartbeat": false,
+        "heartbeatInterval": "",
+        "statusSeparator": "",
+        "enableGlobalContextStore": true
+    },
+    {
+        "id": "8f7656e782e335fa",
+        "type": "ha-device-config",
+        "z": "3984eacf3f486b92",
+        "name": "Localvolts Prices",
+        "hwVersion": "",
+        "manufacturer": "Localvolts Pty Ltd",
+        "model": "Localvolts API",
+        "swVersion": "Beta 0.9.1"
+    }
+]

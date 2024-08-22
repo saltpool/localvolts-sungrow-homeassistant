@@ -1,0 +1,5597 @@
+[
+    {
+        "id": "a22ceab4a91f8127",
+        "type": "tab",
+        "label": "Energy Control",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "df051123bcec61aa",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "DIY Curtailment",
+        "func": "// node.warn(\"Current DC Power:\" + msg.dc_power_now);\n\nif (msg.fit < 0) {\n    // node.warn(\"Negative FIT so not exporting - \" + msg.fit + \"c FIT\");\n    msg.decision = \"Curtailing exports (-ve FIT)\";\n    msg.decisions.push(msg.decision)\n    msg.curtailment_percentage = 100;\n    flow.set(\"curtailment\", 100);\n    return [msg, null, null]\n}\n// you can add your own logic if FIT is 0 here, if you wish\nelse if (msg.fit === 0) {\n    // node.warn(\"Zero FIT so exporting at half speed\");\n    msg.decision = \"Curtailing exports by 50% (0c FIT)\";\n    msg.decisions.push(msg.decision)\n    msg.curtailment_percentage = 50;\n    flow.set(\"curtailment\", 50);\n    return [null, msg, null]\n}\nelse {\n    // node.warn(\"Exporting ok - \" + msg.fit +\"c FIT\");\n    msg.decision = \"OK to export (+ve FIT)\";\n    msg.decisions.push(msg.decision)\n    msg.curtailment_percentage = 0;\n    flow.set(\"curtailment\", 0);\n    return [null, null, msg]\n}\n",
+        "outputs": 3,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 140,
+        "wires": [
+            [
+                "60d4ab772e17b253"
+            ],
+            [
+                "7ecd7165aa12452a"
+            ],
+            [
+                "5476e079e6a74d45"
+            ]
+        ]
+    },
+    {
+        "id": "90189bc94d399849",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Limit Export to 100W",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_export_power_limit"
+        ],
+        "data": "{\"value\":100}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1480,
+        "y": 60,
+        "wires": [
+            [
+                "a9db63d1ef519e42"
+            ]
+        ]
+    },
+    {
+        "id": "6ee2c6f601e112ec",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Unlimited Export (5kW)",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_export_power_limit"
+        ],
+        "data": "{ \"value\": 5000 }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1490,
+        "y": 220,
+        "wires": [
+            [
+                "a9db63d1ef519e42"
+            ]
+        ]
+    },
+    {
+        "id": "60d4ab772e17b253",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Enable Power Limit Mode",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_export_power_limit_mode"
+        ],
+        "data": "{ \"option\": \"Enabled\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1230,
+        "y": 60,
+        "wires": [
+            [
+                "90189bc94d399849"
+            ]
+        ]
+    },
+    {
+        "id": "5476e079e6a74d45",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Enable Power Limit Mode",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_export_power_limit_mode"
+        ],
+        "data": "{ \"option\": \"Enabled\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1230,
+        "y": 220,
+        "wires": [
+            [
+                "6ee2c6f601e112ec"
+            ]
+        ]
+    },
+    {
+        "id": "0a72e299af7c7376",
+        "type": "catch",
+        "z": "a22ceab4a91f8127",
+        "name": "CatchAll",
+        "scope": null,
+        "uncaught": false,
+        "x": 100,
+        "y": 60,
+        "wires": [
+            [
+                "db6ca994cc062914"
+            ]
+        ]
+    },
+    {
+        "id": "db6ca994cc062914",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Flow Errors",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 290,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "6e03dc183ced7dd9",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Debug Curtailment",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2490,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "f3d318ab61343e35",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "EMS Forced Mode",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_ems_mode"
+        ],
+        "data": "{ \"option\": \"Forced mode\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1450,
+        "y": 460,
+        "wires": [
+            [
+                "0b2d5f7146565059"
+            ]
+        ]
+    },
+    {
+        "id": "0b2d5f7146565059",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Forced charge",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_battery_forced_charge_discharge_cmd"
+        ],
+        "data": "{ \"option\": \"Forced charge\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1740,
+        "y": 460,
+        "wires": [
+            [
+                "3f27e54bd2cd6b8a"
+            ]
+        ]
+    },
+    {
+        "id": "60cdc0e41a150751",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Get Battery Level",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.battery_level",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "battery",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 630,
+        "y": 520,
+        "wires": [
+            [
+                "670772ed7eafee88"
+            ]
+        ]
+    },
+    {
+        "id": "18513f81aee52039",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Get Forecast",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.forecast",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "forecast",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "forecast_obj",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 370,
+        "y": 520,
+        "wires": [
+            [
+                "d8179d09f5dd67f1"
+            ]
+        ]
+    },
+    {
+        "id": "65b234d730a3c595",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "EMS Self Consumption Mode",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_ems_mode"
+        ],
+        "data": "{ \"option\": \"Self-consumption mode (default)\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1510,
+        "y": 520,
+        "wires": [
+            [
+                "369a67a217947f59"
+            ]
+        ]
+    },
+    {
+        "id": "369a67a217947f59",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Stop forced charge/discharge",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_battery_forced_charge_discharge_cmd"
+        ],
+        "data": "{ \"option\": \"Stop (default)\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1810,
+        "y": 520,
+        "wires": [
+            [
+                "8351c005f1d56659"
+            ]
+        ]
+    },
+    {
+        "id": "9797a2c89819a60b",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Get Import Price",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.costs_flex_up",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "current",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 180,
+        "y": 520,
+        "wires": [
+            [
+                "18513f81aee52039"
+            ]
+        ]
+    },
+    {
+        "id": "faa21f5bb71f5d9f",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "EMS Forced Mode",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_ems_mode"
+        ],
+        "data": "{ \"option\": \"Forced mode\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1210,
+        "y": 300,
+        "wires": [
+            [
+                "dfc82d97a2a1f6d0"
+            ]
+        ]
+    },
+    {
+        "id": "dfc82d97a2a1f6d0",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Force discharge",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_battery_forced_charge_discharge_cmd"
+        ],
+        "data": "{ \"option\": \"Forced discharge\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1460,
+        "y": 300,
+        "wires": [
+            [
+                "286028299ea1d50b"
+            ]
+        ]
+    },
+    {
+        "id": "3797e378b35fe5fe",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Export from Battery?",
+        "func": "let today = new Date();\n// node.warn(\"hour now is \" + today.getHours());\n\nmsg.baseline_consumption = flow.get(\"baseline_consumption\");\n// node.warn(\"baseline consumption=\" + msg.baseline_consumption)\n\nif (msg.fit >= .3 && msg.battery > 8 && today.getHours() >= 6 && today.getHours() < 8) {\n    // node.warn(\"Morning peak occurring, battery at \" + msg.battery + \"%, between 6-8am, FIT \" + msg.fit);\n    msg.decision = \"Morning peak occurring (>=30c,>8%), battery at \" + msg.battery + \"%, between 6-8am, FIT \" + msg.fit;\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse if (msg.fit > 1 && msg.battery > 40) {\n    // node.warn(\"Extremely high FIT and limited capacity: \" + msg.fit);\n    msg.decision = \"Extremely high FIT (>=$1,>40%), so forcing discharge\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse if (msg.fit >= .6 && msg.battery > 50) {\n    // node.warn(\"Very high FIT and some capacity: \" + msg.fit);\n    msg.decision = \"Very high FIT (>=65c,>50%), so forcing discharge\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse if (msg.fit >= .5 && msg.battery > 60) {\n    // node.warn(\"Great FIT and available capacity: \" + msg.fit);\n    msg.decision = \"High FIT (>=50c,>60%), so forcing discharge\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse if (msg.fit >= .4 && msg.battery > 70) {\n    // node.warn(\"Reasonable FIT and available capacity: \"+msg.fit);\n    msg.decision = \"Moderate FIT (>=40c,>70%), so forcing discharge\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse if (msg.fit >= .3 && msg.battery > 80) {\n    // node.warn(\"Tolerable FIT and available capacity: \" + msg.fit);\n    msg.decision = \"Acceptable FIT (>=32c,>80%), so forcing discharge\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\n//else if (msg.fit >= .30 && msg.battery > 80) {\n//    // node.warn(\"Tolerable FIT and available capacity: \" + msg.fit);\n//    msg.decision = \"Acceptable FIT and available capacity, so forcing discharge\";\n//    msg.decisions.push(msg.decision)\n//    return [msg, null]\n//}\nelse {\n    // node.warn(\"Not worth exporting from battery: \" + msg.fit);\n    msg.decision = \"Not worth exporting from battery.\";\n    msg.decisions.push(msg.decision)\n    return [null,msg]\n}\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 340,
+        "wires": [
+            [
+                "faa21f5bb71f5d9f"
+            ],
+            [
+                "8c78dca6dfd9e6ed"
+            ]
+        ]
+    },
+    {
+        "id": "a07ffdffda776f6d",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Get Feed-in Price",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.earnings_flex_up",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "fit",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 190,
+        "y": 240,
+        "wires": [
+            [
+                "5da2b05fa907b853"
+            ]
+        ]
+    },
+    {
+        "id": "3816a3558f347c87",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "d": true,
+        "name": "Run Every 15s",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "15",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 180,
+        "wires": [
+            [
+                "fd4264aa6847a51e"
+            ]
+        ]
+    },
+    {
+        "id": "6ae9621cfaa50cc7",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Debug Forced Discharge",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2070,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "5da2b05fa907b853",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Get Battery Level",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.battery_level",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "battery",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 270,
+        "y": 300,
+        "wires": [
+            [
+                "96f5b885e46e8a54"
+            ]
+        ]
+    },
+    {
+        "id": "f013b4d9f814a45a",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Debug Force Charge",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2400,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "286028299ea1d50b",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "5kW Discharge",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_forced_charge_discharge_power"
+        ],
+        "data": "{ \"value\": 5000 }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1780,
+        "y": 300,
+        "wires": [
+            [
+                "6ae9621cfaa50cc7",
+                "8e740e78c6556459"
+            ]
+        ]
+    },
+    {
+        "id": "3f27e54bd2cd6b8a",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "10kW charge",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_forced_charge_discharge_power"
+        ],
+        "data": "{ \"value\": 10000 }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 2030,
+        "y": 460,
+        "wires": [
+            [
+                "f013b4d9f814a45a",
+                "6696e787e3440d2c"
+            ]
+        ]
+    },
+    {
+        "id": "8351c005f1d56659",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "100W charge/discharge",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_forced_charge_discharge_power"
+        ],
+        "data": "{ \"value\": 100 }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 2090,
+        "y": 520,
+        "wires": [
+            [
+                "121128ea0ae5ef52"
+            ]
+        ]
+    },
+    {
+        "id": "670772ed7eafee88",
+        "type": "rbe",
+        "z": "a22ceab4a91f8127",
+        "name": "RBE",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "current",
+        "topi": "battery",
+        "x": 790,
+        "y": 520,
+        "wires": [
+            [
+                "6de1b93561f257d5"
+            ]
+        ]
+    },
+    {
+        "id": "a9db63d1ef519e42",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Slow battery charge?",
+        "func": "let today = new Date()\n\n// if FIT 0 or less, charge the battery at full speed\nif (msg.fit <= 0 ) {   // original\n//if (msg.fit <= 0 && msg.importprice <= 0) {\n    // node.warn(\"No FIT benefit - \" + msg.fit + \"c - so charging at full speed\");\n    msg.decision = \"No feed-in benefit so not limiting charge rate\";\n    msg.decisions.push(msg.decision)\n    msg.battery_w = 10000;\n    return [msg, null]\n}\n// there is some feed in benefit, work out if worth slow-charging for\nelse if (msg.battery < 100 && msg.net_remaining < 1) {\n    // node.warn(\"FIT benefit - \" + msg.fit + \"c but less than 1kWh remaining generation so prioritising battery\");\n    msg.decision = \"Feed-in benefit but low generation remaining so not limiting charge rate\";\n    msg.decisions.push(msg.decision)\n    msg.battery_w = 10000;\n    return [null, msg]\n}\nelse if (msg.battery >= 30 && msg.net_remaining > msg.charge_required && today.getHours() > 12 && today.getHours() < 17) {\n    // node.warn(\"FIT benefit - \" + msg.fit + \"c - so slow charging\");\n    msg.decision = \"Getting late in the day, FIT is probably going to be higher later so not limiting charge rate now\";\n    msg.decisions.push(msg.decision)\n    msg.battery_w = 10000;\n    return [null, msg]\n}\nelse if (msg.battery >= 20 && msg.net_remaining > msg.charge_required) {\n    // node.warn(\"FIT benefit - \" + msg.fit + \"c - so slow charging\");\n    msg.decision = \"Enough generation remaining so limiting charge rate\";\n    msg.decisions.push(msg.decision)\n    msg.battery_w = 1000;\n    return [null, msg]\n}\nelse if (msg.battery <= 15 && msg.net_remaining > msg.charge_required) {\n    // node.warn(\"FIT benefit but low battery - \" + msg.fit + \"c - so slow charging\");\n    msg.decision = \"Enough generation remaining but low battery setting charge rate to 10% of PV\";\n    msg.decisions.push(msg.decision)\n    let slow_charge = Math.round((msg.dc_power_now * .1)/100) * 100;\n    msg.battery_w = slow_charge > 100 ? slow_charge : 100;\n    return [null, msg]\n}\n//if the battery is almost full, you can customise the logic here\nelse if (msg.battery > 95 && msg.expected_generation_remaining > msg.charge_required && msg.net_remaining > msg.charge_required) {\n    // node.warn(\"FIT benefit and battery almost full - \" + msg.fit + \"c - so slow charging\");\n    msg.decision = \"Enough generation remaining and battery almost full so setting charge rate to 10% of PV\";\n    msg.decisions.push(msg.decision)\n    let slow_charge = Math.round((msg.dc_power_now * .1)/100) * 100;\n    msg.battery_w = slow_charge > 100 ? slow_charge : 100;\n    return [null, msg]\n}\n//there is some feed-in benefit but we are favouring battery charging\nelse {\n    // node.warn(\"Else - \" + msg.fit + \"c - so fast charging\");\n    msg.battery_w = 5000;\n    msg.decision = \"Feed-in benefit but not limiting charge rate\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1840,
+        "y": 140,
+        "wires": [
+            [
+                "8c2e115b98d19f22"
+            ],
+            [
+                "ae9fdc02f999322e"
+            ]
+        ]
+    },
+    {
+        "id": "ae9fdc02f999322e",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Slow or max charge rate (10kW)",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_battery_max_charge_power"
+        ],
+        "data": "{\"value\": {{battery_w}} }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 2170,
+        "y": 180,
+        "wires": [
+            [
+                "6e03dc183ced7dd9",
+                "347e0ae445145bab"
+            ]
+        ]
+    },
+    {
+        "id": "8c2e115b98d19f22",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Charge at max rate (5kW)",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_battery_max_charge_power"
+        ],
+        "data": "{ \"value\": 5000 }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 2170,
+        "y": 100,
+        "wires": [
+            [
+                "6e03dc183ced7dd9",
+                "347e0ae445145bab"
+            ]
+        ]
+    },
+    {
+        "id": "66c6bcbd97a0be96",
+        "type": "http request",
+        "z": "a22ceab4a91f8127",
+        "name": "PV Forecast East",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://api.solcast.com.au/rooftop_sites/{site}/forecasts?format=json&api_key={key}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 370,
+        "y": 1140,
+        "wires": [
+            [
+                "554dd7f75b4a026f"
+            ]
+        ]
+    },
+    {
+        "id": "ad80ce38e168d8a1",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "d": true,
+        "name": "6am",
+        "props": [
+            {
+                "p": "hour",
+                "v": "6",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 06 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 1140,
+        "wires": [
+            [
+                "66c6bcbd97a0be96",
+                "66d62d3aa77f720f"
+            ]
+        ]
+    },
+    {
+        "id": "593c075a4a95d705",
+        "type": "file",
+        "z": "a22ceab4a91f8127",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 740,
+        "y": 1140,
+        "wires": [
+            [
+                "fb1dcf6acc10ab18"
+            ]
+        ]
+    },
+    {
+        "id": "bb2da5eb568c754f",
+        "type": "file",
+        "z": "a22ceab4a91f8127",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 740,
+        "y": 1220,
+        "wires": [
+            [
+                "de6c912ae391e5db"
+            ]
+        ]
+    },
+    {
+        "id": "66d62d3aa77f720f",
+        "type": "http request",
+        "z": "a22ceab4a91f8127",
+        "name": "PV Forecast West",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://api.solcast.com.au/rooftop_sites/{site}/forecasts?format=json&api_key={key}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 370,
+        "y": 1220,
+        "wires": [
+            [
+                "039237367225b0f7"
+            ]
+        ]
+    },
+    {
+        "id": "fb1dcf6acc10ab18",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Debug East Forecast",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "de6c912ae391e5db",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Debug West Forecast",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "8ec56042b8217101",
+        "type": "link in",
+        "z": "a22ceab4a91f8127",
+        "name": "Import Decider",
+        "links": [
+            "8c78dca6dfd9e6ed"
+        ],
+        "x": 45,
+        "y": 520,
+        "wires": [
+            [
+                "9797a2c89819a60b"
+            ]
+        ]
+    },
+    {
+        "id": "8c78dca6dfd9e6ed",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "decide on import",
+        "mode": "link",
+        "links": [
+            "8ec56042b8217101"
+        ],
+        "x": 1135,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "1eb8193133df66fd",
+        "type": "http request",
+        "z": "a22ceab4a91f8127",
+        "name": "PV Actuals East",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://api.solcast.com.au/rooftop_sites/{site}/estimated_actuals?format=json&api_key={key}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 360,
+        "y": 1520,
+        "wires": [
+            [
+                "4bcbe01c268203cf"
+            ]
+        ]
+    },
+    {
+        "id": "3c4a35a7a5190955",
+        "type": "file",
+        "z": "a22ceab4a91f8127",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 740,
+        "y": 1520,
+        "wires": [
+            [
+                "6e2c681625a85775"
+            ]
+        ]
+    },
+    {
+        "id": "ff1ef747c4f8b3eb",
+        "type": "file in",
+        "z": "a22ceab4a91f8127",
+        "name": "Read East",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 490,
+        "y": 1620,
+        "wires": [
+            [
+                "8f3caefe2cca5837"
+            ]
+        ]
+    },
+    {
+        "id": "8f3caefe2cca5837",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Parse East",
+        "func": "msg.east = JSON.parse(msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 1620,
+        "wires": [
+            [
+                "83639341510f4fb0"
+            ]
+        ]
+    },
+    {
+        "id": "a469a3859b9fe05b",
+        "type": "file",
+        "z": "a22ceab4a91f8127",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 740,
+        "y": 1560,
+        "wires": [
+            [
+                "a3c0d768abaea7d0"
+            ]
+        ]
+    },
+    {
+        "id": "ca0e1a580e62664c",
+        "type": "http request",
+        "z": "a22ceab4a91f8127",
+        "name": "PV Actuals West",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://api.solcast.com.au/rooftop_sites/{site}/estimated_actuals?format=json&api_key={key}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 370,
+        "y": 1560,
+        "wires": [
+            [
+                "323e72863cec9721"
+            ]
+        ]
+    },
+    {
+        "id": "56ee063ef5628cb3",
+        "type": "file in",
+        "z": "a22ceab4a91f8127",
+        "name": "Read West",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 1050,
+        "y": 1620,
+        "wires": [
+            [
+                "ed3b67ac474d3d41"
+            ]
+        ]
+    },
+    {
+        "id": "ed3b67ac474d3d41",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Parse and Add",
+        "func": "msg.west = JSON.parse(msg.payload);\nmsg.totals = {}\nmsg.actual_today = 0;\nmsg.actual_by_hour = [];\nmsg.actual_yesterday = 0;\nmsg.actual_yesterday_by_hour = [];\nmsg.total_parts = [];\nmsg.forecast_periods = [];\n\nlet today = new Date();\nlet yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);\nnode.warn(today);\nnode.warn(yesterday);\nlet max_items = Math.min(msg.west.estimated_actuals.length, msg.east.estimated_actuals.length);\nif (msg.west.estimated_actuals[0].period_end === msg.east.estimated_actuals[0].period_end) {\n    for (let i = 0; i < max_items; i++) {\n        let dp = msg.west.estimated_actuals[i].period_end.split(/\\D/);\n        let dateObj = new Date(Date.UTC(dp[0], dp[1]-1, dp[2], dp[3], dp[4], dp[5]));\n        let total = (msg.west.estimated_actuals[i].pv_estimate + msg.east.estimated_actuals[i].pv_estimate)/2;\n        if (today.getDate() === dateObj.getDate()) {\n            msg.actual_today += total;\n            if (msg.actual_by_hour[dateObj.getHours()]) {\n                msg.actual_by_hour[dateObj.getHours()] += total;\n            }\n            else {\n                msg.actual_by_hour[dateObj.getHours()] = total;\n            }\n            msg.total_parts.push(total);\n        }\n        if (yesterday.getDate() === dateObj.getDate()) {\n            msg.actual_yesterday += total;\n            if (msg.actual_yesterday_by_hour[dateObj.getHours()]) {\n                msg.actual_yesterday_by_hour[dateObj.getHours()] += total;\n            }\n            else {\n                msg.actual_yesterday_by_hour[dateObj.getHours()] = total;\n            }\n            msg.forecast_periods.push(total);\n        }\n        msg.totals[msg.west.estimated_actuals[i].period_end] = { total: total, date: dateObj };\n    }\n}\nelse {\n    node.error(\"files have different start times\", msg);\n}\nmsg.actual_yesterday = msg.actual_yesterday.toPrecision(3)\nmsg.actual_today = msg.actual_today.toPrecision(3)\nfor (let i = 0; i < msg.actual_yesterday_by_hour.length; i++) {\n    if (msg.actual_yesterday_by_hour[i] !== undefined) {\n        msg.actual_yesterday_by_hour[i] = msg.actual_yesterday_by_hour[i].toPrecision(2)\n    }\n}\nfor (let i = 0; i < msg.actual_by_hour.length; i++) {\n    if (msg.actual_by_hour[i] !== undefined) {\n        msg.actual_by_hour[i] = msg.actual_by_hour[i].toPrecision(2)\n    }\n}\nmsg.payload = {\n    \"actual_yesterday\": msg.actual_yesterday,\n    \"actual_yesterday_by_hour\": msg.actual_yesterday_by_hour,\n    \"actual_today\": msg.actual_today,\n    \"actual_by_hour\": msg.actual_by_hour,\n};\nmsg.filename = \"/config/node-red/solcast/chailey-actuals-\" + msg.hour + \"-\" + today.getDate() + \"-\" + (today.getMonth() + 1) + \"-\" + today.getFullYear() + \".json\"\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1240,
+        "y": 1620,
+        "wires": [
+            [
+                "4f58119a14cf397e"
+            ]
+        ]
+    },
+    {
+        "id": "7214013fe58ea15a",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Debug Writing Actuals",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1640,
+        "y": 1620,
+        "wires": []
+    },
+    {
+        "id": "4bcbe01c268203cf",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Filename",
+        "func": "let today = new Date();\nlet datestamp = today.getDate() + \"-\" + (today.getMonth()+1) + \"-\" + today.getFullYear();\nmsg.filename = \"/config/node-red/solcast/actuals/\"+datestamp+\"/east.json\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 1520,
+        "wires": [
+            [
+                "3c4a35a7a5190955"
+            ]
+        ]
+    },
+    {
+        "id": "6e2c681625a85775",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Debug East Actuals",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 950,
+        "y": 1520,
+        "wires": []
+    },
+    {
+        "id": "323e72863cec9721",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Filename",
+        "func": "let today = new Date();\nlet datestamp = today.getDate() + \"-\" + (today.getMonth()+1) + \"-\" + today.getFullYear();\nmsg.filename = \"/config/node-red/solcast/actuals/\"+datestamp+\"/west.json\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 1560,
+        "wires": [
+            [
+                "a469a3859b9fe05b"
+            ]
+        ]
+    },
+    {
+        "id": "a3c0d768abaea7d0",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Debug West Actuals",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 1560,
+        "wires": []
+    },
+    {
+        "id": "dd20b9d1e54afc21",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "East Filename",
+        "func": "let today = new Date();\nlet datestamp = today.getDate() + \"-\" + (today.getMonth() + 1) + \"-\" + today.getFullYear();\nmsg.filename = \"/config/node-red/solcast/actuals/\" + datestamp + \"/east.json\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 1620,
+        "wires": [
+            [
+                "ff1ef747c4f8b3eb"
+            ]
+        ]
+    },
+    {
+        "id": "83639341510f4fb0",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "West Filename",
+        "func": "let today = new Date();\nlet datestamp = today.getDate() + \"-\" + (today.getMonth() + 1) + \"-\" + today.getFullYear();\nmsg.filename = \"/config/node-red/solcast/actuals/\" + datestamp + \"/west.json\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 860,
+        "y": 1620,
+        "wires": [
+            [
+                "56ee063ef5628cb3"
+            ]
+        ]
+    },
+    {
+        "id": "121128ea0ae5ef52",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Preserve Battery?",
+        "func": "let today = new Date();\n// node.warn(\"hour now is \" + today.getHours());\n// node.warn(msg.current + \" and battery \" + msg.battery);\nif (today.getHours() >= 13) {\n    if (msg.current <= .05) {\n        // node.warn(\"After 2pm - preserving battery - grid cheaper than battery cycles\");\n        msg.decision = \"After 1pm, preserving battery - grid cheaper than battery cycles\";\n        msg.decisions.push(msg.decision)\n        return [null, msg]\n    }\n    else {\n        msg.decision = \"After 1pm - but not worth preserving battery at current price, use battery\";\n        msg.decisions.push(msg.decision)\n        // node.warn(\"Not worth preserving battery\");\n        return [msg, null]\n    }\n}\nelse {\n    msg.decision = \"Before 1pm, not worth preserving battery, use battery as required\";\n    msg.decisions.push(msg.decision)\n    // node.warn(\"Not worth preserving battery\");\n    return [msg, null]\n}\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2370,
+        "y": 520,
+        "wires": [
+            [
+                "3dbbdf4736d43c3a"
+            ],
+            [
+                "8001451901b8e129"
+            ]
+        ]
+    },
+    {
+        "id": "8001451901b8e129",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Limit battery discharge (100W)",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_battery_max_discharge_power"
+        ],
+        "data": "{ \"value\": 100 }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 2710,
+        "y": 560,
+        "wires": [
+            [
+                "d6b8c6cfd7ded05f",
+                "e144633243a2e77e"
+            ]
+        ]
+    },
+    {
+        "id": "3dbbdf4736d43c3a",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "No Limit on battery discharge (5kW)",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_battery_max_discharge_power"
+        ],
+        "data": "{ \"value\": 5000 }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 2730,
+        "y": 480,
+        "wires": [
+            [
+                "d6b8c6cfd7ded05f",
+                "e144633243a2e77e"
+            ]
+        ]
+    },
+    {
+        "id": "d6b8c6cfd7ded05f",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Debug Self-Consume",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3060,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "4f58119a14cf397e",
+        "type": "file",
+        "z": "a22ceab4a91f8127",
+        "name": "Write actuals",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1430,
+        "y": 1620,
+        "wires": [
+            [
+                "7214013fe58ea15a"
+            ]
+        ]
+    },
+    {
+        "id": "e53cc381a12c2e2d",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Slower Export",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_export_power_limit"
+        ],
+        "data": "{ \"value\": 2500 }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1460,
+        "y": 140,
+        "wires": [
+            [
+                "a9db63d1ef519e42"
+            ]
+        ]
+    },
+    {
+        "id": "7ecd7165aa12452a",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Enable Power Limit Mode",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_export_power_limit_mode"
+        ],
+        "data": "{ \"option\": \"Enabled\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1230,
+        "y": 140,
+        "wires": [
+            [
+                "e53cc381a12c2e2d"
+            ]
+        ]
+    },
+    {
+        "id": "d3e48bd37399e092",
+        "type": "mqtt in",
+        "z": "a22ceab4a91f8127",
+        "name": "Get remaining kW",
+        "topic": "remaining_kw",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "814a6af6675ecbdc",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1550,
+        "y": 1460,
+        "wires": [
+            [
+                "50caad30ce2211ea"
+            ]
+        ]
+    },
+    {
+        "id": "50caad30ce2211ea",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Debug Forecast MQTT",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1800,
+        "y": 1460,
+        "wires": []
+    },
+    {
+        "id": "96f5b885e46e8a54",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Get Current Generation",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "num",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.total_dc_power",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "dc_power_now",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 370,
+        "y": 380,
+        "wires": [
+            [
+                "5450ca7101e9a8f0"
+            ]
+        ]
+    },
+    {
+        "id": "5450ca7101e9a8f0",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Get Current Load",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "num",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.load_power",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "load_now",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 470,
+        "y": 440,
+        "wires": [
+            [
+                "d72093bc62a81885"
+            ]
+        ]
+    },
+    {
+        "id": "333b02da7200f559",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "d": true,
+        "name": "9pm",
+        "props": [
+            {
+                "p": "hour",
+                "v": "21",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 21 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 1540,
+        "wires": [
+            [
+                "1eb8193133df66fd",
+                "ca0e1a580e62664c"
+            ]
+        ]
+    },
+    {
+        "id": "f74d3457ea62467c",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "d": true,
+        "name": "9pm",
+        "props": [
+            {
+                "p": "hour",
+                "v": "21",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "02 21 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 1620,
+        "wires": [
+            [
+                "dd20b9d1e54afc21"
+            ]
+        ]
+    },
+    {
+        "id": "82aa630ccd6bf338",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "d": true,
+        "name": "6am",
+        "props": [
+            {
+                "p": "hour",
+                "v": "6",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "05 06 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 1300,
+        "wires": [
+            [
+                "9bcdc5cf7e1f05b3"
+            ]
+        ]
+    },
+    {
+        "id": "43904b806a4ce947",
+        "type": "file in",
+        "z": "a22ceab4a91f8127",
+        "name": "Get baseline consumption",
+        "filename": "/config/node-red/reference/baseline-consumption.csv",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 440,
+        "y": 1020,
+        "wires": [
+            [
+                "6afd64caada57266"
+            ]
+        ]
+    },
+    {
+        "id": "6afd64caada57266",
+        "type": "csv",
+        "z": "a22ceab4a91f8127",
+        "name": "",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "mult",
+        "ret": "\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 650,
+        "y": 1020,
+        "wires": [
+            [
+                "6eb13553c6cb7388"
+            ]
+        ]
+    },
+    {
+        "id": "eb616401a350cf12",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Debug Load Consumption",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "32a39e201c1b859c",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "d": true,
+        "name": "Get Baseline Consumption",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3600",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 1020,
+        "wires": [
+            [
+                "43904b806a4ce947"
+            ]
+        ]
+    },
+    {
+        "id": "6eb13553c6cb7388",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Convert to Obj",
+        "func": "let obj = {};\nfor (let i=0; i<msg.payload.length; i++) {\n    obj[\"\"+msg.payload[i].col1] = msg.payload[i].col2;\n}\nmsg.payload = obj;\nflow.set(\"baseline_consumption\", obj);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 1020,
+        "wires": [
+            [
+                "eb616401a350cf12"
+            ]
+        ]
+    },
+    {
+        "id": "3336caf3bd2ed74c",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "d": true,
+        "name": "10am",
+        "props": [
+            {
+                "p": "hour",
+                "v": "10",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 10 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 1180,
+        "wires": [
+            [
+                "66c6bcbd97a0be96",
+                "66d62d3aa77f720f"
+            ]
+        ]
+    },
+    {
+        "id": "12dbb6285d8f8ca0",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "d": true,
+        "name": "2pm",
+        "props": [
+            {
+                "p": "hour",
+                "v": "14",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 14 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 1220,
+        "wires": [
+            [
+                "66c6bcbd97a0be96",
+                "66d62d3aa77f720f"
+            ]
+        ]
+    },
+    {
+        "id": "caec791351315bf0",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "d": true,
+        "name": "10am",
+        "props": [
+            {
+                "p": "hour",
+                "v": "10",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "05 10 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 1340,
+        "wires": [
+            [
+                "9bcdc5cf7e1f05b3"
+            ]
+        ]
+    },
+    {
+        "id": "8a9abaeab0fbe840",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "d": true,
+        "name": "2pm",
+        "props": [
+            {
+                "p": "hour",
+                "v": "14",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "05 14 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 1380,
+        "wires": [
+            [
+                "9bcdc5cf7e1f05b3"
+            ]
+        ]
+    },
+    {
+        "id": "554dd7f75b4a026f",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Filename",
+        "func": "let today = new Date();\nlet datestamp = today.getDate() + \"-\" + (today.getMonth()+1) + \"-\" + today.getFullYear();\nmsg.filename = \"/config/node-red/solcast/data/\"+datestamp+\"/\" + msg.hour + \"-east.json\"\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 1140,
+        "wires": [
+            [
+                "593c075a4a95d705"
+            ]
+        ]
+    },
+    {
+        "id": "039237367225b0f7",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Filename",
+        "func": "let today = new Date();\nlet datestamp = today.getDate() + \"-\" + (today.getMonth() + 1) + \"-\" + today.getFullYear();\nmsg.filename = \"/config/node-red/solcast/data/\"+datestamp+\"/\" + msg.hour + \"-west.json\"\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 1220,
+        "wires": [
+            [
+                "bb2da5eb568c754f"
+            ]
+        ]
+    },
+    {
+        "id": "9bcdc5cf7e1f05b3",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "East Filename",
+        "func": "let today = new Date();\nmsg.datestamp = today.getDate() + \"-\" + (today.getMonth() + 1) + \"-\" + today.getFullYear();\n//regenerate all files for today\nlet hours = [6,10,14];\nfor (let i=0; i<hours.length; i++) {\n    if (hours[i] <= today.getHours()) { //file should exist\n        msg.hour = hours[i];\n        msg.filename = \"/config/node-red/solcast/data/\"+msg.datestamp+\"/\" + msg.hour + \"-east.json\";\n        node.send(msg); \n    }\n    else {\n        // node.warn(\"skipping hour as not there yet: \"+hours[i])\n        // node.send([null,msg])\n    }\n}\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 1340,
+        "wires": [
+            [
+                "588ef90629e40ac9"
+            ]
+        ]
+    },
+    {
+        "id": "588ef90629e40ac9",
+        "type": "file in",
+        "z": "a22ceab4a91f8127",
+        "name": "Read East",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 550,
+        "y": 1340,
+        "wires": [
+            [
+                "b6ee99e90437fcd4"
+            ]
+        ]
+    },
+    {
+        "id": "b6ee99e90437fcd4",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Parse East",
+        "func": "msg.east = JSON.parse(msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 1340,
+        "wires": [
+            [
+                "85a14f95f38e5920"
+            ]
+        ]
+    },
+    {
+        "id": "85a14f95f38e5920",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "West Filename",
+        "func": "msg.filename = \"/config/node-red/solcast/data/\"+msg.datestamp+\"/\" + msg.hour + \"-west.json\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 1340,
+        "wires": [
+            [
+                "de7a4dc9e21db693"
+            ]
+        ]
+    },
+    {
+        "id": "de7a4dc9e21db693",
+        "type": "file in",
+        "z": "a22ceab4a91f8127",
+        "name": "Read West",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 1110,
+        "y": 1340,
+        "wires": [
+            [
+                "b0955ff974dcf5f2"
+            ]
+        ]
+    },
+    {
+        "id": "b0955ff974dcf5f2",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Parse and Add",
+        "func": "msg.west = JSON.parse(msg.payload);\nmsg.totals = {}\nmsg.remaining_today = 0;\nmsg.remaining_by_hour = [];\nmsg.forecast_tomorrow = 0;\nmsg.forecast_tomorrow_by_hour = [];\nmsg.total_parts = [];\nmsg.forecast_periods = [];\nlet today = new Date();\nlet datestamp = today.getDate() + \"-\" + (today.getMonth()+1) + \"-\" + today.getFullYear();\nlet tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);\n//node.warn(today);\n//node.warn(tomorrow);\nlet max_items = Math.min(msg.west.forecasts.length, msg.east.forecasts.length);\nlet peak_gen_time = new Date();\nlet peak_gen_kwh = 0;\nif (msg.west.forecasts[0].period_end === msg.east.forecasts[0].period_end) {\n    for (let i = 0; i < max_items; i++) {\n        let dp = msg.west.forecasts[i].period_end.split(/\\D/);\n        let dateObj = new Date(Date.UTC(dp[0], dp[1]-1, dp[2], dp[3], dp[4], dp[5]));\n        //set time back half an hour so the time is period start not end\n        dateObj.setTime(dateObj.getTime()-(30*60*1000))\n        let pv_estimate_west = (msg.west.forecasts[i].pv_estimate10 + msg.west.forecasts[i].pv_estimate90) / 2;\n        let pv_estimate_east = (msg.east.forecasts[i].pv_estimate10 + msg.east.forecasts[i].pv_estimate90) / 2;\n        let total = (pv_estimate_west + pv_estimate_east)/2;\n        if (today.getDate() === dateObj.getDate()) {\n            //node.warn(\"In if statement\");\n            msg.remaining_today += total;\n            if (msg.remaining_by_hour[dateObj.getHours()]) {\n                msg.remaining_by_hour[dateObj.getHours()] += total;\n                if (peak_gen_kwh < msg.remaining_by_hour[dateObj.getHours()]) {\n                    peak_gen_kwh = msg.remaining_by_hour[dateObj.getHours()];\n                    peak_gen_time = dateObj;\n                }\n            }\n            else {\n                msg.remaining_by_hour[dateObj.getHours()] = total;\n            }\n            msg.total_parts.push(total);\n        }\n        if (tomorrow.getDate() === dateObj.getDate()) {\n            msg.forecast_tomorrow += total;\n            if (msg.forecast_tomorrow_by_hour[dateObj.getHours()]) {\n                msg.forecast_tomorrow_by_hour[dateObj.getHours()] += total;\n            }\n            else {\n                msg.forecast_tomorrow_by_hour[dateObj.getHours()] = total;\n            }\n            msg.forecast_periods.push(total);\n        }\n        msg.totals[msg.east.forecasts[i].period_end] = { total: total, date: dateObj };\n    }\n}\nelse {\n    node.error(\"files have different start times\", msg);\n}\nmsg.remaining_today = msg.remaining_today.toPrecision(3)\n//node.warn(msg.remaining_today);\nmsg.forecast_tomorrow = msg.forecast_tomorrow.toPrecision(3)\nfor (let i = 0; i < msg.remaining_by_hour.length; i++) {\n    if (msg.remaining_by_hour[i] !== undefined) {\n        msg.remaining_by_hour[i] = msg.remaining_by_hour[i].toPrecision(2)\n    }\n}\n\nfor (let i = 0; i < msg.forecast_tomorrow_by_hour.length; i++) {\n    if (msg.forecast_tomorrow_by_hour[i] !== undefined) {\n        msg.forecast_tomorrow_by_hour[i] = msg.forecast_tomorrow_by_hour[i].toPrecision(2)\n    }\n}\nlet peak_gen_hm = peak_gen_time.getHours().toString().padStart(2, '0') + \":\" + peak_gen_time.getMinutes().toString().padStart(2, '0');\n\nflow.set(\"peak_gen_kwh\", peak_gen_kwh.toPrecision(3));\nflow.set(\"peak_gen_time\", peak_gen_hm);\nflow.set(\"remaining_today\", msg.remaining_by_hour);\nflow.set(\"expected_tomorrow\", msg.forecast_tomorrow);\n//if (today.getHours() < 10) {\n    flow.set(\"forecast_pv_today\",msg.remaining_today)\n//}\n\n//node.warn(peak_gen_kwh);\n//node.warn(peak_gen_time);\n//node.warn(msg.remaining_today);\n//node.warn(msg.remaining_by_hour);\n//node.warn(msg.forecast_tomorrow);\n//node.warn(msg.forecast_tomorrow_by_hour);\n\nmsg.payload = {\n    \"peak_gen_kwh\": peak_gen_kwh,\n    \"peak_gen_time\": peak_gen_time,\n    \"forecast_today\": msg.remaining_today,\n    \"forecast_by_hour\": msg.remaining_by_hour,\n    \"forecast_tomorrow\": msg.forecast_tomorrow,\n    \"forecast_tomorrow_by_hour\": msg.forecast_tomorrow_by_hour\n};\nmsg.filename = \"/config/node-red/solcast/forecasts/\"+datestamp+\"/\" + msg.hour + \".json\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1300,
+        "y": 1340,
+        "wires": [
+            [
+                "1f55f226b805f77c",
+                "e4a451be4a841b52"
+            ]
+        ]
+    },
+    {
+        "id": "1f55f226b805f77c",
+        "type": "file",
+        "z": "a22ceab4a91f8127",
+        "name": "Write forecast",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1540,
+        "y": 1340,
+        "wires": [
+            [
+                "ea754940fa1af36f"
+            ]
+        ]
+    },
+    {
+        "id": "e4a451be4a841b52",
+        "type": "mqtt out",
+        "z": "a22ceab4a91f8127",
+        "name": "Send Remaining kW",
+        "topic": "remaining_kw",
+        "qos": "1",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "814a6af6675ecbdc",
+        "x": 1560,
+        "y": 1400,
+        "wires": []
+    },
+    {
+        "id": "ea754940fa1af36f",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Debug Writing Forecast",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1770,
+        "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "6969f1db5a012e0d",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Generation History",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "num",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.daily_pv_generation",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 350,
+        "y": 920,
+        "wires": [
+            [
+                "acf3dbf510dc5df6"
+            ]
+        ]
+    },
+    {
+        "id": "27a880493ef7ecbb",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "d": true,
+        "name": "Check Generation",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 920,
+        "wires": [
+            [
+                "6969f1db5a012e0d"
+            ]
+        ]
+    },
+    {
+        "id": "3944ea61641c9351",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Debug PV Generation Logging",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1150,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "0a40e0832cf7db69",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Append to today file",
+        "func": "let now = new Date();\nlet timestamp = now.getHours().toString().padStart(2, '0') + \":\" + now.getMinutes().toString().padStart(2, '0');\nlet datestamp = now.getDate().toString().padStart(2, '0') + \"-\" + (now.getMonth()+1).toString().padStart(2, '0') + \"-\" + now.getFullYear();\n\nmsg.filename = \"/config/node-red/solcast/generation/\"+datestamp+\".csv\";\nmsg.payload = timestamp + \",\" + msg.payload+\",\"+flow.get(\"curtailment\");\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 920,
+        "wires": [
+            [
+                "886e8141b772b80a"
+            ]
+        ]
+    },
+    {
+        "id": "886e8141b772b80a",
+        "type": "file",
+        "z": "a22ceab4a91f8127",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 920,
+        "y": 920,
+        "wires": [
+            [
+                "3944ea61641c9351"
+            ]
+        ]
+    },
+    {
+        "id": "acf3dbf510dc5df6",
+        "type": "rbe",
+        "z": "a22ceab4a91f8127",
+        "name": "RBE",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload",
+        "topi": "topic",
+        "x": 530,
+        "y": 920,
+        "wires": [
+            [
+                "0a40e0832cf7db69"
+            ]
+        ]
+    },
+    {
+        "id": "c91372affc87b424",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Shutdown Inverter",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_inverter_run_mode"
+        ],
+        "data": "{ \"option\": \"Shutdown\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1250,
+        "y": 580,
+        "wires": [
+            [
+                "16a590ce87ef12c1"
+            ]
+        ]
+    },
+    {
+        "id": "3eb73ad8a6256630",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Enable Inverter",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_inverter_run_mode"
+        ],
+        "data": "{ \"option\": \"Enabled\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1240,
+        "y": 460,
+        "wires": [
+            [
+                "f3d318ab61343e35"
+            ]
+        ]
+    },
+    {
+        "id": "c18ecd577c5a16c4",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Enable Inverter",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_inverter_run_mode"
+        ],
+        "data": "{ \"option\": \"Enabled\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1240,
+        "y": 520,
+        "wires": [
+            [
+                "65b234d730a3c595"
+            ]
+        ]
+    },
+    {
+        "id": "c0c9f79472130360",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Debug Shutdown",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2430,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "16a590ce87ef12c1",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "EMS Self Consumption Mode",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_ems_mode"
+        ],
+        "data": "{ \"option\": \"Self-consumption mode (default)\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1670,
+        "y": 620,
+        "wires": [
+            [
+                "8dd1b9d80eb0747d"
+            ]
+        ]
+    },
+    {
+        "id": "8dd1b9d80eb0747d",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Stop forced charge/discharge",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_battery_forced_charge_discharge_cmd"
+        ],
+        "data": "{ \"option\": \"Stop (default)\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1960,
+        "y": 620,
+        "wires": [
+            [
+                "03316701b31c3b7b"
+            ]
+        ]
+    },
+    {
+        "id": "03316701b31c3b7b",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "5kW charge",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_forced_charge_discharge_power"
+        ],
+        "data": "{ \"value\": 5000 }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 2210,
+        "y": 600,
+        "wires": [
+            [
+                "c0c9f79472130360",
+                "d6458d1b41a84321"
+            ]
+        ]
+    },
+    {
+        "id": "74e9fcaeb927bc30",
+        "type": "comment",
+        "z": "a22ceab4a91f8127",
+        "name": "Reset the EMS",
+        "info": "",
+        "x": 1540,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "10bc27b0d668bf2f",
+        "type": "comment",
+        "z": "a22ceab4a91f8127",
+        "name": "Get Solcast forecasts",
+        "info": "",
+        "x": 120,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "9d58194b508a3f76",
+        "type": "comment",
+        "z": "a22ceab4a91f8127",
+        "name": "Get Solcast actuals",
+        "info": "",
+        "x": 130,
+        "y": 1480,
+        "wires": []
+    },
+    {
+        "id": "116d96141ab77b4b",
+        "type": "comment",
+        "z": "a22ceab4a91f8127",
+        "name": "Log PV Generation",
+        "info": "",
+        "x": 110,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "efdbdac0020f9bab",
+        "type": "comment",
+        "z": "a22ceab4a91f8127",
+        "name": "Load Expected Consumption",
+        "info": "",
+        "x": 140,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "e3e7484829cdcb70",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Calculate Inputs",
+        "func": "let remaining_generation = flow.get(\"remaining_today\");\nlet baseline_consumption = flow.get(\"baseline_consumption\");\nlet today = new Date();\nlet current_hour = today.getHours();\nmsg.decisions = []\nmsg.expected_consumption_remaining = 0;\nmsg.expected_generation_remaining = 0;\nlet consumption_minus_generating_remaining = 0;\nfor (let hour in baseline_consumption) {\n    //if (Number(hour) >= current_hour) {   // <- This takes all day to midnight, not just until sun goes down\n    // This may be appropriate if the battery is large enough to take you completely through the night, as you need to charge the battery up.\n    // However, if the battery is limited in capacity, then don't draw from grid to charge to 100% if there will be remaining solar to charge it to 100% anyway.\n    // If it is, then comment the below line, and uncomment line 10 above.\n    if (Number(hour) >= current_hour && Number(hour) <= 17) {\n        let consumption_this_hour = (baseline_consumption[hour] / 1000);\n        msg.expected_consumption_remaining += consumption_this_hour;\n        if (remaining_generation.hasOwnProperty(hour) && remaining_generation[hour]) {\n            msg.expected_generation_remaining += Number(remaining_generation[hour]);\n            consumption_minus_generating_remaining += Number(remaining_generation[hour]) - consumption_this_hour;\n        }\n    }\n}\n// node.warn(`baseline consumption remaining ${msg.expected_consumption_remaining.toPrecision(2)}kWh`);\n// node.warn(`generation remaining ${msg.expected_generation_remaining.toPrecision(2)}kWh`)\nmsg.net_remaining = (msg.expected_generation_remaining - msg.expected_consumption_remaining);\n// node.warn(`generation - consumption estimate ${msg.net_remaining.toPrecision(2)}kWh`);\nmsg.remaining_battery_kwh = (msg.battery / 100) * 19.2;\n// node.warn(`battery remaining ${msg.remaining_battery_kwh.toPrecision(3)}kWh`);\nmsg.charge_required = 19.2 - msg.remaining_battery_kwh;\n// node.warn(`battery deficit ${msg.charge_required.toPrecision(3)}kWh`);\n// node.warn(`Net generation minus consumption: ${consumption_minus_generating_remaining.toPrecision(2)}kWh`);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 240,
+        "wires": [
+            [
+                "df051123bcec61aa",
+                "3797e378b35fe5fe"
+            ]
+        ]
+    },
+    {
+        "id": "48647c2c6d79945d",
+        "type": "debug",
+        "z": "a22ceab4a91f8127",
+        "name": "Debug Decision Logging",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3110,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "32d8aee4fa4fa0c0",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Append to decision log",
+        "func": "let msg2 = {}\nlet now = new Date();\nlet timestamp = now.getHours().toString().padStart(2, '0') + \":\" + now.getMinutes().toString().padStart(2, '0');\nlet datestamp = now.getDate().toString().padStart(2, '0') + \"-\" + (now.getMonth()+1).toString().padStart(2, '0') + \"-\" + now.getFullYear();\n\nmsg.filename = \"/config/node-red/decision_logs/\"+datestamp+\".csv\";\n\nlet cheap_grid_start = \"\";\nif (msg.cheapest_grid_start){\n    let peak_gen_kwh = flow.get(\"peak_gen_kwh\");\n    let peak_gen_time = flow.get(\"peak_gen_time\");\n    let forecast_pv_today = flow.get(\"forecast_pv_today\");\n    //node.warn(forecast_pv_today);\n    let remaining_pv = msg.net_remaining.toPrecision(3);\n    // let remaining_pv_label = remaining_pv > 0 ? \"Spare PV\" : \"Needed from Grid\";\n    let solar_emoji = \"😕\";\n    if (forecast_pv_today > 70) {\n        solar_emoji = \"🔆 🙌\";\n    }\n    else if (forecast_pv_today > 50) {\n        solar_emoji = \"⛅️ 🆗\";\n    }\n    else if (forecast_pv_today > 40) {\n        solar_emoji = \"☁️ 🙁\";\n    }\n    else {\n        solar_emoji = \"💩 😭\";\n    }\n    let expected_tomorrow = flow.get(\"expected_tomorrow\");\n    let tomorrow_solar_emoji = \"😕\";\n    if (expected_tomorrow > 70) {\n        tomorrow_solar_emoji = \"🔆 🙌\";\n    }\n    else if (expected_tomorrow > 50) {\n        tomorrow_solar_emoji = \"⛅️ 🆗\";\n    }\n    else if (expected_tomorrow > 40) {\n        tomorrow_solar_emoji = \"☁️ 🙁\";\n    }\n    else {\n        tomorrow_solar_emoji = \"💩 😭\";\n    }\n//${remaining_pv_label}: ${remaining_pv}kWh\n\n\n    /// Below changed as time from LocalVolts is UTC/Zulu, so need to put in right hour. Most likely a better way to do this.\n    if(msg.cheapest_grid_start[0] >= 14) {\n        msg.cheapest_grid_start[0] = msg.cheapest_grid_start[0] - 14;\n        }\n    else {\n        msg.cheapest_grid_start[0] = msg.cheapest_grid_start[0] + 10;\n    }\n    // CY - End\n\n    cheap_grid_start = msg.cheapest_grid_start[0].toString().padStart(2, '0') + \":\" + msg.cheapest_grid_start[1].toString().padStart(2, '0');\n    // msg2 = { payload: `PV forecast: ${forecast_pv_today} kWh ${solar_emoji}\n* Peak PV ${peak_gen_kwh} kWh at ${peak_gen_time}\n* Cheapest grid ${msg.cheapest_grid}c around ${cheap_grid_start}\nTomorrow's PV forecast: ${expected_tomorrow} kWh ${tomorrow_solar_emoji}` }     <-- CY backup/original\n    msg2 = { payload: `PV forecast: ${forecast_pv_today} kWh ${solar_emoji}\n* Peak PV ${peak_gen_kwh} kWh at ${peak_gen_time}\n* Cheapest grid ${msg.cheapest_grid}c around ${cheap_grid_start}\nTomorrow's PV forecast: ${expected_tomorrow} kWh ${tomorrow_solar_emoji}`}\n}\n\nlet data = [timestamp];\nif (msg.battery_w) {\n    data.push(\"Curtailment\")\n}\nelse {\n    data.push(\"Other\")\n} \ndata.push(msg.fit)\ndata.push(msg.curtailment_percentage)\ndata.push(msg.current)\ndata.push(msg.forecast)\ndata.push(msg.dc_power_now)\ndata.push(msg.load_now)\ndata.push(msg.expected_generation_remaining.toPrecision(4))\ndata.push(msg.expected_consumption_remaining.toPrecision(4))\ndata.push(msg.battery)\ndata.push(msg.net_remaining.toPrecision(4))\ndata.push(msg.remaining_battery_kwh.toPrecision(4))\ndata.push(msg.charge_required.toPrecision(3))\ndata.push(msg.battery_w)\nif (msg.cheapest_grid_start){\n    data.push(cheap_grid_start)\n}\nelse {\n    data.push(\"\")\n}\ndata.push(msg.decisions.join(\" > \"))\n// data.push(msg.decision)\n\nmsg.payload = data.join(\"\t\");\n\nreturn [msg2,msg];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2670,
+        "y": 360,
+        "wires": [
+            [
+                "2290ec84fd9f1b73",
+                "c0c3a211424b4c9d",
+                "9b70894492a5cdbc"
+            ],
+            [
+                "04540541e71b25ea"
+            ]
+        ]
+    },
+    {
+        "id": "04540541e71b25ea",
+        "type": "file",
+        "z": "a22ceab4a91f8127",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 2900,
+        "y": 420,
+        "wires": [
+            [
+                "48647c2c6d79945d"
+            ]
+        ]
+    },
+    {
+        "id": "072513d530b67f09",
+        "type": "link in",
+        "z": "a22ceab4a91f8127",
+        "name": "Decision Logger",
+        "links": [
+            "6696e787e3440d2c",
+            "8e740e78c6556459",
+            "d6458d1b41a84321",
+            "e144633243a2e77e",
+            "347e0ae445145bab",
+            "4137a97c634901e2",
+            "89ad62b720dbb20c",
+            "682726e3e78e07b8",
+            "e023decbb1edc98b",
+            "416038772a14a3e7",
+            "6bd2252f5a90c217",
+            "77e8510760e9d8b3"
+        ],
+        "x": 2505,
+        "y": 360,
+        "wires": [
+            [
+                "32d8aee4fa4fa0c0"
+            ]
+        ]
+    },
+    {
+        "id": "e144633243a2e77e",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "link out 2",
+        "mode": "link",
+        "links": [
+            "072513d530b67f09"
+        ],
+        "x": 2975,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "d6458d1b41a84321",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "link out 3",
+        "mode": "link",
+        "links": [
+            "072513d530b67f09"
+        ],
+        "x": 2365,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "6696e787e3440d2c",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "link out 4",
+        "mode": "link",
+        "links": [
+            "072513d530b67f09"
+        ],
+        "x": 2195,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "8e740e78c6556459",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "link out 5",
+        "mode": "link",
+        "links": [
+            "072513d530b67f09"
+        ],
+        "x": 1975,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "347e0ae445145bab",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "link out 6",
+        "mode": "link",
+        "links": [
+            "072513d530b67f09"
+        ],
+        "x": 2415,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "ab9d7a07a06ccb76",
+        "type": "link in",
+        "z": "a22ceab4a91f8127",
+        "name": "Send Mobile Message",
+        "links": [
+            "816d7aa504549c19",
+            "90a1e55ed1fb5df8",
+            "c196a08e4b245777",
+            "33a751d9b831e996",
+            "31d2ab361ef61447",
+            "869481f4c6657e7a",
+            "8e102a4b2283a0b7",
+            "0631afb8b644aa2f",
+            "bf0bd8078cdfcd47",
+            "634ccc30f857da01",
+            "3e2cc6794b7cc4ca",
+            "56a9b8003273d3c3",
+            "c8fc11728d5b5573"
+        ],
+        "x": 2855,
+        "y": 200,
+        "wires": [
+            [
+                "62aa7ad97751c374"
+            ]
+        ]
+    },
+    {
+        "id": "62aa7ad97751c374",
+        "type": "rbe",
+        "z": "a22ceab4a91f8127",
+        "name": "RBE",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": false,
+        "property": "payload",
+        "topi": "payload",
+        "x": 2970,
+        "y": 200,
+        "wires": [
+            [
+                "c79be3db69c30328"
+            ]
+        ]
+    },
+    {
+        "id": "816d7aa504549c19",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "link out 7",
+        "mode": "link",
+        "links": [
+            "ab9d7a07a06ccb76"
+        ],
+        "x": 3075,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "c79be3db69c30328",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Notify phone",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": true,
+        "domain": "notify",
+        "service": "mobile_app_sm_g990e",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "data": "{\"message\":msg.payload,\"title\":\"Energy info\"}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 3130,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d72093bc62a81885",
+        "type": "rbe",
+        "z": "a22ceab4a91f8127",
+        "name": "RBE",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "fit",
+        "topi": "battery",
+        "x": 650,
+        "y": 440,
+        "wires": [
+            [
+                "e3e7484829cdcb70"
+            ]
+        ]
+    },
+    {
+        "id": "250df1596ab58f60",
+        "type": "comment",
+        "z": "a22ceab4a91f8127",
+        "name": "Set reserves on battery",
+        "info": "",
+        "x": 120,
+        "y": 1720,
+        "wires": []
+    },
+    {
+        "id": "2d349426e4a27918",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Remove 15% battery reserve",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_reserved_soc_for_backup"
+        ],
+        "data": "{\"value\":0}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery reserve removed",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 420,
+        "y": 1760,
+        "wires": [
+            [
+                "869481f4c6657e7a"
+            ]
+        ]
+    },
+    {
+        "id": "b647352bdb233678",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "d": true,
+        "name": "10pm",
+        "props": [
+            {
+                "p": "hour",
+                "v": "05",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 22 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 1940,
+        "wires": [
+            [
+                "9a9ef7a9592ccf06"
+            ]
+        ]
+    },
+    {
+        "id": "9a9ef7a9592ccf06",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Set 15% battery reserve",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_reserved_soc_for_backup"
+        ],
+        "data": "{\"value\":15}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery reserve set at 15% until 5am",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 330,
+        "y": 1940,
+        "wires": [
+            [
+                "31d2ab361ef61447"
+            ]
+        ]
+    },
+    {
+        "id": "31d2ab361ef61447",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "Send message",
+        "mode": "link",
+        "links": [
+            "ab9d7a07a06ccb76"
+        ],
+        "x": 505,
+        "y": 1940,
+        "wires": []
+    },
+    {
+        "id": "869481f4c6657e7a",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "Send message",
+        "mode": "link",
+        "links": [
+            "ab9d7a07a06ccb76"
+        ],
+        "x": 605,
+        "y": 1760,
+        "wires": []
+    },
+    {
+        "id": "0631afb8b644aa2f",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "Send message",
+        "mode": "link",
+        "links": [
+            "ab9d7a07a06ccb76"
+        ],
+        "x": 505,
+        "y": 1820,
+        "wires": []
+    },
+    {
+        "id": "115bf7e80def7def",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Set 50% battery reserve",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_reserved_soc_for_backup"
+        ],
+        "data": "{\"value\":50}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery reserve removed",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 330,
+        "y": 1820,
+        "wires": [
+            [
+                "0631afb8b644aa2f"
+            ]
+        ]
+    },
+    {
+        "id": "5edf77b8d333ff1f",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "d": true,
+        "name": "12pm",
+        "props": [
+            {
+                "p": "hour",
+                "v": "12",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 12 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 1820,
+        "wires": [
+            [
+                "115bf7e80def7def"
+            ]
+        ]
+    },
+    {
+        "id": "d2619b0e55c63ecb",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "d": true,
+        "name": "6pm",
+        "props": [
+            {
+                "p": "hour",
+                "v": "18",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 18 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 1880,
+        "wires": [
+            [
+                "0fcb11dc87dee752"
+            ]
+        ]
+    },
+    {
+        "id": "0fcb11dc87dee752",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Remove 50% battery reserve",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_reserved_soc_for_backup"
+        ],
+        "data": "{\"value\":0}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery reserve removed",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 340,
+        "y": 1880,
+        "wires": [
+            [
+                "bf0bd8078cdfcd47"
+            ]
+        ]
+    },
+    {
+        "id": "bf0bd8078cdfcd47",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "Send message",
+        "mode": "link",
+        "links": [
+            "ab9d7a07a06ccb76"
+        ],
+        "x": 505,
+        "y": 1880,
+        "wires": []
+    },
+    {
+        "id": "7979bf39095a6e60",
+        "type": "comment",
+        "z": "a22ceab4a91f8127",
+        "name": "Notify if battery is low at 3pm",
+        "info": "",
+        "x": 820,
+        "y": 1720,
+        "wires": []
+    },
+    {
+        "id": "e23aa4f96cbbbd37",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "name": "3pm",
+        "props": [
+            {
+                "p": "hour",
+                "v": "15",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 15 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 770,
+        "y": 1760,
+        "wires": [
+            [
+                "c95a7738693d9690"
+            ]
+        ]
+    },
+    {
+        "id": "c95a7738693d9690",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Get Battery Level",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.battery_level",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "battery",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 990,
+        "y": 1760,
+        "wires": [
+            [
+                "b1dbaf3864a35c28"
+            ]
+        ]
+    },
+    {
+        "id": "6ab8c40128df18c1",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Notify phone",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": true,
+        "domain": "notify",
+        "service": "mobile_app_sm_g990e",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "data": "{\"message\":msg.payload,\"title\":\"Solar Battery Level\"}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1450,
+        "y": 1760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b1dbaf3864a35c28",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Prepare msg",
+        "func": "if (msg.battery < 50) {\n    //node.warn(\"Not much battery charge left! Only \" + msg.battery)\n    msg.payload = \"WARNING: Battery level is currently at \" + msg.battery + \"%. CHARGE BATTERY!\";\n}\nelse {\n    //node.warn(\"Battery should be fine for demand period - is at \" + msg.battery)\n    msg.payload = \"Ok: Battery level is currently sufficient at \" + msg.battery + \"%\";\n}\n\n// Return the modified message\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1230,
+        "y": 1760,
+        "wires": [
+            [
+                "6ab8c40128df18c1"
+            ]
+        ]
+    },
+    {
+        "id": "c8e6f5e3b42b8ccd",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Export limit 0w",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_export_power_limit"
+        ],
+        "data": "{ \"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery export limit enforced",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 980,
+        "y": 1880,
+        "wires": [
+            [
+                "3e2cc6794b7cc4ca"
+            ]
+        ]
+    },
+    {
+        "id": "b6cebb19baaaccec",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "name": "7:30am",
+        "props": [
+            {
+                "p": "hour",
+                "v": "730",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "30 07 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 780,
+        "y": 1880,
+        "wires": [
+            [
+                "c8e6f5e3b42b8ccd"
+            ]
+        ]
+    },
+    {
+        "id": "8b0ac6b9d06f6290",
+        "type": "comment",
+        "z": "a22ceab4a91f8127",
+        "name": "Export limits",
+        "info": "",
+        "x": 770,
+        "y": 1840,
+        "wires": []
+    },
+    {
+        "id": "3e2cc6794b7cc4ca",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "Send message",
+        "mode": "link",
+        "links": [
+            "ab9d7a07a06ccb76"
+        ],
+        "x": 1185,
+        "y": 1880,
+        "wires": []
+    },
+    {
+        "id": "8585c5a77ee4512a",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "name": "5:30pm",
+        "props": [
+            {
+                "p": "hour",
+                "v": "1730",
+                "vt": "num"
+            }
+        ],
+        "repeat": "",
+        "crontab": "30 17 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 780,
+        "y": 1940,
+        "wires": [
+            [
+                "3d256001cad2f2e5"
+            ]
+        ]
+    },
+    {
+        "id": "3d256001cad2f2e5",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Export limit 5kW",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_export_power_limit"
+        ],
+        "data": "{ \"value\": 5000}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery export limit removed",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 980,
+        "y": 1940,
+        "wires": [
+            [
+                "56a9b8003273d3c3"
+            ]
+        ]
+    },
+    {
+        "id": "56a9b8003273d3c3",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "Send message",
+        "mode": "link",
+        "links": [
+            "ab9d7a07a06ccb76"
+        ],
+        "x": 1185,
+        "y": 1940,
+        "wires": []
+    },
+    {
+        "id": "4cf70cf12e296319",
+        "type": "comment",
+        "z": "a22ceab4a91f8127",
+        "name": "Force Charge/Stop Buttons",
+        "info": "",
+        "x": 150,
+        "y": 2000,
+        "wires": []
+    },
+    {
+        "id": "e122ea757cb3505e",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Export limit 5.5kW",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_export_power_limit"
+        ],
+        "data": "{ \"value\": 5500}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery export limit removed",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 350,
+        "y": 2040,
+        "wires": [
+            [
+                "2dbc74842d7adc40"
+            ]
+        ]
+    },
+    {
+        "id": "2dbc74842d7adc40",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Remove battery reserve",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_reserved_soc_for_backup"
+        ],
+        "data": "{\"value\":0}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery reserve removed",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 590,
+        "y": 2040,
+        "wires": [
+            [
+                "5b623cd5ae9f8a6e"
+            ]
+        ]
+    },
+    {
+        "id": "5b623cd5ae9f8a6e",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "EMS Forced Mode",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_ems_mode"
+        ],
+        "data": "{ \"option\": \"Forced mode\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 850,
+        "y": 2040,
+        "wires": [
+            [
+                "358b94ef2f6ecbdd"
+            ]
+        ]
+    },
+    {
+        "id": "358b94ef2f6ecbdd",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Force discharge",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_battery_forced_charge_discharge_cmd"
+        ],
+        "data": "{ \"option\": \"Forced discharge\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1060,
+        "y": 2040,
+        "wires": [
+            [
+                "a9319ed350d2cad2"
+            ]
+        ]
+    },
+    {
+        "id": "a9319ed350d2cad2",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "8kw Discharge Limit",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_forced_charge_discharge_power"
+        ],
+        "data": "{ \"value\": 8000 }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Force discharge enabled",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 1280,
+        "y": 2040,
+        "wires": [
+            [
+                "89ad62b720dbb20c"
+            ]
+        ]
+    },
+    {
+        "id": "89ad62b720dbb20c",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "link out 8",
+        "mode": "link",
+        "links": [
+            "072513d530b67f09"
+        ],
+        "x": 1485,
+        "y": 2040,
+        "wires": []
+    },
+    {
+        "id": "343612443c2350bc",
+        "type": "server-state-changed",
+        "z": "a22ceab4a91f8127",
+        "name": "Force discharge now",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entityId": "input_button.force_discharge_now",
+        "entityIdType": "exact",
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "eventData"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "triggerId"
+            }
+        ],
+        "x": 130,
+        "y": 2040,
+        "wires": [
+            [
+                "e122ea757cb3505e"
+            ]
+        ]
+    },
+    {
+        "id": "e1d8e552872ab561",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Export limit 0w",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_export_power_limit"
+        ],
+        "data": "{ \"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery export limit removed",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 360,
+        "y": 2180,
+        "wires": [
+            [
+                "9edae31f9c37b081"
+            ]
+        ]
+    },
+    {
+        "id": "9edae31f9c37b081",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Add 15% battery reserve",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_reserved_soc_for_backup"
+        ],
+        "data": "{\"value\":15}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery reserve of 15% added",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 590,
+        "y": 2180,
+        "wires": [
+            [
+                "c3f9fa5a7b7867a0"
+            ]
+        ]
+    },
+    {
+        "id": "c3f9fa5a7b7867a0",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "EMS Self-Consumption Mode",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_ems_mode"
+        ],
+        "data": "{ \"option\": \"Self-consumption mode (default)\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 850,
+        "y": 2180,
+        "wires": [
+            [
+                "5b650cb80a1c2212"
+            ]
+        ]
+    },
+    {
+        "id": "5b650cb80a1c2212",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Force discharge stop",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_battery_forced_charge_discharge_cmd"
+        ],
+        "data": "{ \"option\": \"Stop (default)\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1100,
+        "y": 2180,
+        "wires": [
+            [
+                "cedad323775de79c"
+            ]
+        ]
+    },
+    {
+        "id": "cedad323775de79c",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Remove Discharge Rate",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_forced_charge_discharge_power"
+        ],
+        "data": "{ \"value\": 0 }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Force discharge stopped",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 1330,
+        "y": 2180,
+        "wires": [
+            [
+                "682726e3e78e07b8"
+            ]
+        ]
+    },
+    {
+        "id": "682726e3e78e07b8",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "link out 9",
+        "mode": "link",
+        "links": [
+            "072513d530b67f09"
+        ],
+        "x": 1485,
+        "y": 2180,
+        "wires": []
+    },
+    {
+        "id": "41abeae98747499a",
+        "type": "server-state-changed",
+        "z": "a22ceab4a91f8127",
+        "name": "Stop force discharge now",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entityId": "input_button.stop_forced_discharge_100w_15",
+        "entityIdType": "exact",
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "eventData"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "triggerId"
+            }
+        ],
+        "x": 150,
+        "y": 2180,
+        "wires": [
+            [
+                "e1d8e552872ab561"
+            ]
+        ]
+    },
+    {
+        "id": "df89f156f1a845ca",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Export limit 5kW",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_export_power_limit"
+        ],
+        "data": "{ \"value\": 5000}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery export limit removed",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 360,
+        "y": 2300,
+        "wires": [
+            [
+                "e32010be2c4e9537"
+            ]
+        ]
+    },
+    {
+        "id": "e32010be2c4e9537",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Add 50% battery reserve",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_reserved_soc_for_backup"
+        ],
+        "data": "{\"value\":50}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery reserve of 50% added",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 590,
+        "y": 2300,
+        "wires": [
+            [
+                "719c2249df5b3c60"
+            ]
+        ]
+    },
+    {
+        "id": "719c2249df5b3c60",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "EMS Self-Consumption Mode",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_ems_mode"
+        ],
+        "data": "{ \"option\": \"Self-consumption mode (default)\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 850,
+        "y": 2300,
+        "wires": [
+            [
+                "9e661cd38c578d46"
+            ]
+        ]
+    },
+    {
+        "id": "9e661cd38c578d46",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Force discharge stop",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_battery_forced_charge_discharge_cmd"
+        ],
+        "data": "{ \"option\": \"Stop (default)\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1100,
+        "y": 2300,
+        "wires": [
+            [
+                "4b052026187f2007"
+            ]
+        ]
+    },
+    {
+        "id": "4b052026187f2007",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Remove Discharge Rate",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_forced_charge_discharge_power"
+        ],
+        "data": "{ \"value\": 0 }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Force discharge stopped",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 1330,
+        "y": 2300,
+        "wires": [
+            [
+                "e023decbb1edc98b"
+            ]
+        ]
+    },
+    {
+        "id": "e023decbb1edc98b",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "link out 10",
+        "mode": "link",
+        "links": [
+            "072513d530b67f09"
+        ],
+        "x": 1485,
+        "y": 2300,
+        "wires": []
+    },
+    {
+        "id": "3712825f36428630",
+        "type": "server-state-changed",
+        "z": "a22ceab4a91f8127",
+        "name": "Stop force discharge now",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entityId": "input_button.stop_forced_dischage_now_5_5kw_50",
+        "entityIdType": "exact",
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "eventData"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "triggerId"
+            }
+        ],
+        "x": 150,
+        "y": 2300,
+        "wires": [
+            [
+                "df89f156f1a845ca"
+            ]
+        ]
+    },
+    {
+        "id": "32286c0a968384c0",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Export limit 5kW",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_export_power_limit"
+        ],
+        "data": "{ \"value\": 5000}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery export limit removed",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 360,
+        "y": 2360,
+        "wires": [
+            [
+                "5ac32a474167d7f3"
+            ]
+        ]
+    },
+    {
+        "id": "5ac32a474167d7f3",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Remove battery reserve",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_reserved_soc_for_backup"
+        ],
+        "data": "{\"value\":0}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery reserve removed",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 590,
+        "y": 2360,
+        "wires": [
+            [
+                "734ae9f50db4de41"
+            ]
+        ]
+    },
+    {
+        "id": "734ae9f50db4de41",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "EMS Self-Consumption Mode",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_ems_mode"
+        ],
+        "data": "{ \"option\": \"Self-consumption mode (default)\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 850,
+        "y": 2360,
+        "wires": [
+            [
+                "47b8817a61002feb"
+            ]
+        ]
+    },
+    {
+        "id": "47b8817a61002feb",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Force discharge stop",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_battery_forced_charge_discharge_cmd"
+        ],
+        "data": "{ \"option\": \"Stop (default)\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1100,
+        "y": 2360,
+        "wires": [
+            [
+                "f591073473e2e778"
+            ]
+        ]
+    },
+    {
+        "id": "f591073473e2e778",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Remove Discharge Rate",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_forced_charge_discharge_power"
+        ],
+        "data": "{ \"value\": 0 }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Force discharge stopped",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 1330,
+        "y": 2360,
+        "wires": [
+            [
+                "416038772a14a3e7"
+            ]
+        ]
+    },
+    {
+        "id": "416038772a14a3e7",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "link out 11",
+        "mode": "link",
+        "links": [
+            "072513d530b67f09"
+        ],
+        "x": 1485,
+        "y": 2360,
+        "wires": []
+    },
+    {
+        "id": "0aec5533d7a2bc63",
+        "type": "server-state-changed",
+        "z": "a22ceab4a91f8127",
+        "name": "Stop force discharge now",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entityId": "input_button.stop_forced_discharge_5_5kw_0",
+        "entityIdType": "exact",
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "eventData"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "triggerId"
+            }
+        ],
+        "x": 150,
+        "y": 2360,
+        "wires": [
+            [
+                "32286c0a968384c0"
+            ]
+        ]
+    },
+    {
+        "id": "5493b1652d4a39bd",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Export limit 0w",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_export_power_limit"
+        ],
+        "data": "{ \"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery export limit removed",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 360,
+        "y": 2240,
+        "wires": [
+            [
+                "51efcf08a1310e6f"
+            ]
+        ]
+    },
+    {
+        "id": "51efcf08a1310e6f",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Removed battery reserve",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_reserved_soc_for_backup"
+        ],
+        "data": "{\"value\":0}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery reserve removed",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 590,
+        "y": 2240,
+        "wires": [
+            [
+                "f213255e2569fe94"
+            ]
+        ]
+    },
+    {
+        "id": "f213255e2569fe94",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "EMS Self-Consumption Mode",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_ems_mode"
+        ],
+        "data": "{ \"option\": \"Self-consumption mode (default)\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 850,
+        "y": 2240,
+        "wires": [
+            [
+                "1a35b6e8dfa8bd70"
+            ]
+        ]
+    },
+    {
+        "id": "1a35b6e8dfa8bd70",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Force discharge stop",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_battery_forced_charge_discharge_cmd"
+        ],
+        "data": "{ \"option\": \"Stop (default)\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1100,
+        "y": 2240,
+        "wires": [
+            [
+                "b3c7b67fcc53a05b"
+            ]
+        ]
+    },
+    {
+        "id": "b3c7b67fcc53a05b",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Remove Discharge Rate",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_forced_charge_discharge_power"
+        ],
+        "data": "{ \"value\": 0 }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Force discharge stopped",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 1330,
+        "y": 2240,
+        "wires": [
+            [
+                "6bd2252f5a90c217"
+            ]
+        ]
+    },
+    {
+        "id": "6bd2252f5a90c217",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "link out 12",
+        "mode": "link",
+        "links": [
+            "072513d530b67f09"
+        ],
+        "x": 1485,
+        "y": 2240,
+        "wires": []
+    },
+    {
+        "id": "ef0158681ca20771",
+        "type": "server-state-changed",
+        "z": "a22ceab4a91f8127",
+        "name": "Stop force discharge now",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entityId": "input_button.stop_forced_discharge_100w_0",
+        "entityIdType": "exact",
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "eventData"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "triggerId"
+            }
+        ],
+        "x": 150,
+        "y": 2240,
+        "wires": [
+            [
+                "5493b1652d4a39bd"
+            ]
+        ]
+    },
+    {
+        "id": "3a4458d821b37fb6",
+        "type": "server-state-changed",
+        "z": "a22ceab4a91f8127",
+        "name": "Sunrise Trigger (-1.25hrs)",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entityId": "input_button.sunrise_trigger",
+        "entityIdType": "exact",
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "eventData"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "triggerId"
+            }
+        ],
+        "x": 130,
+        "y": 1760,
+        "wires": [
+            [
+                "2d349426e4a27918"
+            ]
+        ]
+    },
+    {
+        "id": "fd4264aa6847a51e",
+        "type": "traffic",
+        "z": "a22ceab4a91f8127",
+        "name": "allow_or_stop",
+        "property_allow": "payload",
+        "filter_allow": "true",
+        "ignore_case_allow": true,
+        "negate_allow": false,
+        "send_allow": false,
+        "property_stop": "payload",
+        "filter_stop": "false",
+        "ignore_case_stop": true,
+        "negate_stop": false,
+        "send_stop": false,
+        "default_start": true,
+        "differ": false,
+        "x": 400,
+        "y": 180,
+        "wires": [
+            [
+                "a07ffdffda776f6d"
+            ]
+        ]
+    },
+    {
+        "id": "639d82d8bb330af8",
+        "type": "ha-switch",
+        "z": "a22ceab4a91f8127",
+        "name": "Energy_control_switch",
+        "version": 0,
+        "debugenabled": false,
+        "inputs": 0,
+        "outputs": 2,
+        "entityConfig": "39a507ed6f81ba8d",
+        "enableInput": false,
+        "outputOnStateChange": true,
+        "outputProperties": [
+            {
+                "property": "outputType",
+                "propertyType": "msg",
+                "value": "state change",
+                "valueType": "str"
+            },
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 160,
+        "y": 120,
+        "wires": [
+            [
+                "fd4264aa6847a51e"
+            ],
+            [
+                "fd4264aa6847a51e"
+            ]
+        ]
+    },
+    {
+        "id": "6de1b93561f257d5",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Charge/discharge/shutdown",
+        "func": "let today = new Date();\n//node.warn(\"hour now is \" + today.getHours());\n//node.warn(msg.current + \" and battery \" + msg.battery);\n//node.warn(msg.net_remaining+\";\"+msg.charge_required)\n//node.warn(msg.forecast_obj)\n\nlet forecasts = msg.forecast_obj.attributes.forecast;\nmsg.grid_forecasts = []\nmsg.fit_forecasts = []\n\nmsg.cheapest_grid_start = undefined\nmsg.best_fit_start = undefined\n\nmsg.time_blocks_grid = {}\nmsg.time_blocks_fit = {}\nmsg.cheapest_grid = 1000\nmsg.best_fit = -1000\nmsg.cheapest_grid_time = undefined\nmsg.best_fit_time = undefined\n\nlet grid_buy_price_day = msg.grid_buy_price_day / 100;\nlet grid_buy_price_night_spike_prep = msg.grid_buy_price_night_spike_prep / 100;\nlet grid_sell_price_day = msg.grid_sell_price_day / 100;\nlet grid_sell_price_night = msg.grid_sell_price_night / 100;\nlet grid_buy_price_day_spike_prep = msg.grid_buy_price_day_spike_prep / 100;\n\nlet minbuy4hrs = msg.minbuy4hrs;\n\nfor (let i=0; i<forecasts.length-4; i++) {\n    msg.grid_forecasts.push(forecasts[i].costsFlexUp);\n    msg.fit_forecasts.push(forecasts[i].earningsFlexUp);\n    if (msg.cheapest_grid > forecasts[i].costsFlexUp) {\n        msg.cheapest_grid_time = forecasts[i].intervalStart;      \n        msg.cheapest_grid = forecasts[i].costsFlexUp;\n    }\n    if (msg.best_fit < forecasts[i].earningsFlexUp) {\n        msg.best_fit_time = forecasts[i].intervalStart;\n        msg.best_fit = forecasts[i].earningsFlexUp;\n    }\n    msg.time_blocks_grid[forecasts[i].intervalStart] = 0\n    msg.time_blocks_fit[forecasts[i].intervalStart] = 0\n    for (let j=0; j<4; j++) {\n        msg.time_blocks_grid[forecasts[i].intervalStart] += forecasts[i+j].costsFlexUp\n        msg.time_blocks_fit[forecasts[i].intervalStart] += forecasts[i+j].earningsFlexUp\n    }\n    msg.time_blocks_grid[forecasts[i].intervalStart] = Number((msg.time_blocks_grid[forecasts[i].intervalStart]/6).toPrecision(2))\n    msg.time_blocks_fit[forecasts[i].intervalStart] = Number((msg.time_blocks_fit[forecasts[i].intervalStart]/6).toPrecision(2))\n\n    //node.warn(\"time_blocks_grid: \" + msg.time_blocks_grid[forecasts[i].intervalStart]);\n}\nlet cheapest_grid_block = 1000\n\nfor (let block in msg.time_blocks_grid) {\n    //node.warn(\"time_blocks_grid: \" + block);\n    let [hour,minute] = block.split('T')[1].split(\"+\")[0].split(\":\").slice(0, 2)\n    if (Number(hour) < 18 && msg.time_blocks_grid[block] < cheapest_grid_block) {\n        msg.cheapest_grid_start = [Number(hour),Number(minute)];\n        cheapest_grid_block = msg.time_blocks_grid[block]\n    }\n    else {\n        // node.warn(cheapest_grid_block + \" is cheaper than or same as \" + msg.time_blocks_grid[block])\n    }\n}\nlet best_fit_block = -1000\nfor (let block in msg.time_blocks_fit) {\n    let [hour,minute] = block.split('T')[1].split(\"+\")[0].split(\":\").slice(0, 2)\n    if (Number(hour) < 18 && msg.time_blocks_fit[block] > best_fit_block) {\n        msg.best_fit_start = [Number(hour),Number(minute)];\n        best_fit_block = msg.time_blocks_fit[block]\n    }\n}\n\n// Charge up to 40% during the night if the price is cheapish (30c or less, roughly, from HASS slider) and upcoming sell price likely to be 60c or greater (from HASS), to get ready for potential morning shoulder higher feed-in tarrif\nif (today.getHours() >= 4 && today.getHours() < 5 && msg.current <= grid_buy_price_night_spike_prep && msg.battery < 40 && msg.maxsell4hrs > grid_sell_price_night) {\n    msg.decision = \"Opportunity to charge battery to 40% for shoulder period, battery is at\" + msg.battery + \"% and price is \" + msg.current\n    msg.decisions.push(msg.decision)\n    return [msg, null, null]\n}\n\n// node.warn(\"cheapest grid starting at \"+msg.cheapest_grid_start.join(\":\"));\n// node.warn(today.getHours() >= Number(msg.cheapcheapest_grid_startest_grid_start[0]))\n// node.warn(today.getMinutes() >= Number(msg.cheapest_grid_start[1]))\n// node.warn(msg)\n// less than or equal to 0 decisions\nif (msg.current <= 0) {\n    //if (msg.battery <= 98) {\n    //if (msg.battery <= 98 && (today.getHours() <16 || today.getHours() > 21)) {\n        // added next line to make sure that only buy when it is the cheapest part of the next 4 hrs (within 10% of the cheapest)\n    if (msg.battery <= 98 && msg.current <= (minbuy4hrs * .9) && (today.getHours() <16 || today.getHours() > 21)) {\n        // node.warn(\"FREE ELECTRICITY and battery <= 98\");\n        msg.decision = \"Free electricity from grid, cheap part of next 4 hrs, so fast charging\";\n        msg.decisions.push(msg.decision)\n        return [msg,null,null]\n    }\n    //shut down inverter\n    //else if (msg.current < -.03 && msg.forecast < 0) {\n    else if (msg.current < -.03 && msg.forecast < 0 && (today.getHours() < 16 || today.getHours() > 21)) {\n        // node.warn(\"Being paid more than 3c to use from grid, and forecast is negative too\");\n        msg.decision = \"Being paid more than 3c to use from grid, so shutting down inverter\";\n        msg.decisions.push(msg.decision)\n        return [null, null, msg]\n    }\n}\n\n// Check if battery is less than 50% charged at 3pm.\n// We need to prepare for the demand period at 6pm so get enough charge in the battery to get us through that peak.\nelse if (today.getHours() >= 14 && today.getHours() < 16 && msg.current <= grid_buy_price_day && msg.battery < 90) {\n    // If battery is under 90%, charge it up if the price is under roughly 25c/kWh (from HASS)\n    // node.warn(\"Need to charge battery to prepare for demand period since the battery is only at\" + msg.battery + \"%\")\n    msg.decision = \"Need to charge battery to 90% to prepare for upcomging demand period since the battery is only at\" + msg.battery +\"%\"\n    msg.decisions.push(msg.decision)\n    return [msg,null,null]\n}\n\n// Check if battery is less than 100% charged at 3pm and whether there is a major spike coming (definition, > $2/kWh sell price).\n// We need to prepare for this spike period, if true, so fully charge battery.\n// Will only charge if current price is 40c/kWh or below (defined in HASS)\nelse if (today.getHours() >= 15 && today.getHours() < 16 && msg.current <= grid_buy_price_day_spike_prep && msg.battery < 100 && msg.maxsell4hrs > grid_sell_price_day) {\n    // If battery is not fully charged, charge it up if the price is under roughly 40c/kWh (from HASS) because there is going to be a sell price of over roughly $2/kwh (from HASS) within the next 4 hours\n    // node.warn(\"Need to charge battery to prepare for demand period since the battery is only at\" + msg.battery + \"%\")\n    msg.decision = \"Need to charge battery to 100% to prepare for upcoming spike since the battery is only at\" + msg.battery + \"% and sell price expected to be up to $\" + msg.maxsell4hrs;\n    msg.decisions.push(msg.decision)\n    return [msg,null,null]\n}\n\n//very cheap power decisions\n//else if (msg.current <= .04 && msg.battery < 75 && today.getHours() > 12) {\nelse if (msg.current <= .04 && msg.battery < 75 && today.getHours() > 12 && (today.getHours() < 16 || today.getHours() >= 21)) {\n    // node.warn(\"very cheap charging and battery low for afternoon\")\n    msg.decision = \"After 1pm, very cheap grid, battery low, so force-charging\";\n    msg.decisions.push(msg.decision)\n    return [msg, null, null]\n}\nelse if (msg.current <= .04 && msg.battery < 30 && today.getHours() < 8) {\n    // node.warn(\"very cheap charging and battery low for morning\")\n    msg.decision = \"Before 7am, very cheap grid, battery low, so force-charging\";\n    msg.decisions.push(msg.decision)\n    return [msg, null, null]\n}\nelse if (msg.current < grid_buy_price_day && msg.battery < 100 && msg.net_remaining <= 0 && today.getHours() > 10 && today.getHours() < 16) {\n    // node.warn(\"Little generation left and price is cheap so force charging\");\n    // grid_buy_price_day is taken from HASS slider\n    msg.decision = \"Between 10am and 4pm, < \" + grid_buy_price_day  + \", battery < 100, low generation remaining, so force-charging\";\n    msg.decisions.push(msg.decision)\n    return [msg, null, null]\n}\n// else if (msg.current <= .15 && msg.battery < 85 && msg.net_remaining < 1 && today.getHours() > 14 && today.getHours() < 16) {\n//     // node.warn(\"Little generation left and price is cheap so force charging\");\n//     msg.decision = \"Between 2pm and 4pm, <= 15c grid, battery <85, low generation remaining, so force-charging\";\n//     msg.decisions.push(msg.decision)\n//     return [msg, null, null]1\n// }\n// msg.current < .10 && msg.battery < 100 && msg.net_remaining < 2 && \n// grid_buy_price_day is taken from HASS slider\nelse if (msg.current < grid_buy_price_day && msg.battery < 100 && msg.net_remaining < 1 && today.getHours() >= Number(msg.cheapest_grid_start[0]) && today.getHours() < (Number(msg.cheapest_grid_start[0])+3) && today.getMinutes() >= Number(msg.cheapest_grid_start[1])) {\n    if(today.getHours() > 8 && today.getHours() < 16) {\n    // node.warn(\"Not enough generation left to fully charge battery so force charging\");\n    msg.decision = \"In cheapest grid period, generation remaining not enough to charge battery, so force-charging\";\n    msg.decisions.push(msg.decision)\n    return [msg, null, null]\n    }\n}\n\nelse {\n    // node.warn(\"Not worth charging battery from grid, not worth shutting down inverter\");\n    msg.decision = \"Not worth charging battery from grid, not worth shutting down inverter\";\n    msg.decisions.push(msg.decision)\n    return [null, msg, null]\n}",
+        "outputs": 3,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 520,
+        "wires": [
+            [
+                "3eb73ad8a6256630"
+            ],
+            [
+                "c18ecd577c5a16c4"
+            ],
+            [
+                "c91372affc87b424"
+            ]
+        ]
+    },
+    {
+        "id": "d8179d09f5dd67f1",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Get forecast high/low sell price 4hrs",
+        "func": "let forecasts = msg.forecast_obj.attributes.forecast;\n\nlet sellprice = null;\nlet maxsellprice = null;\nlet minsellprice = null;\n\n// 48 = 4hrs of 5min intervals\n\n// temp\nmaxsellprice = forecasts[0].earningsFlexUp;\nminsellprice = forecasts[0].earningsFlexUp;\n\nfor (let i = 1; i <= 47; i++) {\n    sellprice = forecasts[i].earningsFlexUp;\n\n    if (sellprice > maxsellprice) {\n        maxsellprice = sellprice;\n    }\n    \n    if (sellprice < minsellprice) {\n        minsellprice = sellprice;\n    }\n}\n\nmsg.maxsell4hrs = maxsellprice;\nmsg.minsell4hrs = minsellprice;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 200,
+        "y": 580,
+        "wires": [
+            [
+                "ee0fc7f53c7c6dc2",
+                "c53a22e1ef3172f4"
+            ]
+        ]
+    },
+    {
+        "id": "933d03b7aeecf25a",
+        "type": "inject",
+        "z": "a22ceab4a91f8127",
+        "name": "Every 15 mins",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "900",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1260,
+        "y": 800,
+        "wires": [
+            [
+                "b4c6eb0385f02477"
+            ]
+        ]
+    },
+    {
+        "id": "f2a577dea0c55490",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Full Battery Hour",
+        "func": "let remaining_generation = flow.get(\"remaining_today\");\nlet baseline_consumption = flow.get(\"baseline_consumption\");\n\nlet battery_charge = msg.battery_charge;\nlet battery_charge_required = null;\nlet battery_capacity = 19.2;\nlet battery_level = msg.battery_level;\n\nlet battery_full_hour = null;\n\nlet today = new Date();\nlet current_hour = today.getHours();\nlet sundown_hour = 17;\n\nmsg.expected_consumption_remaining = 0;\nmsg.expected_generation_remaining = 0;\n\nbattery_charge_required = battery_capacity - battery_charge;\n\nlet consumption_minus_generating_remaining = 0;\n\nfor (let hour in baseline_consumption) {\n    if (Number(hour) >= current_hour && Number(hour) < sundown_hour) {\n        let consumption_this_hour = (baseline_consumption[hour] / 1000);\n        msg.expected_consumption_remaining += consumption_this_hour;\n        if (remaining_generation.hasOwnProperty(hour) && remaining_generation[hour]) {\n            msg.expected_generation_remaining += Number(remaining_generation[hour]);\n            consumption_minus_generating_remaining += Number(remaining_generation[hour]) - consumption_this_hour;\n\n            // Work out what hour we will have a 100% battery\n            battery_charge_required = battery_charge_required - remaining_generation[hour];\n\n            if(battery_charge_required <= 0)\n                {\n                battery_full_hour = Number(hour) + 1;\n                break;\n                }\n        }\n    }\n    else\n    {\n        battery_full_hour = 99;\n    }\n}\n\n// This is a bit of a mess, need to work on this to get it better (won't be hard, this is quick and dirty)\nswitch (battery_full_hour) {\n    case 10:\n        msg.battery_full_hour = \"10am\";\n        break;\n    case 11:\n        msg.battery_full_hour = \"11am\";\n        break;\n    case 12:\n        msg.battery_full_hour = \"12pm\";\n        break;\n    case 13:\n        msg.battery_full_hour = \"1pm\";\n        break;\n    case 14:\n        msg.battery_full_hour = \"2pm\";\n        break;\n    case 15:\n        msg.battery_full_hour = \"3pm\";\n        break;\n    case 16:\n        msg.battery_full_hour = \"4pm\";\n        break;\n    case 17:\n        msg.battery_full_hour = \"5pm\";\n        break;\n    case 99:\n        msg.battery_full_hour = \"99\";\n        break;\n    default:\n        msg.battery_full_hour = \"Full\";\n}\n\nmsg.payload = {\n    data: {\n        state: msg.battery_full_hour,\n        entity_id: `sensor.battery_hour_full`,\n        attributes: {\n            'name': 'battery_hour_full',\n            'entries': [\n                {'title': 'BATTERY_HOUR_FULL', battery_full_hour}\n            ],\n            friendly_name: 'Battery hour when full',\n            icon: 'mdi:battery-high'\n        }\n    }\n};\n\nreturn [{payload: msg.payload, entity_id: 'sensor.battery_hour_full'}];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1910,
+        "y": 800,
+        "wires": [
+            [
+                "2e030b56cac4a4e0"
+            ]
+        ]
+    },
+    {
+        "id": "b4c6eb0385f02477",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Get Battery Charge",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.battery_charge",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "battery_charge",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 1470,
+        "y": 800,
+        "wires": [
+            [
+                "39148a569414d571"
+            ]
+        ]
+    },
+    {
+        "id": "2e030b56cac4a4e0",
+        "type": "ha-api",
+        "z": "a22ceab4a91f8127",
+        "name": "sensor",
+        "server": "5165f8c6.cc4798",
+        "version": 1,
+        "debugenabled": false,
+        "protocol": "http",
+        "method": "post",
+        "path": "/api/states/{{entity_id}}",
+        "data": "",
+        "dataType": "json",
+        "responseType": "text",
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "results"
+            }
+        ],
+        "x": 2090,
+        "y": 800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a70ae704aa2382fb",
+        "type": "comment",
+        "z": "a22ceab4a91f8127",
+        "name": "When will battery be fully charged?",
+        "info": "",
+        "x": 1300,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "2290ec84fd9f1b73",
+        "type": "within-time-switch",
+        "z": "a22ceab4a91f8127",
+        "name": "6pm-6:30pm",
+        "nameInt": "",
+        "positionConfig": "5e71c4ffa9baa60b",
+        "startTime": "18:00",
+        "startTimeType": "entered",
+        "startOffset": 0,
+        "startOffsetType": "none",
+        "startOffsetMultiplier": 60000,
+        "endTime": "18:30",
+        "endTimeType": "entered",
+        "endOffset": 0,
+        "endOffsetType": "none",
+        "endOffsetMultiplier": 60000,
+        "timeRestrictions": 0,
+        "timeRestrictionsType": "none",
+        "timeDays": "*",
+        "timeOnlyOddDays": false,
+        "timeOnlyEvenDays": false,
+        "timeOnlyOddWeeks": false,
+        "timeOnlyEvenWeeks": false,
+        "timeMonths": "*",
+        "timedatestart": "",
+        "timedateend": "",
+        "propertyStart": "",
+        "propertyStartType": "none",
+        "propertyStartCompare": "true",
+        "propertyStartThreshold": "",
+        "propertyStartThresholdType": "num",
+        "startTimeAlt": "",
+        "startTimeAltType": "entered",
+        "startOffsetAlt": 0,
+        "startOffsetAltType": "none",
+        "startOffsetAltMultiplier": 60000,
+        "propertyEnd": "",
+        "propertyEndType": "none",
+        "propertyEndCompare": "true",
+        "propertyEndThreshold": "",
+        "propertyEndThresholdType": "num",
+        "endTimeAlt": "",
+        "endTimeAltType": "entered",
+        "endOffsetAlt": 0,
+        "endOffsetAltType": "none",
+        "endOffsetAltMultiplier": 60000,
+        "withinTimeValue": "",
+        "withinTimeValueType": "msgInput",
+        "outOfTimeValue": "false",
+        "outOfTimeValueType": "msgInput",
+        "tsCompare": "0",
+        "x": 2910,
+        "y": 360,
+        "wires": [
+            [
+                "816d7aa504549c19"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "c0c3a211424b4c9d",
+        "type": "within-time-switch",
+        "z": "a22ceab4a91f8127",
+        "name": "8am-8:30am",
+        "nameInt": "",
+        "positionConfig": "5e71c4ffa9baa60b",
+        "startTime": "08:00",
+        "startTimeType": "entered",
+        "startOffset": 0,
+        "startOffsetType": "none",
+        "startOffsetMultiplier": 60000,
+        "endTime": "08:30",
+        "endTimeType": "entered",
+        "endOffset": 0,
+        "endOffsetType": "none",
+        "endOffsetMultiplier": 60000,
+        "timeRestrictions": 0,
+        "timeRestrictionsType": "none",
+        "timeDays": "*",
+        "timeOnlyOddDays": false,
+        "timeOnlyEvenDays": false,
+        "timeOnlyOddWeeks": false,
+        "timeOnlyEvenWeeks": false,
+        "timeMonths": "*",
+        "timedatestart": "",
+        "timedateend": "",
+        "propertyStart": "",
+        "propertyStartType": "none",
+        "propertyStartCompare": "true",
+        "propertyStartThreshold": "",
+        "propertyStartThresholdType": "num",
+        "startTimeAlt": "",
+        "startTimeAltType": "entered",
+        "startOffsetAlt": 0,
+        "startOffsetAltType": "none",
+        "startOffsetAltMultiplier": 60000,
+        "propertyEnd": "",
+        "propertyEndType": "none",
+        "propertyEndCompare": "true",
+        "propertyEndThreshold": "",
+        "propertyEndThresholdType": "num",
+        "endTimeAlt": "",
+        "endTimeAltType": "entered",
+        "endOffsetAlt": 0,
+        "endOffsetAltType": "none",
+        "endOffsetAltMultiplier": 60000,
+        "withinTimeValue": "",
+        "withinTimeValueType": "msgInput",
+        "outOfTimeValue": "false",
+        "outOfTimeValueType": "msgInput",
+        "tsCompare": "0",
+        "x": 2910,
+        "y": 240,
+        "wires": [
+            [
+                "816d7aa504549c19"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "9b70894492a5cdbc",
+        "type": "within-time-switch",
+        "z": "a22ceab4a91f8127",
+        "name": "12pm-12:30pm",
+        "nameInt": "",
+        "positionConfig": "5e71c4ffa9baa60b",
+        "startTime": "12:00",
+        "startTimeType": "entered",
+        "startOffset": 0,
+        "startOffsetType": "none",
+        "startOffsetMultiplier": 60000,
+        "endTime": "12:30",
+        "endTimeType": "entered",
+        "endOffset": 0,
+        "endOffsetType": "none",
+        "endOffsetMultiplier": 60000,
+        "timeRestrictions": 0,
+        "timeRestrictionsType": "none",
+        "timeDays": "*",
+        "timeOnlyOddDays": false,
+        "timeOnlyEvenDays": false,
+        "timeOnlyOddWeeks": false,
+        "timeOnlyEvenWeeks": false,
+        "timeMonths": "*",
+        "timedatestart": "",
+        "timedateend": "",
+        "propertyStart": "",
+        "propertyStartType": "none",
+        "propertyStartCompare": "true",
+        "propertyStartThreshold": "",
+        "propertyStartThresholdType": "num",
+        "startTimeAlt": "",
+        "startTimeAltType": "entered",
+        "startOffsetAlt": 0,
+        "startOffsetAltType": "none",
+        "startOffsetAltMultiplier": 60000,
+        "propertyEnd": "",
+        "propertyEndType": "none",
+        "propertyEndCompare": "true",
+        "propertyEndThreshold": "",
+        "propertyEndThresholdType": "num",
+        "endTimeAlt": "",
+        "endTimeAltType": "entered",
+        "endOffsetAlt": 0,
+        "endOffsetAltType": "none",
+        "endOffsetAltMultiplier": 60000,
+        "withinTimeValue": "",
+        "withinTimeValueType": "msgInput",
+        "outOfTimeValue": "false",
+        "outOfTimeValueType": "msgInput",
+        "tsCompare": "0",
+        "x": 2920,
+        "y": 300,
+        "wires": [
+            [
+                "816d7aa504549c19"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "2e95b5ffe1c9b389",
+        "type": "server-state-changed",
+        "z": "a22ceab4a91f8127",
+        "name": "Force charge now",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entityId": "input_button.force_charge_now",
+        "entityIdType": "exact",
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "eventData"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "triggerId"
+            }
+        ],
+        "x": 130,
+        "y": 2100,
+        "wires": [
+            [
+                "a1d85bc63957ae20"
+            ]
+        ]
+    },
+    {
+        "id": "a1d85bc63957ae20",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "EMS Forced Mode",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_ems_mode"
+        ],
+        "data": "{ \"option\": \"Forced mode\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 350,
+        "y": 2100,
+        "wires": [
+            [
+                "fa35501e7f3192c9"
+            ]
+        ]
+    },
+    {
+        "id": "fa35501e7f3192c9",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "Force charge",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_battery_forced_charge_discharge_cmd"
+        ],
+        "data": "{ \"option\": \"Forced charge\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 550,
+        "y": 2100,
+        "wires": [
+            [
+                "086d17fad48f3ae2"
+            ]
+        ]
+    },
+    {
+        "id": "086d17fad48f3ae2",
+        "type": "api-call-service",
+        "z": "a22ceab4a91f8127",
+        "name": "10kw Charge Limit",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_forced_charge_discharge_power"
+        ],
+        "data": "{ \"value\": 10000 }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Force charge enabled",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 850,
+        "y": 2100,
+        "wires": [
+            [
+                "77e8510760e9d8b3"
+            ]
+        ]
+    },
+    {
+        "id": "77e8510760e9d8b3",
+        "type": "link out",
+        "z": "a22ceab4a91f8127",
+        "name": "link out 13",
+        "mode": "link",
+        "links": [
+            "072513d530b67f09"
+        ],
+        "x": 1005,
+        "y": 2100,
+        "wires": []
+    },
+    {
+        "id": "9af53b0aa71d57ad",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Get buy price for prep (day)",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_number.grid_buy_price_day",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "grid_buy_price_day",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 860,
+        "y": 700,
+        "wires": [
+            [
+                "bf3b6c9c3997a31e"
+            ]
+        ]
+    },
+    {
+        "id": "bf3b6c9c3997a31e",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Get buy price for spike prep (night)",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_number.grid_buy_price_night_spike_prep",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "grid_buy_price_night_spike_prep",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 760,
+        "y": 640,
+        "wires": [
+            [
+                "cd53228df097f099"
+            ]
+        ]
+    },
+    {
+        "id": "1961b0432ea10eac",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Get sell price for spike (night)",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_number.grid_sell_price_night",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "grid_sell_price_night",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 660,
+        "y": 580,
+        "wires": [
+            [
+                "c9ba4bb21628fced"
+            ]
+        ]
+    },
+    {
+        "id": "c9ba4bb21628fced",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Get sell price for spile (Day)",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_number.grid_sell_price_day",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "grid_sell_price_day",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 940,
+        "y": 580,
+        "wires": [
+            [
+                "60cdc0e41a150751"
+            ]
+        ]
+    },
+    {
+        "id": "cd53228df097f099",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Get buy price for spike prep (day)",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_number.grid_buy_price_day_spike_prep",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "grid_buy_price_day_spike_prep",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 1080,
+        "y": 640,
+        "wires": [
+            [
+                "1961b0432ea10eac"
+            ]
+        ]
+    },
+    {
+        "id": "ee0fc7f53c7c6dc2",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Get forecast high/low buy price 4hrs",
+        "func": "let forecasts = msg.forecast_obj.attributes.forecast;\nlet buyprice = null;\nlet minbuyprice = null;\nlet maxbuyprice = null;\n\nmaxbuyprice = forecasts[0].costsFlexUp;\nminbuyprice = forecasts[0].costsFlexUp;\n\n// 48 = 4hrs of 5min intervals\nfor (let i = 1; i <= 47; i++) {\n    buyprice = forecasts[i].costsFlexUp;\n\n    if (buyprice < minbuyprice) {\n        minbuyprice = buyprice;\n    }\n    if (buyprice > maxbuyprice) {\n        maxbuyprice = buyprice;\n    }\n}\n \nmsg.minbuy4hrs = minbuyprice;\nmsg.maxbuy4hrs = maxbuyprice;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 700,
+        "wires": [
+            [
+                "9af53b0aa71d57ad",
+                "0e786c6e0a9778d8"
+            ]
+        ]
+    },
+    {
+        "id": "0e786c6e0a9778d8",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Update buy sensors",
+        "func": "let lowestbuy4hrs = msg.minbuy4hrs;\nlet highestbuy4hrs = msg.maxbuy4hrs;\n\nmsg.payloadlow = {\n    data: {\n        state: msg.minbuy4hrs,\n        entity_id: `sensor.lowestbuy4hrs`,\n        attributes: {\n            'name': 'lowest_buy_4hrs',\n            'entries': [\n                {'title': 'LOWEST_BUY_4HRS', lowestbuy4hrs}\n            ],\n            friendly_name: 'Lowest buy price in next 4hrs',\n            icon: 'mdi:currency-usd'\n        }\n    }\n}\n\nmsg.payloadhigh = {\n    data: {\n        state: msg.maxbuy4hrs,\n        entity_id: `sensor.highestbuy4hrs`,\n        attributes: {\n            'name': 'highest_buy_4hrs',\n            'entries': [\n                { 'title': 'HIGHEST_BUY_4HRS', highestbuy4hrs }\n            ],\n            friendly_name: 'Highest buy price in next 4hrs',\n            icon: 'mdi:currency-usd'\n        }\n    }\n}\n    \nreturn [\n    {payload: msg.payloadlow, entity_id: 'sensor.lowestbuy4hrs'},\n    {payload: msg.payloadhigh, entity_id: 'sensor.highestbuy4hrs'}\n    ];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 740,
+        "wires": [
+            [
+                "0e947c316948d545"
+            ],
+            [
+                "0e947c316948d545"
+            ]
+        ]
+    },
+    {
+        "id": "0e947c316948d545",
+        "type": "ha-api",
+        "z": "a22ceab4a91f8127",
+        "name": "sensor",
+        "server": "5165f8c6.cc4798",
+        "version": 1,
+        "debugenabled": false,
+        "protocol": "http",
+        "method": "post",
+        "path": "/api/states/{{entity_id}}",
+        "data": "",
+        "dataType": "json",
+        "responseType": "text",
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "results"
+            }
+        ],
+        "x": 690,
+        "y": 740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c53a22e1ef3172f4",
+        "type": "function",
+        "z": "a22ceab4a91f8127",
+        "name": "Update sell sensors",
+        "func": "let highestsell4hrs = msg.maxsell4hrs\nlet lowestsell4hrs = msg.minsell4hrs\n\nmsg.payloadhigh = {\n    data: {\n        state: msg.maxsell4hrs,\n        entity_id: `sensor.highestsell4hrs`,\n        attributes: {\n            'name': 'highest_sell_4hrs',\n            'entries': [\n                {'title': 'HIGHEST_SELL_4HRS', highestsell4hrs}\n            ],\n            friendly_name: 'Highest sell price in next 4hrs',\n            icon: 'mdi:currency-usd'\n        }\n    }\n}\n\nmsg.payloadlow = {\n    data: {\n        state: msg.minsell4hrs,\n        entity_id: `sensor.lowestsell4hrs`,\n        attributes: {\n            'name': 'lowest_sell_4hrs',\n            'entries': [\n                {'title': 'LOWEST_SELL_4HRS', lowestsell4hrs}\n            ],\n            friendly_name: 'Lowest sell price in next 4hrs',\n            icon: 'mdi:currency-usd'\n        }\n    }\n}\n\nreturn [\n    {payload: msg.payloadhigh, entity_id: 'sensor.highestsell4hrs'},\n    {payload: msg.payloadlow, entity_id: 'sensor.lowestsell4hrs'}\n];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 130,
+        "y": 620,
+        "wires": [
+            [
+                "bc7f20259a7db60f"
+            ],
+            [
+                "bc7f20259a7db60f"
+            ]
+        ]
+    },
+    {
+        "id": "bc7f20259a7db60f",
+        "type": "ha-api",
+        "z": "a22ceab4a91f8127",
+        "name": "sensor",
+        "server": "5165f8c6.cc4798",
+        "version": 1,
+        "debugenabled": false,
+        "protocol": "http",
+        "method": "post",
+        "path": "/api/states/{{entity_id}}",
+        "data": "",
+        "dataType": "json",
+        "responseType": "text",
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "results"
+            }
+        ],
+        "x": 310,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "39148a569414d571",
+        "type": "api-current-state",
+        "z": "a22ceab4a91f8127",
+        "name": "Get Battery Level",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.battery_level",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "battery_level",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 1690,
+        "y": 800,
+        "wires": [
+            [
+                "f2a577dea0c55490"
+            ]
+        ]
+    },
+    {
+        "id": "5165f8c6.cc4798",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "",
+        "connectionDelay": false,
+        "cacheJson": false,
+        "heartbeat": false,
+        "heartbeatInterval": "",
+        "statusSeparator": "",
+        "enableGlobalContextStore": true
+    },
+    {
+        "id": "814a6af6675ecbdc",
+        "type": "mqtt-broker",
+        "name": "MQTT Broker",
+        "broker": "192.168.1.83",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "39a507ed6f81ba8d",
+        "type": "ha-entity-config",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "",
+        "name": "Energy_control_on_off",
+        "version": "6",
+        "entityType": "switch",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "energy_control_on_off"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "switch"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "5e71c4ffa9baa60b",
+        "type": "position-config",
+        "name": "",
+        "isValide": "true",
+        "angleType": "deg",
+        "timeZoneOffset": 99,
+        "timeZoneDST": 0,
+        "stateTimeFormat": "3",
+        "stateDateFormat": "12",
+        "contextStore": ""
+    }
+]
