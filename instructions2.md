@@ -116,4 +116,4 @@ The following dashboard will display:
 6. Allow the charts to display. It may take a minute or two to load and may not appear updated for a while. Come back tomorrow and check it, and you should see some information.
 7. Click "Done" (top right) when you are done.
 
-**Continue to part three of the instructions [here](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/d5f0d4366177874e82125d6b1d007c46784c71f4/instructions3.md).**
+**Continue to part three of the instructions [here](instructions3.md).**
