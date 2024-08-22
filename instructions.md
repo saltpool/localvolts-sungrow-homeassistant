@@ -37,10 +37,10 @@ I personally use the OVA version by importing into vmware, but your most likely 
 The following instructions are based on the [HACS download page](https://hacs.xyz/docs/setup/download/):
 1. Go to the Add-on store (Settings -> Add-ons -> Add-on store (bottom right))
 2. Install "Advanced SSH & Web Terminal"
-  <img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/35054f481c0d7a286ed3dfb5262f6d3f1c61a852/images/ssh-1.png" />
+  <img src="images/ssh-1.png" />
   
 3. Go to the configuration tab of the add-on and enter the appropriate password
-  <img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/e63d30a0930fc5fa610a0e361a376c4975a0ba01/images/ssh-2.png" />
+  <img src="images/ssh-2.png" />
   
 4. Start the SSH add-on (it may take a few minutes to start)
 5. Enable the "Watchdog" and "Show in sidebar" sliders
@@ -48,7 +48,7 @@ The following instructions are based on the [HACS download page](https://hacs.xy
 ```
 wget -O hacs.sh https://get.hacs.xyz
 ```
-  <img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/549b9ba30ef6adf29beb7359fb7c123ba1c2dc1e/images/hacs-1.png" />
+  <img src="images/hacs-1.png" />
 
 7. After the script completes, restart Home Assistant (always check "Developer Tools" -> "Check configuration" first)
 8. Once HASS has restarted, click on Settings -> Devices & services -> Add Integration (bottom right)
@@ -65,7 +65,7 @@ wget -O hacs.sh https://get.hacs.xyz
 Apexcharts is a great add-on to allow you to draw charts. In this case, it will be used for one of the Localvolts forecast charts (the other being in Grafana), displayed directly in Home Assistant.
 
 1. Go into HACS and type "Apexcharts" in the search area
-  <img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/0564986ed75062fa4f9201fb3f25af9878739949/images/apexcharts-1.png" />
+  <img src="images/apexcharts-1.png" />
   
 2. Select it and then click "Download"
 3. Reload your browser when prompted
@@ -75,7 +75,7 @@ Node-Red will be used quite extensively in our energy management, so this instal
 1. Go into Settings -> Add-ons
 2. Click on "Add-on store"
 3. Search for "node-red"
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/5632b9fdcf7480c4dd6c05d9b1b6ba3879ae7686/images/node-red-1.png" />
+<img src="images/node-red-1.png" />
 
 4. Select it and install
 5. Enable "Watchdog" and "Show in sidebar" options
@@ -84,7 +84,7 @@ Node-Red will be used quite extensively in our energy management, so this instal
 
 ### Install Node-Red Companion
 1. Go into HACS and search for "Node-RED Companion"
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/56d94848a494861c0e8046fa5196db6403682ef4/images/node-red-companion-1.png" />
+<img src="images/node-red-companion-1.png" />
 
 2. Download the add-on
 3. Click on "Add Integraton to My (icon)"
@@ -94,7 +94,7 @@ Node-Red will be used quite extensively in our energy management, so this instal
 ### Install Kiosk mode
 Kiosk mode allows you to view a dashboard on a tablet without side bar and headers, etc.
 1. Go into HACS and search for "Kiosk"
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/4599b9d2a936a9abf839c26ecf864885362dbf95/images/kiosk-1.png" />
+<img src="images/kiosk-1.png" />
 
 2. Download the add-on
 3. Reload the browser when requested
@@ -103,7 +103,7 @@ Kiosk mode allows you to view a dashboard on a tablet without side bar and heade
 A MQTT (Mosquitto) broker is required to hold some values from the energy management flows that we will create shortly in Node-Red.
 
 1. Go to Settings -> Add-ons -> "+ Add-on store" and search for MQTT
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/83e05b79425cdf175158fe4243a2f04ac77d74c7/images/mqtt-1.png" />
+<img src="images/mqtt-1.png" />
 2. Select it and click on "Install"
 3. Enable "Watchdog" and click on "Start"
 
@@ -154,10 +154,10 @@ Visual Studio Code Server will make your editing work easier, so install it as f
 1. Settings -> Add-Ons
 2. Click on "Add-on Store" from the bottom right
 3. Search for "Studio Code Server" and select it when found
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/179ba17572095b1af0463fa5e648f3622dc6d6de/images/studio-code-server.png">
+<img src="images/studio-code-server.png">
 4. Click on "install"
 5. Once installed, enable "watchdog" and "show in sidebar" and click on "start"
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/a391d9bd5855a4ea7cc1922d69d28baa79a0075f/images/studio-code-server-start.png">
+<img src="images/studio-code-server-start.png">
 
 ### Launch Visual Studio Code and configure Sungrow Modbus
 1. Edit your "secrets.yaml" file
@@ -171,9 +171,9 @@ Visual Studio Code Server will make your editing work easier, so install it as f
 > Update each line appropriately, especially your inverter IP address, as it won't work without it!
 
 3. Create a folder in the config directory called "intergrations"
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/5ff73d376530110fe816eb5cb5092031674d946d/images/vcs-1.png">
+<img src="images/vcs-1.png">
 
-4. Copy the [modbus_sungrow.yaml](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/6424e88a26bade581ab78bdde094196203e367e7/yaml/modbus_sungrow.yaml) file to the integrations directory
+4. Copy the [modbus_sungrow.yaml](yaml/modbus_sungrow.yaml) file to the integrations directory
 5. Modify the modbus_sungrow.yaml file appropriately for your inverter size, especially lines 2380, 2386 and 2392.
 6. Modify the configuration.yaml file by adding the following code, if it doesn't already exist:
 
@@ -181,7 +181,7 @@ Visual Studio Code Server will make your editing work easier, so install it as f
    homeassistant:
      packages: !include_dir_named integrations
    ```
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/82087643fd4304944bf5f8a17d863ff076cea063/images/vcs-2.png">
+<img src="images/vcs-2.png">
 
 > [!WARNING]
 > It is extremely important to format yaml files correctly. Indents are very important and Home Assistant may not load on restart if it contains any errors.
@@ -191,22 +191,22 @@ Visual Studio Code Server will make your editing work easier, so install it as f
 
 8. Once HASS has been rebooted, browse to Settings -> Devices & services -> Entities, and you should find some new sensors present:
 
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/d7f811a70f64061c65c14096c4882e3143f83a8b/images/sungrow-1.png">
+<img src="images/sungrow-1.png">
 
 If you click on a sensor, you should see the current state. If this is seen, your modbus is being queried successfully.
 
 ### Configure the HASS Energy Dashboard
 1. Click on "Energy" from the side menu
 2. On step 1 "Electricity grid", configure as appropriate:
-   <img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/1fbcef4141f7e9408efd5e4810ef81156c900455/images/energy-1.png">
+   <img src="images/energy-1.png">
    1. For "Add consumption", select "Total imported energy".
    2. For "Add return", select "Total exported energy"
 3. On step 2 "Solar panels", configure as appropriate:
-   <img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/477d007833c9122c3250772e95f3ffb194fdd251/images/energy-2.png">
+   <img src="images/energy-2.png">
    1. For "Add solar production", select "Total PV production"
    2. Click on "Forecast production" and tick "Solcast PV Forecast"
 4. On step 3 "Home battery storage", configure as appropriate:
-   <img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/3a40d8e9fc58640b0e763e3f5977bead794bc54d/images/energy-3.png">
+   <img src="images/energy-3.png">
    1. Click on "Add Battery System"
    2. For "Energy going in to the battery", select "Total battery charge"
    3. For "Energy coming out of the battery", select "Total battery discharge"
@@ -215,7 +215,7 @@ If you click on a sensor, you should see the current state. If this is seen, you
 7. Click on "Show me my energy page"
 
 ### Add the PV Dashboards
-1. Copy the content of the [dashboards/pv-dashboard.yaml](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/d2df751726c48054e985a8f28677f55e83e1c7e7/dashboards/pv-dashboard.yaml) file (hint, copy as raw)
+1. Copy the content of the [dashboards/pv-dashboard.yaml](dashboards/pv-dashboard.yaml) file (hint, copy as raw)
 2. Go to Settings -> Dashboards
 3. Click on "+ Add Dashboard" from down the bottom right of the screen
 4. Select "New dashboard from scratch"
@@ -231,6 +231,6 @@ If you click on a sensor, you should see the current state. If this is seen, you
 > [!TIP]
 > There may be two "Entity not available" warnings on the dashboard (sensor.battery_cycles_per_day and switch.energy_control_on_off). Don't worry about these, we will come back and create these sensors in a future step - they just haven't been created yet.
 
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/214c7f2e410f9ddea350fc5a7455a1108269a6a5/images/pv-1.png">
+<img src="images/pv-1.png">
 
 **Continue to part two of the instructions [here](instructions2.md).**
