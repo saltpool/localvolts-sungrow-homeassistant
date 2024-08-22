@@ -22,16 +22,16 @@ The decision logic that these flows take are based around what personally fit fo
 1. Launch Node-Red from the side bar
 2. From the hamburger menu at the top right, select "Manage palette"
 3. From the "Install" tab of the palette, search for "traffic" and install "node-red-contrib-traffic"
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/b95ffdd09390ea5f9f1b2b6794a6a50553a672ea/images/node-red-traffic-1.png" />
+<img src="images/node-red-traffic-1.png" />
 4. Search for "sun-position" and install "node-red-contrib-sun-position"
-   <img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/1480e5fa7879698e553338d2c1a8c9cd94e3d21e/images/node-red-sun-1.png" />
+   <img src="images/node-red-sun-1.png" />
 
 5. Close the palette and then from the hamburger menu again, select import
 
-6. Copy the contents from the [energy_control.yaml](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/4b3959aea01458cb644fdc55215294308c029a6e/flows/energy_control.json) file to your clipboard (view it as raw before you copy it)
+6. Copy the contents from the [energy_control.yaml](flows/energy_control.json) file to your clipboard (view it as raw before you copy it)
 
 7. Paste the contents of your clipboard to the import nodes text area
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/e49830a272a181d19e48bb6851001682ddc5d22e/images/node-red-energy-1.png" />
+<img src="images/node-red-energy-1.png" />
 
 8. Select "new flow" (bottom left) and then "Import". If you are told that some of the nodes already exist in your workspace, click on "View nodes..." and then "Import selected". This will leave out the duplicated "Home Assistant" node that came with the Localvolts flow import.
 
@@ -55,7 +55,7 @@ Paste your expected typical daily usage in WATTS (so, e.g., put 1000 for 1kW) ag
 
 It will appear something like this (0 = midnight):
 
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/0ca15332fdced5785722605dcb6f2e0eb2d5ad7c/images/consumption-1.png" />
+<img src="images/consumption-1.png" />
 
 Once done, save and exit by CTL-X.
 
@@ -164,7 +164,7 @@ Unit of measurement: c
 ```
 5. Once done, save the dashboard. You should see a dashboard like this with buttons on it - this is your manual control page.
 
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/5751765ac732e90607a1c9c3341eec09a39ef761/images/grid-control-1.png" />
+<img src="images/grid-control-1.png" />
 
 6. You will notice that the coloured dollar icons are either set at 0 or -20. We will need to update these to something more realistic. The following is how I have them set up, but you might find different amounts suit you better (click on each and change the slider to the approriate number of cents):
     1. "Grid Buy Price (Night-Spike-Prep)": 25
@@ -175,7 +175,7 @@ Unit of measurement: c
   
 7. Your buttons will appear similar to the following:
 
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/5751765ac732e90607a1c9c3341eec09a39ef761/images/grid-control-2.png" />
+<img src="images/grid-control-2.png" />
 
 This dashboard will allow you to:
 - Enable energy management
@@ -219,6 +219,6 @@ State template: {{ ((states("sensor.total_battery_charge")|float) / (states("sen
 2. Click on the edit/pencil icon at the top right
 3. Click on the "+" on the header bar to create a new dashboard
 4. On the "View configuration" page that pops up, select "Edit in YAML" from the 3 dot menu at the top right
-5. Paste the content from the [grid-control.yaml](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/e67e23f6f8f0c710bf586793d6ef3cc4b5cffe38/yaml/grid-control.yaml) file (remember to copy the raw content), and then "Save"
+5. Paste the content from the [grid-control.yaml](yaml/grid-control.yaml) file (remember to copy the raw content), and then "Save"
 
-**We will create a Grafana dashboard in the next [instructions](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/cf81824085cebe4db58e7020c59834fc78a2f059/instructions4.md) section.**
+**We will create a Grafana dashboard in the next [instructions](instructions4.md) section.**
