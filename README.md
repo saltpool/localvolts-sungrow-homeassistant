@@ -104,53 +104,53 @@ The following is the logic behind the coding in the Node-Red flows. Note that al
 ### Home Assistant
 #### Node-Red
 A set of flows pull the pricing information from LocalVolts at regular intervals
-![alt_test](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/eff0081d2bcedd0673fb3603f0024036277bdb9c/images/nodered-localvolts.png)
+![alt_test](images/nodered-localvolts.png)
 
 The main energy management flows control the charging/discharging/import/export/curtailing of energy, based on the Localvolts pricing
-![alt text](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/653feb92b9bc9d9b3d76af0aeab7ae250fe210c4/images/nodered-energy_management.png)
+![alt text](images/nodered-energy_management.png)
 
 They also control the retrieval of solar forecasts from solcast.com, for your specific property (you need a Solcast account - which is free for up to 10 API calls per day)
 
 ### Buy/Sell price archival
 An archive is optionaly kept of each 5 min buy and sell price, unique to your NMI, as taken from the LocalVolts API
-![alt_test](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/653feb92b9bc9d9b3d76af0aeab7ae250fe210c4/images/localvolts-price_history.png)
+![alt_test](images/localvolts-price_history.png)
 
 ### Decision log
 Each time a decision is made on import/export/curtail/charge/discharge, it is logged for your reference and troubleshooting
-![alt_test](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/653feb92b9bc9d9b3d76af0aeab7ae250fe210c4/images/decision_log.png)
+![alt_test](images/decision_log.png)
 
 ### HASS Energy Dashboard
 The built in energy dashboard can be configured to show your PV generation/import/export/battery usage
-![alt_test](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/653feb92b9bc9d9b3d76af0aeab7ae250fe210c4/images/hass-energy.png)
+![alt_test](images/hass-energy.png)
 
 > [!TIP]
 > Note that if you curtail your solar, like in this case, you will not see what you "could have" generated, but what your inverter "let through".
 
 ### HASS PV Dashboards
 Various PV dashboards are displayed so you know what is going on at a glance
-![alt_test](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/653feb92b9bc9d9b3d76af0aeab7ae250fe210c4/images/hass-pv-1.png)
+![alt_test](images/hass-pv-1.png)
 
-![alt_test](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/653feb92b9bc9d9b3d76af0aeab7ae250fe210c4/images/hass-pv-2.png)
+![alt_test](images/hass-pv-2.png)
 
-![alt_test](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/653feb92b9bc9d9b3d76af0aeab7ae250fe210c4/images/hass-pv-3.png)
+![alt_test](images/hass-pv-3.png)
 
 > [!NOTE]
 > Note that the second PV dashboard allows you to manually control your inverter. It also allows you to disable energy management, in case there are issues, or you simply want to control it yourself
 
 ### HASS Costs Dashboard
 Various ApexChart graphs can be displayed showing you your approximate costs so far. Note this should be used as a guide only as the final cost will always be what Localvolts state it is.
-![alt_test](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/653feb92b9bc9d9b3d76af0aeab7ae250fe210c4/images/hass-summary-2.png)
+![alt_test](images/hass-summary-2.png)
 
-![alt_test](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/653feb92b9bc9d9b3d76af0aeab7ae250fe210c4/images/hass-summary-3.png)
+![alt_test](images/hass-summary-3.png)
 
 ### Dashboards for tablets
 I use two older Microsoft Surface tablets to display what is currently happening, so I don't have to keep looking in an app in my phone.
 
 Dashboard 1: HASS price and solar generation forecasts
-![alt_test](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/653feb92b9bc9d9b3d76af0aeab7ae250fe210c4/images/hass-dashboard.png)
+![alt_test](images/hass-dashboard.png)
 This dashboard shows the price forecasts for buying and selling for both the next 4hrs (so you can spot an close upcoming spike) and for 24hrs. It also includes the solar predications for the next 5 days, taken from Solcast. It is running a HASS dashboard.
 
-![alt_test](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/c5837d4730035b3627090dfba03ca6e3c3411ad2/images/grafana-7.png)
+![alt_test](images/grafana-7.png)
 This dashboard shows more information and runs on Grafana. It shows the following:
 - Current solar/PV generation
 - How much of your solar/PV is being used
@@ -175,4 +175,4 @@ There are bound to be times when things go wrong, so if you're not prepared to p
 If something is wrong, or you need help, feel free to post an issue (if you know that it is a coding issue) or start a discussion (if you just need some help) and someone may be able to help you out.
 
 # Installation Instructions
-Please refer to the following [instructions](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/main/instructions.md) that are based on a fresh Home Assistant (full) installation.
+Please refer to the following [instructions](instructions.md) that are based on a fresh Home Assistant (full) installation.
