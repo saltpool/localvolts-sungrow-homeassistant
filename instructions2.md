@@ -11,15 +11,15 @@ Since we will be retrieving our energy pricing from Localvolts, we need to add a
 
 1. Launch Node-Red from the side bar
 2. From the hamburger menu at the top right of the page, select "import"
-3. Copy the contents from the [LocalVolts json template]("https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/8a779447a60d5feacc728a732e92e8b2a69f31f4/flows/localvolts.json") (hint, copy it raw) and paste it into the import box and press import
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/f7aec00221c49cc30348cbca90f28a031524485e/images/node-red-2.png" />
+3. Copy the contents from the [LocalVolts json template]("flows/localvolts.json") (hint, copy it raw) and paste it into the import box and press import
+<img src="images/node-red-2.png" />
 4. The Localvolts flow will be displayed as follows:
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/f7aec00221c49cc30348cbca90f28a031524485e/images/node-red-3.png" />
+<img src="images/node-red-3.png" />
 5. Click on the red "Deploy" button at the top right to save the settings of the import. The little blue dots will disappear, as these indicates unsaved work.
    
 6. Go into the "Request properties" flow and update the following:
 
-   <img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/a9090c3faed108e3162d4b2c988028c619b412c0/images/node-red-4.png" />
+   <img src="images/node-red-4.png" />
 
     1. NMI - this should work with the default "*", but if it doesn't, add your NMI here
     2. {partnerid} - this is provided to you by Localvolts  
@@ -42,12 +42,12 @@ We can make a Apexchart dashboard to display upcoming forecast pricing.  This is
 8. Click on the pencil/edit icon on the top right of the blank dashboard
 9. Click "+ Add card" from the bottom right
 10. Scroll to the bottom and select "Custom: ApexCharts Card"
-11. Delete everything in the code section of the editor and paste the contents of the [Localvolts forecast dashboard](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/0fc4cd532ca434e30f0ab056feb6a361e0d83e32/dashboards/localvolts-forecast.txt) (hint, copy the raw contents only)
+11. Delete everything in the code section of the editor and paste the contents of the [Localvolts forecast dashboard](dashboards/localvolts-forecast.txt) (hint, copy the raw contents only)
 12. If you get a "Entity not available: sensor.forecast" error message, make sure that your Localvolts flow is working first.
 
 Muck around with the type of dashboard (I find the "Panel (1 card)" works best as it stretches it out over the whole page) that suits you. Do this through the pencil/edit icon on the title of the dashboard.
 
-<img src="https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/77cc0841e9a3258e18191cd231e72e2d8595a5be/images/localvolts-forecast-1.png" />
+<img src="images/localvolts-forecast-1.png" />
 
 Later on we will create a dashboard that contains more information than this, but this gives you the general idea and a basic forecast.
 
@@ -58,11 +58,11 @@ Later on we will create a dashboard that contains more information than this, bu
 This section will take you through the creation of some informative dashboards, thanks to the great [HA-Amber-Electric-Usage-Charts](https://github.com/melvanderwal/HA-Amber-Electric-Usage-Charts) repository, but with some additional modifications specific to Localvolts. Please read the info at this repository for some key background and things to look out for and understand.
 
 ### Install the sensors
-1. Copy the [localvolts_usage.yaml](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/7f06d0db484a31c2d357c6e6eb40f842ddaf6cdf/dashboards/localvolts_usage.yaml) file to the /config/integrations directory using Studio Code Server (just this one file, don't copy localvolts_usage2.yaml)
+1. Copy the [localvolts_usage.yaml](dashboards/localvolts_usage.yaml) file to the /config/integrations directory using Studio Code Server (just this one file, don't copy localvolts_usage2.yaml)
 2. Go to Developer Tools -> Check configuration
 3. If all good, select "All YAML configuration" to reload the YAML files
 4. Go to Settings -> Devices & services -> Entities and search for the two new sensors; inverter_export_power & inverter_import_power. Make sure that they both exist and that they are both returning positive values. Note, if you're not currently importing from or exporting to the grid, you may need to wait until you are so that you can confirm this.
-5. Once this working, copy the text content of [localvolts_usage2.yaml](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/d34d98958d5a6f2ad291e310b23d8c7c86571acf/dashboards/localvolts_usage2.yaml) file to the end of the /config/integrations/localvolts_usage.yaml file.
+5. Once this working, copy the text content of [localvolts_usage2.yaml](dashboards/localvolts_usage2.yaml) file to the end of the /config/integrations/localvolts_usage.yaml file.
 6. Return to Developer Tools -> Check configuration and then select "ALL YAML configuration" to reload the YAML files if the configuration check succeeded
 7. Go to Settings -> Devices & serivces -> Entities and search for one of the new sensors; electricity_import_cost_5_minutes. Confirm that it exists so that you know the new YAML file has loaded.
 
@@ -78,7 +78,7 @@ The following dashboard will display:
 1. If you haven't already, go to Settings -> Dashboards and create a dashboard called "Forecast"
 2. Open the dashboard and edit it
 3. From the 3 dot menu at the top right of the dashboard, go to the "Raw configuration editor"
-4. Copy the content from [forecast.yaml](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/33641e45f5721630c00f45b3139ce7678ceda06b/dashboards/forecast.yaml) (hint, copy it raw) and paste into the dashboard, then save it.
+4. Copy the content from [forecast.yaml](dashboards/forecast.yaml) (hint, copy it raw) and paste into the dashboard, then save it.
 5. Restart HASS (after confirming the settings are ok, as usual)
 6. Create the solar_buy_price and solar_sell_price sensors (this basically is just taking the costsflex and earningsflex Localvolts sensors and rounding them to two decimal places)
   1. Go to Settings -> Devices & services -> Helpers
@@ -111,7 +111,7 @@ The following dashboard will display:
 1. Go Settings -> Dashboards, and create a "new dashboard from scratch" called "Costs", use the mdi:currency-usd icon
 2. Go into the Costs dashboard and edit it
 3. Go to the 3 dot menu at the top right and select "Raw configuration editor"
-4. Paste in the raw content from [costs.yaml](https://github.com/saltpool/localvolts-sungrow-homeassistant/blob/7ed0369e569f16faa17054038adfc5903f99fc36/dashboards/costs.yaml) and save
+4. Paste in the raw content from [costs.yaml](dashboards/costs.yaml) and save
 5. Close the dashboard through the "X" at the top left, next to "Edit configuration"
 6. Allow the charts to display. It may take a minute or two to load and may not appear updated for a while. Come back tomorrow and check it, and you should see some information.
 7. Click "Done" (top right) when you are done.
