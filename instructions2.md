@@ -42,7 +42,7 @@ We can make a Apexchart dashboard to display upcoming forecast pricing.  This is
 8. Click on the pencil/edit icon on the top right of the blank dashboard
 9. Click "+ Add card" from the bottom right
 10. Scroll to the bottom and select "Custom: ApexCharts Card"
-11. Delete everything in the code section of the editor and paste the contents of the [Localvolts forecast dashboard](dashboards/localvolts-forecast.txt) (hint, copy the raw contents only)
+11. Delete everything in the code section of the editor and paste the contents of the [Localvolts forecast dashboard](dashboards/localvolts-forecast.yaml) (hint, copy the raw contents only)
 12. If you get a "Entity not available: sensor.forecast" error message, make sure that your Localvolts flow is working first.
 
 Muck around with the type of dashboard (I find the "Panel (1 card)" works best as it stretches it out over the whole page) that suits you. Do this through the pencil/edit icon on the title of the dashboard.
