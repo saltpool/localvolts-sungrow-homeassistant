@@ -40,7 +40,7 @@ http://homeassistant.local:8123/api/states/sensor.daily_pv_generation
 
    Note: Change the name to the IP of your HASS server, if the name is not appropriate for you.
    
-   7. Click "Save and test". Make sure that it tells you that your connection was successful before you move on the the next step.
+   7. Click "Save and test". Make sure that it tells you that your connection was successful before you move on to the the next step.
 
 ### Create the Dashboard
 1. Click on the "Dashboards" menu item within the Grafana menu
