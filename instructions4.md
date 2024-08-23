@@ -54,7 +54,7 @@ http://homeassistant.local:8123/api/states/sensor.daily_pv_generation
 <img src="images/grafana-7.png" />
 
 >[!TIP]
->If your HASS instance is not access as http://homeassistant.local:8123, you will need to update each and every API URL in each of the charts manually. Hint - do this BEFORE you import. Take the source YAML content and do a simple search and replace, then paste into the import text box as above.
+>If your HASS instance is not accessed as http://homeassistant.local:8123, you will need to update each and every API URL in each of the charts manually. Hint - do this BEFORE you import. Take the source YAML content and do a simple search and replace, then paste into the import text box as above.
 
 >[!NOTE]
 >If your dashboard does not show the sensors correctly, you may have to check the API URL that is being queried. This will happen if you have your HASS server known as anything but http://homeassistant.local:8123.
