@@ -2,10 +2,11 @@
 Control your **Sungrow** Hybrid inverter with **LocalVolts** through **Home Assistant** using **NodeRed**
 
 > [!IMPORTANT]
-> Note: You MUST have a battery for this management system, unless you want to perform a lot of modifications to it.
+> Note: You MUST have solar and a battery for this management system, unless you want to perform a lot of modifications to it.
 
 > [!NOTE]
-> This project is still a work-in-progress. If you have ideas on how to make this integration better, please start a discussion.
+> New:
+> - Additional of an "aggressive mode" to force more energy out of your battery, to maximise financial return
 
 This repository depends on a number of great repositories, some of which have been customised for my own personal use. 
 I have forked these repositories, since I have updated some content, so all instructions are based on my own forks, though you should be able to get the originals working yourself with some minor updates.
@@ -43,7 +44,9 @@ Some very high level features are:
 # Logic behind management
 The following is the logic behind the coding in the Node-Red flows. Note that all of these can be customised to suit your particular situation, battery size, solar PV size, typical daily usage, etc.  For example, if you are able to export more than 5kW (perhaps you are on a plan that allows a 10kW export and you have a suitably sized inverter), then you should definitely update this decision matrix. You should probably change these decisions based on the seasons too.  These are coded in Javascript within the Node-Red flows.
 
-## FIT/Export
+## "Standard" logic (as opposed to "Aggressive", see below)
+
+### FIT/Export
 
 | FIT | Battery Level | Time | Rate | Decision |
 |---|---|---|---|---|
@@ -60,7 +63,7 @@ The following is the logic behind the coding in the Node-Red flows. Note that al
 
 [^1]: In reality, this should be set to 100W as 0kW may be seen as no setting.
 
-## Import
+### Import
 
 | Cost | Battery Level | Time | Rate | Decision |
 |---|---|---|---|---|
@@ -81,13 +84,16 @@ The following is the logic behind the coding in the Node-Red flows. Note that al
 [^3]: This will depend on your inverter capability
 [^4]: Configurable through HASS sliders (all other code is configurable anyway)
 
-## Preserve battery
+### Preserve battery
 
 | Time | Cost | Decision |
 |---|---|---|
 | < 1pm | Any | Use battery as required |
 | > 1pm | < $0.05 | Grid is cheaper than battery cycles, draw from grid |
 | > 1pm | > $0.05 | Best to use battery than draw from grid |
+
+## Aggressive Logic for demand period
+For those that want a more aggressive approach to exporting your energy back to the grid to do some more serious trading, there is a Home Assistant switch that will be installed to allow you to enable "Agressive Mode". What this will do is when it comes to the demand period (4-9pm QLD), it will check the average buy price between midnight and 4am and compare with the current sell price. If there is a (configurable) difference between what you can sell for, and what you would pay to replace it during the night (that is, if you sell it now, you can buy it back later cheaper), then it will export as much as it can, to set battery levels (so you don't run out during a peak period, that wouldn't be too good).
 
 # Requirements
 - A working instance of Home Assistant (full, not core!)
