@@ -6,7 +6,7 @@ Control your **Sungrow** Hybrid inverter with **LocalVolts** through **Home Assi
 
 > [!NOTE]
 > What's new:
-> - Additional of an "aggressive mode" to force more energy out of your battery, to maximise financial return
+> - Additional of an "aggressive mode" to force more energy out of your battery, to potentially maximise financial return
 > - Alert if Localvolts API is not behaving correctly (too many "forecasts" and no "Expected"), and puts inverter into "no export" mode
 > - Updated Grafana dashboard to show
 >     - Whether solar is currently being curtailed or not
