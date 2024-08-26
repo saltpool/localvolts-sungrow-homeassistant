@@ -98,7 +98,7 @@ The following is the logic behind the coding in the Node-Red flows. Note that al
 | > 1pm | < $0.05 | Grid is cheaper than battery cycles, draw from grid |
 | > 1pm | > $0.05 | Best to use battery than draw from grid |
 
-## Aggressive Logic (for demand period)
+## Aggressive Mode (for demand period only)
 For those that want a more aggressive approach to exporting your energy back to the grid to do some more serious trading, there is a Home Assistant switch that will be installed to allow you to enable "Agressive Mode". What this will do is when it comes to the demand period (4-9pm QLD), it will check the average buy price between midnight and 4am and compare with the current sell price. If there is a (configurable) difference between what you can sell for, and what you would pay to replace it during the night (that is, if you sell it now, you can buy it back later cheaper), then it will export as much as it can, to set battery levels (so you don't run out during a peak period, that wouldn't be too good).
 
 # Requirements
