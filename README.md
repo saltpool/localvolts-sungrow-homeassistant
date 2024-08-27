@@ -168,6 +168,7 @@ This dashboard shows more information and runs on Grafana. It shows the followin
 - Current solar/PV generation
 - How much of your solar/PV is being used
 - The current buy and sell prices, with trends
+- Whether there is a demand period currently active
 - The forecasted buy and sell prices, for the next 24 hours
 - Whether your inverter is currently curtailing
 - The current battery charge level
