@@ -17,7 +17,7 @@ Since we will be retrieving our energy pricing from Localvolts, we need to add a
 <img src="images/node-red-3.png" />
 5. Click on the red "Deploy" button at the top right to save the settings of the import. The little blue dots will disappear, as these indicates unsaved work.
    
-6. Go into the "Request properties" flow and update the following:
+6. Go into the "Request properties" flow and update the following (note replace the curley brackets as well):
 
    <img src="images/node-red-4.png" />
 
