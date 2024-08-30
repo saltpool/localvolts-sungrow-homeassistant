@@ -278,4 +278,122 @@ views:
         name: Energy Control
         show_state: true
         icon: mdi:home-battery
+  - title: Control
+    path: control
+    icon: mdi:transmission-tower
+    type: sections
+    sections:
+      - type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_button.force_charge_now
+            show_state: true
+            name: Force Charge
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_button.force_discharge_now
+            show_state: true
+            name: Force Discharge
+          - type: markdown
+            content: Nightime
+            layout_options:
+              grid_columns: 2
+              grid_rows: auto
+          - type: markdown
+            content: Daytime
+            layout_options:
+              grid_columns: 2
+              grid_rows: auto
+          - type: tile
+            entity: input_number.grid_buy_price_night_spike_prep
+            color: red
+          - type: tile
+            entity: input_number.grid_buy_price_day
+            color: yellow
+            show_entity_picture: false
+          - type: tile
+            entity: input_number.grid_sell_price_night
+            color: green
+          - type: tile
+            entity: input_number.grid_buy_price_day_spike_prep
+            color: red
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: switch.energy_control_on_off
+            name: Energy Control
+            show_state: true
+            icon: mdi:home-battery
+          - type: tile
+            entity: input_number.grid_sell_price_day
+            color: green
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: switch.aggressive_mode
+            name: Aggressive Mode
+            show_state: true
+            icon: mdi:gauge-full
+          - type: tile
+            entity: input_number.aggressive_sell_buy_diff
+            color: blue
+            show_entity_picture: false
+        title: Manual Control
+      - type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_button.stop_forced_discharge_100w_15
+            show_state: false
+            name: Stop Forced Discharge (100W/15% reserve)
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_button.stop_forced_dischage_now_5_5kw_50
+            name: Stop Forced Discharge (5kW/50% reserve)
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_button.stop_forced_discharge_5_5kw_0
+            name: Stop Forced Discharge (5kW/0% reserve)
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_button.stop_forced_discharge_100w_0
+            show_state: false
+            name: Stop Forced Discharge (100W/0% reserve)
+      - type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: input_button.sunrise_trigger
+            icon: mdi:sun-clock
+            show_state: true
+    visible:
+      - user: 5ec85e23c5ba4ed6b2ccb2ac828db283
+      - user: ef895ddf98b04b19953f4f1a9ff62448
+    cards: []
 title: PV System
