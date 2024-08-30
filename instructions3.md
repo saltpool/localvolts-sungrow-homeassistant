@@ -28,14 +28,16 @@ The decision logic that these flows take are based around what personally fit fo
 
 5. Close the palette and then from the hamburger menu again, select import
 
-6. Copy the contents from the [energy_control.yaml](flows/energy_control.json) file to your clipboard (view it as raw before you copy it)
+6. Copy the contents from the [energy_control.json](flows/energy_control.json) file to your clipboard (view it as raw before you copy it)
 
-7. Paste the contents of your clipboard to the import nodes text area
+*Note, if you do not have a solar array, you can opt to use the [energy_control_battery_only.json](flows/energy_control_battery_only.json) instead.*
+
+8. Paste the contents of your clipboard to the import nodes text area
 <img src="images/node-red-energy-1.png" />
 
-8. Select "new flow" (bottom left) and then "Import". If you are told that some of the nodes already exist in your workspace, click on "View nodes..." and then "Import selected". This will leave out the duplicated "Home Assistant" node that came with the Localvolts flow import.
+9. Select "new flow" (bottom left) and then "Import". If you are told that some of the nodes already exist in your workspace, click on "View nodes..." and then "Import selected". This will leave out the duplicated "Home Assistant" node that came with the Localvolts flow import.
 
-9. A large number of nodes will be imported, all with blue dots above them. You should perform the following, and then once done, click on deploy:
+10. A large number of nodes will be imported, all with blue dots above them. You should perform the following, and then once done, click on deploy:
     1. Confirm the inverter sizing is appropriate for you. Anywhere there is an export of 5kW, confirm that is correct for your situation.
     2. The "Slow battery charge?" node contains msg.battery_w that you should update appropriately. It is mostly set to import from the grid at 10kW.
     3. The "Full Battery Hour" node has a hard-coded battery capacity, you should update this.
@@ -44,7 +46,7 @@ The decision logic that these flows take are based around what personally fit fo
     6. "PV Actuals East" and "PV Actuals West" will need to be updated, like the above East and West forecast nodes.
     7. Update the MQTT Broker node appropriately for your MQTT broker (installed previously). Click on the edit button inside the node and change the server to the IP address of your HASS server. Keep everything else as it is. Remember to click on Deploy to deploy the changes.
 
-10. Using terminal, browse to the location _/addon_configs/a0d7b954_nodered/node-red/_ and create firstly a folder called _reference_ and then create and edit a file called **baseline-consumption.csv** (the following assumes Linux)
+11. Using terminal, browse to the location _/addon_configs/a0d7b954_nodered/node-red/_ and create firstly a folder called _reference_ and then create and edit a file called **baseline-consumption.csv** (the following assumes Linux)
 ```
 cd /addon_configs/a0d7b954_nodered/node-red/
 mkdir reference
