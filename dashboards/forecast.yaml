@@ -65,7 +65,7 @@ views:
                 extremas: false
                 in_header: false
             series:
-              - entity: sensor.forecast
+              - entity: sensor.forecast_2
                 name: Buy Price
                 color: firebrick
                 data_generator: |
@@ -74,7 +74,7 @@ views:
                   })
                 show:
                   extremas: min+time
-              - entity: sensor.forecast
+              - entity: sensor.forecast_2
                 name: Sell Price
                 color: forestgreen
                 data_generator: |
@@ -229,7 +229,7 @@ views:
                 extremas: false
                 in_header: false
             series:
-              - entity: sensor.forecast
+              - entity: sensor.forecast_2
                 name: Buy Price
                 color: firebrick
                 data_generator: |
@@ -238,7 +238,7 @@ views:
                   })
                 show:
                   extremas: min+time
-              - entity: sensor.forecast
+              - entity: sensor.forecast_2
                 name: Sell Price
                 color: forestgreen
                 data_generator: |
@@ -331,28 +331,48 @@ views:
                   in_header: true
       - type: grid
         cards:
+          - type: markdown
+            content: '**{{states("sensor.day_tomorrow")}}**'
+            layout_options:
+              grid_columns: 2
+              grid_rows: 1
+          - type: markdown
+            content: '**{{states("sensor.day_after_tommorrow")}}**'
+            layout_options:
+              grid_columns: 2
+              grid_rows: auto
           - type: gauge
             entity: sensor.solcast_pv_forecast_forecast_tomorrow
-            name: Solar Tomorrow
             unit: kWh
             severity:
               green: 60
               yellow: 40
               red: 0
+            name: ' '
           - type: gauge
             entity: sensor.solcast_pv_forecast_forecast_day_3
-            name: Day after Tomorrow
+            name: ' '
             severity:
               green: 60
               yellow: 40
               red: 0
+          - type: markdown
+            content: '**{{states("sensor.day_in_three_days")}}**'
+            layout_options:
+              grid_columns: 2
+              grid_rows: auto
+          - type: markdown
+            content: '**{{states("sensor.day_in_four_days")}}**'
+            layout_options:
+              grid_columns: 2
+              grid_rows: auto
           - type: gauge
             entity: sensor.solcast_pv_forecast_forecast_day_4
             severity:
               green: 60
               yellow: 40
               red: 0
-            name: Day after that
+            name: ' '
           - type: gauge
             entity: sensor.solcast_pv_forecast_forecast_day_5
             needle: false
@@ -361,8 +381,26 @@ views:
               yellow: 40
               red: 0
             name: And after that
+          - type: markdown
+            content: '**{{states("sensor.day_in_five_days")}}**'
+            layout_options:
+              grid_columns: 2
+              grid_rows: auto
+          - type: markdown
+            content: '**{{states("sensor.day_in_six_days")}}**'
+            layout_options:
+              grid_columns: 2
+              grid_rows: auto
           - type: gauge
             entity: sensor.solcast_pv_forecast_forecast_day_6
+            name: And even after that
+            needle: false
+            severity:
+              green: 60
+              yellow: 40
+              red: 0
+          - type: gauge
+            entity: sensor.solcast_pv_forecast_forecast_day_7
             name: And even after that
             needle: false
             severity:
