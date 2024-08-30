@@ -66,7 +66,7 @@ This section will take you through the creation of some informative dashboards, 
 6. Return to Developer Tools -> Check configuration and then select "ALL YAML configuration" to reload the YAML files if the configuration check succeeded
 7. Go to Settings -> Devices & services -> Entities and search for one of the new sensors; electricity_import_cost_5_minutes. Confirm that it exists so that you know the new YAML file has loaded.
 
-### Create some solar forecast helpers
+### Create some helpers
 1. Go to Settings -> Devices & services -> Helpers
 2. Add a new helper ("+ create helper") of type "template", and then "Template a sensor"
 3. Name it "Day Tomorrow"
@@ -96,6 +96,22 @@ State Template: {{ (as_timestamp(now())+(60*60*24*5))|timestamp_custom('%A') }}
 Name: Day In Six Days
 State Template: {{ (as_timestamp(now())+(60*60*24*6))|timestamp_custom('%A') }}
 ```
+6. Select each of the above helpers just created and change their icon to be mdi:calendar
+
+7. Create the buy and sell price helpers, rounded to cents (2 decimal places)
+```
+Name: Grid Buy Price
+State template: {{states('sensor.costs_flex_up')|float|round(2)}}
+Unit of measurement: $
+State class: Measurement
+```
+```
+Name: Grid Sell Price
+State template: {{states('sensor.earnings_flex_up')|float|round(2)}}
+Unit of measurement: $
+State class: Measurement
+```
+8. Select the last two helpers just created and update their icons to be mdi:currency-usd and Display precision to x.xx
 
 ### Create the dashboards - Forecast
 The following dashboard will display:
@@ -111,24 +127,6 @@ The following dashboard will display:
 3. From the 3 dot menu at the top right of the dashboard, go to the "Raw configuration editor"
 4. Copy the content from [forecast.yaml](dashboards/forecast.yaml) (hint, copy it raw) and paste into the dashboard, then save it.
 5. Restart HASS (after confirming the settings are ok, as usual)
-6. Create the solar_buy_price and solar_sell_price sensors (this basically is just taking the costsflex and earningsflex Localvolts sensors and rounding them to two decimal places)
-  1. Go to Settings -> Devices & services -> Helpers
-  2. Select "+ Create Helper"
-  3. Scroll down and select "Template"
-  4. Then select "Template sensor":
-     - Name: Grid_Buy_Price
-     - State template: {{states('sensor.costs_flex_up')|float|round(2)}}
-     - Unit of measurement: $
-     - State class: Measurement
-  5. Save the helper
-  6. Select the helper just created and update the icon to be mdi:currency-usd and Display precision to x.xx
-  7. Repeat for a second template sensor:
-     - Name: Grid_Sell_Price
-     - State template: {{states('sensor.earnings_flex_up')|float|round(2)}}
-     - Unit of measurement: $
-     - State class: Measurement
-   8. Save the helper
-   9. Select the helper just created and update the icon to be mdi:currency-usd and Display precision to x.xx
 
 ### Create the dashboards - Costs
 The following dashboard will display:
