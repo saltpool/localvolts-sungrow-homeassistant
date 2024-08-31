@@ -41,7 +41,7 @@ The decision logic that these flows take are based around what personally fit fo
     1. Confirm the inverter sizing is appropriate for you. Anywhere there is an export of 5kW, confirm that is correct for your situation.
     2. The "Slow battery charge?" node contains msg.battery_w that you should update appropriately. It is mostly set to import from the grid at 10kW.
     3. The "Full Battery Hour" node has a hard-coded battery capacity, you should update this.
-    4. "PV Forecast East" and "PV Forecast West" will need your Solcast.com details added to them. Replace {site} and {key} appropriately.
+    4. "PV Forecast East", "PV Forecast West", "PV Actuals East" and "PV Actuals West" will need your Solcast.com details added to them. Replace {site} and {key} appropriately.
     5. If you don't have EAST or WEST facing PV arrays, you can rename the node names but you'll need to update the code in the appropriate nodes as well.
     6. "PV Actuals East" and "PV Actuals West" will need to be updated, like the above East and West forecast nodes.
     7. Update the MQTT Broker node appropriately for your MQTT broker (installed previously). Click on the edit button inside the node and change the server to the IP address of your HASS server. Keep everything else as it is. Remember to click on Deploy to deploy the changes.
