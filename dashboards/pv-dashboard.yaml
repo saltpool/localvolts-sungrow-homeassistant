@@ -391,8 +391,5 @@ views:
             entity: input_button.sunrise_trigger
             icon: mdi:sun-clock
             show_state: true
-    visible:
-      - user: 5ec85e23c5ba4ed6b2ccb2ac828db283
-      - user: ef895ddf98b04b19953f4f1a9ff62448
     cards: []
 title: PV System
