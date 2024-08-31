@@ -164,6 +164,17 @@ Maximum value: 100
 Step size: 1
 Unit of measurement: c
 ```
+
+```
+Type: Number
+Name: Aggressive Sell-Buy Diff
+Icon: mdi:currency-usd
+Minimum value: 0
+Maximum value: 30
+Step size: 1
+Unit of measurement: c
+```
+
 5. Once done, save the dashboard. You should see a dashboard like this with buttons on it - this is your manual control page.
 
 <img src="images/grid-control-1.png" />
