@@ -87,7 +87,7 @@
           "decimals": 1,
           "displayName": "Generation",
           "mappings": [],
-          "max": 13000,
+          "max": 14000,
           "min": 0,
           "noValue": "0",
           "thresholds": {
@@ -238,6 +238,7 @@
           }
         }
       ],
+      "transparent": true,
       "type": "gauge"
     },
     {
@@ -331,6 +332,7 @@
           }
         }
       ],
+      "transparent": true,
       "type": "gauge"
     },
     {
@@ -443,7 +445,7 @@
                     },
                     {
                       "color": "dark-red",
-                      "value": -0.05
+                      "value": -0.1
                     },
                     {
                       "color": "red",
@@ -481,7 +483,7 @@
         ]
       },
       "gridPos": {
-        "h": 7,
+        "h": 6,
         "w": 12,
         "x": 12,
         "y": 0
@@ -534,7 +536,7 @@
           "root_selector": "*",
           "source": "url",
           "type": "json",
-          "url": "http://homeassistant.local:8123/api/history/period?filter_entity_id=sensor.costs_flex_up_2",
+          "url": "http://homeassistant.local:8123/api/history/period?filter_entity_id=sensor.costs_flex_up",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -569,14 +571,997 @@
           "root_selector": "*",
           "source": "url",
           "type": "json",
-          "url": "http://homeassistant.local:8123/api/history/period?filter_entity_id=sensor.earnings_flex_up_2",
+          "url": "http://homeassistant.local:8123/api/history/period?filter_entity_id=sensor.earnings_flex_up",
           "url_options": {
             "data": "",
             "method": "GET"
           }
         }
       ],
-      "title": "Current Pricing",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "${DS_HOMEASSISTANT-JSON}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "fieldMinMax": false,
+          "mappings": [
+            {
+              "options": {
+                "off": {
+                  "color": "#00000000",
+                  "index": 0,
+                  "text": "Not Demand"
+                },
+                "on": {
+                  "color": "dark-red",
+                  "index": 1,
+                  "text": "Demand"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 12,
+        "y": 6
+      },
+      "id": 42,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "/^State$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.3",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "state",
+              "text": "State",
+              "type": "string"
+            },
+            {
+              "selector": "last_changed",
+              "text": "Time",
+              "type": "timestamp"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "as-is",
+          "global_query_id": "",
+          "parser": "backend",
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/states/binary_sensor.demand_interval",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "${DS_HOMEASSISTANT-JSON}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Daily_sell State"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Sell"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Daily_buy State"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Daily Buy"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 15,
+        "y": 6
+      },
+      "id": 40,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.3",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "state",
+              "text": "State",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "Daily_buy",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/states/sensor.electricity_import_cost_daily",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        },
+        {
+          "columns": [
+            {
+              "selector": "state",
+              "text": "State",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "hide": false,
+          "refId": "Daily_sell",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/states/sensor.electricity_export_profit_daily",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "${DS_HOMEASSISTANT-JSON}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Monthly_sell State"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Sell"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Monthly_buy State"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Monthly Buy"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 3,
+        "x": 18,
+        "y": 6
+      },
+      "id": 41,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.3",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "state",
+              "text": "State",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "Monthly_buy",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/states/sensor.electricity_import_cost_monthly",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        },
+        {
+          "columns": [
+            {
+              "selector": "state",
+              "text": "State",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "hide": false,
+          "refId": "Monthly_sell",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/states/sensor.electricity_export_profit_monthly",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "${DS_HOMEASSISTANT-JSON}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "max": 80,
+          "min": 25,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 30
+              },
+              {
+                "color": "orange",
+                "value": 40
+              },
+              {
+                "color": "yellow",
+                "value": 50
+              },
+              {
+                "color": "green",
+                "value": 60
+              },
+              {
+                "color": "dark-green",
+                "value": 70
+              }
+            ]
+          },
+          "unit": "kwatth"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Solar_tomorrow (Day 2) Estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Tomorrow"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Day 3 Estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Day after tomorrow"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Day 4 Estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Day after that"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Day 5 Estimate"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "And after that"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 3,
+        "x": 21,
+        "y": 6
+      },
+      "id": 33,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.1.3",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "state",
+              "text": "Estimate",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "Solar_tomorrow (Day 2)",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/states/sensor.solcast_pv_forecast_forecast_tomorrow",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        },
+        {
+          "columns": [
+            {
+              "selector": "state",
+              "text": "Estimate",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "hide": false,
+          "refId": "Day 3",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/states/sensor.solcast_pv_forecast_forecast_day_3",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        },
+        {
+          "columns": [
+            {
+              "selector": "state",
+              "text": "Estimate",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "hide": false,
+          "refId": "Day 4",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/states/sensor.solcast_pv_forecast_forecast_day_4",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        },
+        {
+          "columns": [
+            {
+              "selector": "state",
+              "text": "Estimate",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "hide": false,
+          "refId": "Day 5",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/states/sensor.solcast_pv_forecast_forecast_day_5",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Solar Estimates",
+      "transparent": true,
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "${DS_HOMEASSISTANT-JSON}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "fieldMinMax": false,
+          "mappings": [
+            {
+              "options": {
+                "from": 0,
+                "result": {
+                  "color": "dark-orange",
+                  "index": 0,
+                  "text": "Exporting Curtailed"
+                },
+                "to": 100
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 101,
+                "result": {
+                  "color": "dark-green",
+                  "index": 1,
+                  "text": "Exporting not curtailed"
+                },
+                "to": 15000
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 6,
+        "x": 0,
+        "y": 8
+      },
+      "id": 38,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "vertical",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^State$/",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.3",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "last_reported",
+              "text": "Time",
+              "type": "timestamp"
+            },
+            {
+              "selector": "state",
+              "text": "State",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "as-is",
+          "global_query_id": "",
+          "parser": "backend",
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/states/sensor.export_power_limit",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "${DS_HOMEASSISTANT-JSON}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "9": {
+                  "index": 2,
+                  "text": "9am"
+                },
+                "10": {
+                  "index": 3,
+                  "text": "10am"
+                },
+                "11": {
+                  "index": 4,
+                  "text": "11am"
+                },
+                "12": {
+                  "index": 5,
+                  "text": "12pm"
+                },
+                "13": {
+                  "index": 6,
+                  "text": "1pm"
+                },
+                "14": {
+                  "index": 7,
+                  "text": "2pm"
+                },
+                "15": {
+                  "index": 8,
+                  "text": "3pm"
+                },
+                "16": {
+                  "index": 9,
+                  "text": "4pm"
+                },
+                "17": {
+                  "index": 10,
+                  "text": "5pm"
+                },
+                "98": {
+                  "index": 1,
+                  "text": "Full"
+                },
+                "99": {
+                  "index": 0,
+                  "text": "Not today"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              },
+              {
+                "color": "dark-green",
+                "value": 10
+              },
+              {
+                "color": "green",
+                "value": 13
+              },
+              {
+                "color": "super-light-green",
+                "value": 14
+              },
+              {
+                "color": "yellow",
+                "value": 15
+              },
+              {
+                "color": "orange",
+                "value": 16
+              },
+              {
+                "color": "red",
+                "value": 17
+              },
+              {
+                "color": "dark-purple",
+                "value": 99
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 6,
+        "y": 8
+      },
+      "id": 28,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "value",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.3",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "state",
+              "text": "State",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/states/sensor.battery_hour_full",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Full hour",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "${DS_HOMEASSISTANT-JSON}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              },
+              {
+                "color": "light-green",
+                "value": 20
+              },
+              {
+                "color": "green",
+                "value": 40
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 60
+              },
+              {
+                "color": "dark-green",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "kwatth"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 9,
+        "y": 8
+      },
+      "id": 29,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.3",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "state",
+              "text": "State",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/states/sensor.daily_pv_generation",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Generation",
       "type": "stat"
     },
     {
@@ -607,9 +1592,13 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
+            "lineInterpolation": "smooth",
             "lineStyle": {
-              "fill": "solid"
+              "dash": [
+                10,
+                10
+              ],
+              "fill": "dash"
             },
             "lineWidth": 1,
             "pointSize": 5,
@@ -792,7 +1781,7 @@
         "h": 7,
         "w": 9,
         "x": 12,
-        "y": 7
+        "y": 8
       },
       "id": 23,
       "options": {
@@ -837,7 +1826,7 @@
           "root_selector": "attributes",
           "source": "url",
           "type": "json",
-          "url": "http://homeassistant.local:8123/api/states/sensor.forecast_2",
+          "url": "http://homeassistant.local:8123/api/states/sensor.forecast",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -846,594 +1835,8 @@
       ],
       "timeFrom": "+12h",
       "title": "Forecast Price",
+      "transparent": true,
       "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "yesoreyeram-infinity-datasource",
-        "uid": "${DS_HOMEASSISTANT-JSON}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 1,
-          "mappings": [],
-          "max": 80,
-          "min": 25,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "dark-red",
-                "value": null
-              },
-              {
-                "color": "semi-dark-red",
-                "value": 30
-              },
-              {
-                "color": "orange",
-                "value": 40
-              },
-              {
-                "color": "yellow",
-                "value": 50
-              },
-              {
-                "color": "green",
-                "value": 60
-              },
-              {
-                "color": "dark-green",
-                "value": 70
-              }
-            ]
-          },
-          "unit": "kwatth"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Solar_tomorrow (Day 2) Estimate"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Tomorrow"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Day 3 Estimate"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Day after tomorrow"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Day 4 Estimate"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Day after that"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Day 5 Estimate"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "And after that"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 15,
-        "w": 3,
-        "x": 21,
-        "y": 7
-      },
-      "id": 33,
-      "options": {
-        "minVizHeight": 75,
-        "minVizWidth": 75,
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "sizing": "auto"
-      },
-      "pluginVersion": "11.1.3",
-      "targets": [
-        {
-          "columns": [
-            {
-              "selector": "state",
-              "text": "Estimate",
-              "type": "number"
-            }
-          ],
-          "datasource": {
-            "type": "yesoreyeram-infinity-datasource",
-            "uid": "${DS_HOMEASSISTANT-JSON}"
-          },
-          "filters": [],
-          "format": "table",
-          "global_query_id": "",
-          "refId": "Solar_tomorrow (Day 2)",
-          "root_selector": "",
-          "source": "url",
-          "type": "json",
-          "url": "http://homeassistant.local:8123/api/states/sensor.solcast_pv_forecast_forecast_tomorrow",
-          "url_options": {
-            "data": "",
-            "method": "GET"
-          }
-        },
-        {
-          "columns": [
-            {
-              "selector": "state",
-              "text": "Estimate",
-              "type": "number"
-            }
-          ],
-          "datasource": {
-            "type": "yesoreyeram-infinity-datasource",
-            "uid": "${DS_HOMEASSISTANT-JSON}"
-          },
-          "filters": [],
-          "format": "table",
-          "global_query_id": "",
-          "hide": false,
-          "refId": "Day 3",
-          "root_selector": "",
-          "source": "url",
-          "type": "json",
-          "url": "http://homeassistant.local:8123/api/states/sensor.solcast_pv_forecast_forecast_day_3",
-          "url_options": {
-            "data": "",
-            "method": "GET"
-          }
-        },
-        {
-          "columns": [
-            {
-              "selector": "state",
-              "text": "Estimate",
-              "type": "number"
-            }
-          ],
-          "datasource": {
-            "type": "yesoreyeram-infinity-datasource",
-            "uid": "${DS_HOMEASSISTANT-JSON}"
-          },
-          "filters": [],
-          "format": "table",
-          "global_query_id": "",
-          "hide": false,
-          "refId": "Day 4",
-          "root_selector": "",
-          "source": "url",
-          "type": "json",
-          "url": "http://homeassistant.local:8123/api/states/sensor.solcast_pv_forecast_forecast_day_4",
-          "url_options": {
-            "data": "",
-            "method": "GET"
-          }
-        },
-        {
-          "columns": [
-            {
-              "selector": "state",
-              "text": "Estimate",
-              "type": "number"
-            }
-          ],
-          "datasource": {
-            "type": "yesoreyeram-infinity-datasource",
-            "uid": "${DS_HOMEASSISTANT-JSON}"
-          },
-          "filters": [],
-          "format": "table",
-          "global_query_id": "",
-          "hide": false,
-          "refId": "Day 5",
-          "root_selector": "",
-          "source": "url",
-          "type": "json",
-          "url": "http://homeassistant.local:8123/api/states/sensor.solcast_pv_forecast_forecast_day_5",
-          "url_options": {
-            "data": "",
-            "method": "GET"
-          }
-        }
-      ],
-      "title": "Solar Estimates",
-      "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "yesoreyeram-infinity-datasource",
-        "uid": "${DS_HOMEASSISTANT-JSON}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "fieldMinMax": false,
-          "mappings": [
-            {
-              "options": {
-                "from": 0,
-                "result": {
-                  "color": "dark-orange",
-                  "index": 0,
-                  "text": "Exporting Curtailed"
-                },
-                "to": 100
-              },
-              "type": "range"
-            },
-            {
-              "options": {
-                "from": 101,
-                "result": {
-                  "color": "dark-green",
-                  "index": 1,
-                  "text": "Exporting not curtailed"
-                },
-                "to": 15000
-              },
-              "type": "range"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 6,
-        "x": 0,
-        "y": 8
-      },
-      "id": 38,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "vertical",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "/^State$/",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "value",
-        "wideLayout": true
-      },
-      "pluginVersion": "11.1.3",
-      "targets": [
-        {
-          "columns": [
-            {
-              "selector": "last_reported",
-              "text": "Time",
-              "type": "timestamp"
-            },
-            {
-              "selector": "state",
-              "text": "State",
-              "type": "number"
-            }
-          ],
-          "datasource": {
-            "type": "yesoreyeram-infinity-datasource",
-            "uid": "${DS_HOMEASSISTANT-JSON}"
-          },
-          "filters": [],
-          "format": "as-is",
-          "global_query_id": "",
-          "parser": "backend",
-          "refId": "A",
-          "root_selector": "",
-          "source": "url",
-          "type": "json",
-          "url": "http://homeassistant.local:8123/api/states/sensor.export_power_limit",
-          "url_options": {
-            "data": "",
-            "method": "GET"
-          }
-        }
-      ],
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "yesoreyeram-infinity-datasource",
-        "uid": "${DS_HOMEASSISTANT-JSON}"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [
-            {
-              "options": {
-                "9": {
-                  "index": 2,
-                  "text": "9am"
-                },
-                "10": {
-                  "index": 3,
-                  "text": "10am"
-                },
-                "11": {
-                  "index": 4,
-                  "text": "11am"
-                },
-                "12": {
-                  "index": 5,
-                  "text": "12pm"
-                },
-                "13": {
-                  "index": 6,
-                  "text": "1pm"
-                },
-                "14": {
-                  "index": 7,
-                  "text": "2pm"
-                },
-                "15": {
-                  "index": 8,
-                  "text": "3pm"
-                },
-                "16": {
-                  "index": 9,
-                  "text": "4pm"
-                },
-                "17": {
-                  "index": 10,
-                  "text": "5pm"
-                },
-                "98": {
-                  "index": 1,
-                  "text": "Full"
-                },
-                "99": {
-                  "index": 0,
-                  "text": "Not today"
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "dark-red",
-                "value": null
-              },
-              {
-                "color": "dark-green",
-                "value": 10
-              },
-              {
-                "color": "green",
-                "value": 13
-              },
-              {
-                "color": "super-light-green",
-                "value": 14
-              },
-              {
-                "color": "yellow",
-                "value": 15
-              },
-              {
-                "color": "orange",
-                "value": 16
-              },
-              {
-                "color": "red",
-                "value": 17
-              },
-              {
-                "color": "dark-purple",
-                "value": 99
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 6,
-        "y": 8
-      },
-      "id": 28,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "last"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "text": {},
-        "textMode": "value",
-        "wideLayout": true
-      },
-      "pluginVersion": "11.1.3",
-      "targets": [
-        {
-          "columns": [
-            {
-              "selector": "state",
-              "text": "State",
-              "type": "number"
-            }
-          ],
-          "datasource": {
-            "type": "yesoreyeram-infinity-datasource",
-            "uid": "${DS_HOMEASSISTANT-JSON}"
-          },
-          "filters": [],
-          "format": "table",
-          "global_query_id": "",
-          "refId": "A",
-          "root_selector": "",
-          "source": "url",
-          "type": "json",
-          "url": "http://homeassistant.local:8123/api/states/sensor.battery_hour_full",
-          "url_options": {
-            "data": "",
-            "method": "GET"
-          }
-        }
-      ],
-      "title": "Battery full hour",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "yesoreyeram-infinity-datasource",
-        "uid": "${DS_HOMEASSISTANT-JSON}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              },
-              {
-                "color": "light-green",
-                "value": 20
-              },
-              {
-                "color": "green",
-                "value": 40
-              },
-              {
-                "color": "semi-dark-green",
-                "value": 60
-              },
-              {
-                "color": "dark-green",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "kwatth"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 9,
-        "y": 8
-      },
-      "id": 29,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "11.1.3",
-      "targets": [
-        {
-          "columns": [
-            {
-              "selector": "state",
-              "text": "State",
-              "type": "number"
-            }
-          ],
-          "datasource": {
-            "type": "yesoreyeram-infinity-datasource",
-            "uid": "${DS_HOMEASSISTANT-JSON}"
-          },
-          "filters": [],
-          "format": "table",
-          "global_query_id": "",
-          "refId": "A",
-          "root_selector": "",
-          "source": "url",
-          "type": "json",
-          "url": "http://homeassistant.local:8123/api/states/sensor.daily_pv_generation",
-          "url_options": {
-            "data": "",
-            "method": "GET"
-          }
-        }
-      ],
-      "title": "Generation",
-      "type": "stat"
     },
     {
       "datasource": {
@@ -1522,6 +1925,7 @@
           }
         }
       ],
+      "transparent": true,
       "type": "bargauge"
     },
     {
@@ -1551,7 +1955,7 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
+            "lineInterpolation": "stepAfter",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -1630,7 +2034,7 @@
         "x": 0,
         "y": 12
       },
-      "id": 35,
+      "id": 39,
       "options": {
         "legend": {
           "calcs": [],
@@ -1716,6 +2120,7 @@
         }
       ],
       "title": "Grid Import & Export",
+      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -1862,6 +2267,7 @@
           }
         }
       ],
+      "transparent": true,
       "type": "gauge"
     },
     {
@@ -1890,7 +2296,7 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
+            "lineInterpolation": "stepAfter",
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -2098,7 +2504,7 @@
         "h": 8,
         "w": 9,
         "x": 12,
-        "y": 14
+        "y": 15
       },
       "id": 34,
       "options": {
@@ -2109,7 +2515,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -2341,6 +2747,7 @@
         }
       ],
       "title": "Energy Usage",
+      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -2529,6 +2936,7 @@
         }
       ],
       "title": "Battery Charge & Discharge",
+      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -2717,6 +3125,7 @@
           }
         }
       ],
+      "transparent": true,
       "type": "gauge"
     },
     {
@@ -2749,9 +3158,13 @@
             "insertNulls": false,
             "lineInterpolation": "linear",
             "lineStyle": {
-              "fill": "solid"
+              "dash": [
+                10,
+                10
+              ],
+              "fill": "dash"
             },
-            "lineWidth": 2,
+            "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -2932,7 +3345,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 23
       },
       "id": 24,
       "options": {
@@ -2977,7 +3390,7 @@
           "root_selector": "attributes",
           "source": "url",
           "type": "json",
-          "url": "http://homeassistant.local:8123/api/states/sensor.forecast_2",
+          "url": "http://homeassistant.local:8123/api/states/sensor.forecast",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -2986,6 +3399,337 @@
       ],
       "timeFrom": "+1d",
       "title": "Forecast Price",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "${DS_HOMEASSISTANT-JSON}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "stepAfter",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "watt"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Import_power kW"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Import"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Export_power kW"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Export"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Buy_price Buy"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Buy price"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sell_price Buy"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Sell price"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 31
+      },
+      "id": 35,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.1.3",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "last_reported",
+              "text": "Time",
+              "type": "timestamp"
+            },
+            {
+              "selector": "state",
+              "text": "kW",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "as-is",
+          "global_query_id": "",
+          "hide": false,
+          "json_options": {
+            "columnar": true
+          },
+          "parser": "backend",
+          "refId": "Import_power",
+          "root_selector": "*",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/history/period?filter_entity_id=sensor.import_power",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        },
+        {
+          "columns": [
+            {
+              "selector": "last_reported",
+              "text": "Time",
+              "type": "timestamp"
+            },
+            {
+              "selector": "state",
+              "text": "kW",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "as-is",
+          "global_query_id": "",
+          "hide": false,
+          "json_options": {
+            "columnar": true
+          },
+          "parser": "backend",
+          "refId": "Export_power",
+          "root_selector": "*",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/history/period?filter_entity_id=sensor.export_power",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        },
+        {
+          "columns": [
+            {
+              "selector": "last_reported",
+              "text": "Time",
+              "type": "timestamp"
+            },
+            {
+              "selector": "state",
+              "text": "Buy",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "as-is",
+          "global_query_id": "",
+          "hide": false,
+          "parser": "backend",
+          "refId": "Buy_price",
+          "root_selector": "*",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/history/period?filter_entity_id=sensor.costs_flex_up",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        },
+        {
+          "columns": [
+            {
+              "selector": "last_updated",
+              "text": "Time",
+              "type": "timestamp"
+            },
+            {
+              "selector": "state",
+              "text": "Buy",
+              "type": "number"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "${DS_HOMEASSISTANT-JSON}"
+          },
+          "filters": [],
+          "format": "as-is",
+          "global_query_id": "",
+          "hide": false,
+          "parser": "backend",
+          "refId": "Sell_price",
+          "root_selector": "*",
+          "source": "url",
+          "type": "json",
+          "url": "http://homeassistant.local:8123/api/history/period?filter_entity_id=sensor.earnings_flex_up",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Grid Import & Export",
+      "transparent": true,
       "type": "timeseries"
     }
   ],
@@ -2993,27 +3737,7 @@
   "schemaVersion": 39,
   "tags": [],
   "templating": {
-    "list": [
-      {
-        "current": {},
-        "datasource": {
-          "type": "datasource",
-          "uid": "grafana"
-        },
-        "definition": "",
-        "hide": 0,
-        "includeAll": false,
-        "multi": false,
-        "name": "query0",
-        "options": [],
-        "query": "",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      }
-    ]
+    "list": []
   },
   "time": {
     "from": "now-12h",
@@ -3023,6 +3747,6 @@
   "timezone": "",
   "title": "EnergyMonitor",
   "uid": "fdv5swis884cga",
-  "version": 1,
+  "version": 38,
   "weekStart": ""
 }
