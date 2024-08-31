@@ -349,7 +349,6 @@ views:
             entity: input_number.aggressive_sell_buy_diff
             color: blue
             show_entity_picture: false
-        title: Manual Control
       - type: grid
         cards:
           - show_name: true
@@ -365,14 +364,14 @@ views:
             type: button
             tap_action:
               action: toggle
-            entity: input_button.stop_forced_dischage_now_5_5kw_50
+            entity: input_button.stop_forced_dischage_now_5kw_50
             name: Stop Forced Discharge (5kW/50% reserve)
           - show_name: true
             show_icon: true
             type: button
             tap_action:
               action: toggle
-            entity: input_button.stop_forced_discharge_5_5kw_0
+            entity: input_button.stop_forced_discharge_5kw_0
             name: Stop Forced Discharge (5kW/0% reserve)
           - show_name: true
             show_icon: true
