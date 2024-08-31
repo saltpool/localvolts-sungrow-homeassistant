@@ -1,6 +1,6 @@
 [
     {
-        "id": "a22ceab4a91f8127",
+        "id": "1f79901475e24239",
         "type": "tab",
         "label": "Energy Control",
         "disabled": false,
@@ -8,9 +8,9 @@
         "env": []
     },
     {
-        "id": "df051123bcec61aa",
+        "id": "bb5e56bffd985b70",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "DIY Curtailment",
         "func": "// node.warn(\"Current DC Power:\" + msg.dc_power_now);\n\nif (msg.fit < 0) {\n    // node.warn(\"Negative FIT so not exporting - \" + msg.fit + \"c FIT\");\n    msg.decision = \"Curtailing exports (-ve FIT)\";\n    msg.decisions.push(msg.decision)\n    msg.curtailment_percentage = 100;\n    flow.set(\"curtailment\", 100);\n    return [msg, null, null]\n}\n// you can add your own logic if FIT is 0 here, if you wish\nelse if (msg.fit === 0) {\n    // node.warn(\"Zero FIT so exporting at half speed\");\n    msg.decision = \"Curtailing exports by 50% (0c FIT)\";\n    msg.decisions.push(msg.decision)\n    msg.curtailment_percentage = 50;\n    flow.set(\"curtailment\", 50);\n    return [null, msg, null]\n}\nelse {\n    // node.warn(\"Exporting ok - \" + msg.fit +\"c FIT\");\n    msg.decision = \"OK to export (+ve FIT)\";\n    msg.decisions.push(msg.decision)\n    msg.curtailment_percentage = 0;\n    flow.set(\"curtailment\", 0);\n    return [null, null, msg]\n}\n",
         "outputs": 3,
@@ -23,20 +23,20 @@
         "y": 140,
         "wires": [
             [
-                "60d4ab772e17b253"
+                "39f6312b7d5aaf88"
             ],
             [
-                "7ecd7165aa12452a"
+                "ae297f7198f7cda8"
             ],
             [
-                "5476e079e6a74d45"
+                "c1fd0d2530c30ab7"
             ]
         ]
     },
     {
-        "id": "90189bc94d399849",
+        "id": "5c531b673a884db7",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Limit Export to 100W",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -58,14 +58,14 @@
         "y": 60,
         "wires": [
             [
-                "a9db63d1ef519e42"
+                "ffae156d12ee89f7"
             ]
         ]
     },
     {
-        "id": "6ee2c6f601e112ec",
+        "id": "d9907df2994d9ddf",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Unlimited Export (5kW)",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -87,14 +87,14 @@
         "y": 220,
         "wires": [
             [
-                "a9db63d1ef519e42"
+                "ffae156d12ee89f7"
             ]
         ]
     },
     {
-        "id": "60d4ab772e17b253",
+        "id": "39f6312b7d5aaf88",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Enable Power Limit Mode",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -116,14 +116,14 @@
         "y": 60,
         "wires": [
             [
-                "90189bc94d399849"
+                "5c531b673a884db7"
             ]
         ]
     },
     {
-        "id": "5476e079e6a74d45",
+        "id": "c1fd0d2530c30ab7",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Enable Power Limit Mode",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -145,14 +145,14 @@
         "y": 220,
         "wires": [
             [
-                "6ee2c6f601e112ec"
+                "d9907df2994d9ddf"
             ]
         ]
     },
     {
-        "id": "0a72e299af7c7376",
+        "id": "6c64d2dfd3e8399a",
         "type": "catch",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "CatchAll",
         "scope": null,
         "uncaught": false,
@@ -160,14 +160,14 @@
         "y": 60,
         "wires": [
             [
-                "db6ca994cc062914"
+                "6a81fb1fbfd688d8"
             ]
         ]
     },
     {
-        "id": "db6ca994cc062914",
+        "id": "6a81fb1fbfd688d8",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Flow Errors",
         "active": true,
         "tosidebar": true,
@@ -182,9 +182,9 @@
         "wires": []
     },
     {
-        "id": "6e03dc183ced7dd9",
+        "id": "1a51c2892e17f12d",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Debug Curtailment",
         "active": false,
         "tosidebar": true,
@@ -199,9 +199,9 @@
         "wires": []
     },
     {
-        "id": "f3d318ab61343e35",
+        "id": "50d9e5e00a871b97",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "EMS Forced Mode",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -223,14 +223,14 @@
         "y": 460,
         "wires": [
             [
-                "0b2d5f7146565059"
+                "2c9184bfc2554b60"
             ]
         ]
     },
     {
-        "id": "0b2d5f7146565059",
+        "id": "2c9184bfc2554b60",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Forced charge",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -252,96 +252,14 @@
         "y": 460,
         "wires": [
             [
-                "3f27e54bd2cd6b8a"
+                "65faecc4feb05555"
             ]
         ]
     },
     {
-        "id": "60cdc0e41a150751",
-        "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
-        "name": "Get Battery Level",
-        "server": "5165f8c6.cc4798",
-        "version": 3,
-        "outputs": 1,
-        "halt_if": "",
-        "halt_if_type": "str",
-        "halt_if_compare": "is",
-        "entity_id": "sensor.battery_level",
-        "state_type": "num",
-        "blockInputOverrides": false,
-        "outputProperties": [
-            {
-                "property": "battery",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entityState"
-            }
-        ],
-        "for": "0",
-        "forType": "num",
-        "forUnits": "minutes",
-        "override_topic": false,
-        "state_location": "payload",
-        "override_payload": "msg",
-        "entity_location": "data",
-        "override_data": "msg",
-        "x": 630,
-        "y": 520,
-        "wires": [
-            [
-                "670772ed7eafee88"
-            ]
-        ]
-    },
-    {
-        "id": "18513f81aee52039",
-        "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
-        "name": "Get Forecast",
-        "server": "5165f8c6.cc4798",
-        "version": 3,
-        "outputs": 1,
-        "halt_if": "",
-        "halt_if_type": "str",
-        "halt_if_compare": "is",
-        "entity_id": "sensor.forecast",
-        "state_type": "num",
-        "blockInputOverrides": false,
-        "outputProperties": [
-            {
-                "property": "forecast",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entityState"
-            },
-            {
-                "property": "forecast_obj",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entity"
-            }
-        ],
-        "for": "0",
-        "forType": "num",
-        "forUnits": "minutes",
-        "override_topic": false,
-        "state_location": "payload",
-        "override_payload": "msg",
-        "entity_location": "data",
-        "override_data": "msg",
-        "x": 370,
-        "y": 520,
-        "wires": [
-            [
-                "d8179d09f5dd67f1"
-            ]
-        ]
-    },
-    {
-        "id": "65b234d730a3c595",
+        "id": "3b5408452773ea23",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "EMS Self Consumption Mode",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -363,14 +281,14 @@
         "y": 520,
         "wires": [
             [
-                "369a67a217947f59"
+                "d6d1be72a5f6bbad"
             ]
         ]
     },
     {
-        "id": "369a67a217947f59",
+        "id": "d6d1be72a5f6bbad",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Stop forced charge/discharge",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -392,14 +310,14 @@
         "y": 520,
         "wires": [
             [
-                "8351c005f1d56659"
+                "043568fe9ab29980"
             ]
         ]
     },
     {
-        "id": "9797a2c89819a60b",
+        "id": "f36468c7fba6d8e9",
         "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get Import Price",
         "server": "5165f8c6.cc4798",
         "version": 3,
@@ -430,14 +348,14 @@
         "y": 520,
         "wires": [
             [
-                "18513f81aee52039"
+                "dfc1b7afe3f42a9f"
             ]
         ]
     },
     {
-        "id": "faa21f5bb71f5d9f",
+        "id": "5d74e58926c8af7a",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "EMS Forced Mode",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -459,14 +377,14 @@
         "y": 300,
         "wires": [
             [
-                "dfc82d97a2a1f6d0"
+                "7e145221ea33596c"
             ]
         ]
     },
     {
-        "id": "dfc82d97a2a1f6d0",
+        "id": "7e145221ea33596c",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Force discharge",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -488,37 +406,14 @@
         "y": 300,
         "wires": [
             [
-                "286028299ea1d50b"
+                "b145a53f58d3e50a"
             ]
         ]
     },
     {
-        "id": "3797e378b35fe5fe",
-        "type": "function",
-        "z": "a22ceab4a91f8127",
-        "name": "Export from Battery?",
-        "func": "let today = new Date();\n// node.warn(\"hour now is \" + today.getHours());\n\nmsg.baseline_consumption = flow.get(\"baseline_consumption\");\n// node.warn(\"baseline consumption=\" + msg.baseline_consumption)\n\nif (msg.fit >= .3 && msg.battery > 8 && today.getHours() >= 6 && today.getHours() < 8) {\n    // node.warn(\"Morning peak occurring, battery at \" + msg.battery + \"%, between 6-8am, FIT \" + msg.fit);\n    msg.decision = \"Morning peak occurring (>=30c,>8%), battery at \" + msg.battery + \"%, between 6-8am, FIT \" + msg.fit;\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse if (msg.fit > 1 && msg.battery > 40) {\n    // node.warn(\"Extremely high FIT and limited capacity: \" + msg.fit);\n    msg.decision = \"Extremely high FIT (>=$1,>40%), so forcing discharge\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse if (msg.fit >= .6 && msg.battery > 50) {\n    // node.warn(\"Very high FIT and some capacity: \" + msg.fit);\n    msg.decision = \"Very high FIT (>=65c,>50%), so forcing discharge\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse if (msg.fit >= .5 && msg.battery > 60) {\n    // node.warn(\"Great FIT and available capacity: \" + msg.fit);\n    msg.decision = \"High FIT (>=50c,>60%), so forcing discharge\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse if (msg.fit >= .4 && msg.battery > 70) {\n    // node.warn(\"Reasonable FIT and available capacity: \"+msg.fit);\n    msg.decision = \"Moderate FIT (>=40c,>70%), so forcing discharge\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse if (msg.fit >= .3 && msg.battery > 80) {\n    // node.warn(\"Tolerable FIT and available capacity: \" + msg.fit);\n    msg.decision = \"Acceptable FIT (>=32c,>80%), so forcing discharge\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\n//else if (msg.fit >= .30 && msg.battery > 80) {\n//    // node.warn(\"Tolerable FIT and available capacity: \" + msg.fit);\n//    msg.decision = \"Acceptable FIT and available capacity, so forcing discharge\";\n//    msg.decisions.push(msg.decision)\n//    return [msg, null]\n//}\nelse {\n    // node.warn(\"Not worth exporting from battery: \" + msg.fit);\n    msg.decision = \"Not worth exporting from battery.\";\n    msg.decisions.push(msg.decision)\n    return [null,msg]\n}\n",
-        "outputs": 2,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 920,
-        "y": 340,
-        "wires": [
-            [
-                "faa21f5bb71f5d9f"
-            ],
-            [
-                "8c78dca6dfd9e6ed"
-            ]
-        ]
-    },
-    {
-        "id": "a07ffdffda776f6d",
+        "id": "88971e4a8b4ea026",
         "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get Feed-in Price",
         "server": "5165f8c6.cc4798",
         "version": 3,
@@ -549,16 +444,16 @@
         "y": 240,
         "wires": [
             [
-                "5da2b05fa907b853"
+                "559e5cda60c9b943"
             ]
         ]
     },
     {
-        "id": "3816a3558f347c87",
+        "id": "649ed4cc07791925",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "d": true,
-        "name": "Run Every 15s",
+        "name": "Run Every 10s",
         "props": [
             {
                 "p": "payload"
@@ -568,7 +463,7 @@
                 "vt": "str"
             }
         ],
-        "repeat": "15",
+        "repeat": "10",
         "crontab": "",
         "once": true,
         "onceDelay": "1",
@@ -579,14 +474,14 @@
         "y": 180,
         "wires": [
             [
-                "fd4264aa6847a51e"
+                "1ff7ad2ca1d82a29"
             ]
         ]
     },
     {
-        "id": "6ae9621cfaa50cc7",
+        "id": "d5e16b85bad1814b",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Debug Forced Discharge",
         "active": false,
         "tosidebar": true,
@@ -601,9 +496,9 @@
         "wires": []
     },
     {
-        "id": "5da2b05fa907b853",
+        "id": "559e5cda60c9b943",
         "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get Battery Level",
         "server": "5165f8c6.cc4798",
         "version": 3,
@@ -634,14 +529,14 @@
         "y": 300,
         "wires": [
             [
-                "96f5b885e46e8a54"
+                "fb9bd28f3f4ae92c"
             ]
         ]
     },
     {
-        "id": "f013b4d9f814a45a",
+        "id": "9d48684bb2b5d664",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Debug Force Charge",
         "active": false,
         "tosidebar": true,
@@ -656,10 +551,10 @@
         "wires": []
     },
     {
-        "id": "286028299ea1d50b",
+        "id": "b145a53f58d3e50a",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
-        "name": "5kW Discharge",
+        "z": "1f79901475e24239",
+        "name": "10kW Discharge",
         "server": "5165f8c6.cc4798",
         "version": 5,
         "debugenabled": false,
@@ -670,7 +565,7 @@
         "entityId": [
             "input_number.set_sg_forced_charge_discharge_power"
         ],
-        "data": "{ \"value\": 5000 }",
+        "data": "{ \"value\": 10000 }",
         "dataType": "json",
         "mergeContext": "",
         "mustacheAltTags": false,
@@ -680,15 +575,15 @@
         "y": 300,
         "wires": [
             [
-                "6ae9621cfaa50cc7",
-                "8e740e78c6556459"
+                "d5e16b85bad1814b",
+                "42517cc3802f7abc"
             ]
         ]
     },
     {
-        "id": "3f27e54bd2cd6b8a",
+        "id": "65faecc4feb05555",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "10kW charge",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -710,15 +605,15 @@
         "y": 460,
         "wires": [
             [
-                "f013b4d9f814a45a",
-                "6696e787e3440d2c"
+                "9d48684bb2b5d664",
+                "d56aba185dbdfded"
             ]
         ]
     },
     {
-        "id": "8351c005f1d56659",
+        "id": "043568fe9ab29980",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "100W charge/discharge",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -740,14 +635,14 @@
         "y": 520,
         "wires": [
             [
-                "121128ea0ae5ef52"
+                "1536c70dc54852ad"
             ]
         ]
     },
     {
-        "id": "670772ed7eafee88",
+        "id": "8fd0959b9343441b",
         "type": "rbe",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "RBE",
         "func": "rbe",
         "gap": "",
@@ -760,16 +655,16 @@
         "y": 520,
         "wires": [
             [
-                "6de1b93561f257d5"
+                "c94dc0e157e692bc"
             ]
         ]
     },
     {
-        "id": "a9db63d1ef519e42",
+        "id": "ffae156d12ee89f7",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Slow battery charge?",
-        "func": "let today = new Date()\n\n// if FIT 0 or less, charge the battery at full speed\nif (msg.fit <= 0 ) {   // original\n//if (msg.fit <= 0 && msg.importprice <= 0) {\n    // node.warn(\"No FIT benefit - \" + msg.fit + \"c - so charging at full speed\");\n    msg.decision = \"No feed-in benefit so not limiting charge rate\";\n    msg.decisions.push(msg.decision)\n    msg.battery_w = 10000;\n    return [msg, null]\n}\n// there is some feed in benefit, work out if worth slow-charging for\nelse if (msg.battery < 100 && msg.net_remaining < 1) {\n    // node.warn(\"FIT benefit - \" + msg.fit + \"c but less than 1kWh remaining generation so prioritising battery\");\n    msg.decision = \"Feed-in benefit but low generation remaining so not limiting charge rate\";\n    msg.decisions.push(msg.decision)\n    msg.battery_w = 10000;\n    return [null, msg]\n}\nelse if (msg.battery >= 30 && msg.net_remaining > msg.charge_required && today.getHours() > 12 && today.getHours() < 17) {\n    // node.warn(\"FIT benefit - \" + msg.fit + \"c - so slow charging\");\n    msg.decision = \"Getting late in the day, FIT is probably going to be higher later so not limiting charge rate now\";\n    msg.decisions.push(msg.decision)\n    msg.battery_w = 10000;\n    return [null, msg]\n}\nelse if (msg.battery >= 20 && msg.net_remaining > msg.charge_required) {\n    // node.warn(\"FIT benefit - \" + msg.fit + \"c - so slow charging\");\n    msg.decision = \"Enough generation remaining so limiting charge rate\";\n    msg.decisions.push(msg.decision)\n    msg.battery_w = 1000;\n    return [null, msg]\n}\nelse if (msg.battery <= 15 && msg.net_remaining > msg.charge_required) {\n    // node.warn(\"FIT benefit but low battery - \" + msg.fit + \"c - so slow charging\");\n    msg.decision = \"Enough generation remaining but low battery setting charge rate to 10% of PV\";\n    msg.decisions.push(msg.decision)\n    let slow_charge = Math.round((msg.dc_power_now * .1)/100) * 100;\n    msg.battery_w = slow_charge > 100 ? slow_charge : 100;\n    return [null, msg]\n}\n//if the battery is almost full, you can customise the logic here\nelse if (msg.battery > 95 && msg.expected_generation_remaining > msg.charge_required && msg.net_remaining > msg.charge_required) {\n    // node.warn(\"FIT benefit and battery almost full - \" + msg.fit + \"c - so slow charging\");\n    msg.decision = \"Enough generation remaining and battery almost full so setting charge rate to 10% of PV\";\n    msg.decisions.push(msg.decision)\n    let slow_charge = Math.round((msg.dc_power_now * .1)/100) * 100;\n    msg.battery_w = slow_charge > 100 ? slow_charge : 100;\n    return [null, msg]\n}\n//there is some feed-in benefit but we are favouring battery charging\nelse {\n    // node.warn(\"Else - \" + msg.fit + \"c - so fast charging\");\n    msg.battery_w = 5000;\n    msg.decision = \"Feed-in benefit but not limiting charge rate\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\n",
+        "func": "let today = new Date()\n//node.warn(msg.net_remaining);\n\n// if FIT 0 or less, charge the battery at full speed\nif (msg.fit <= 0 ) {\n    //node.warn(msg.net_remaining);\n    //node.warn(\"No FIT benefit - \" + msg.fit + \"c - so charging at full speed\");\n    msg.decision = \"No feed-in benefit so not limiting charge rate\";\n    msg.decisions.push(msg.decision)\n    msg.battery_w = 10000;\n    return [msg, null]\n}\n// there is some feed in benefit, work out if worth slow-charging for\nelse if (msg.battery < 100 && msg.net_remaining < 1) {\n    //node.warn(msg.net_remaining);\n    //node.warn(\"FIT benefit - \" + msg.fit + \"c but less than 1kWh remaining generation so prioritising battery\");\n    msg.decision = \"Feed-in benefit but low generation remaining so not limiting charge rate\";\n    msg.decisions.push(msg.decision)\n    msg.battery_w = 10000;\n    return [null, msg]\n}\nelse if (msg.battery >= 30 && msg.net_remaining > msg.charge_required && today.getHours() > 12 && today.getHours() < 17) {\n    //node.warn(msg.net_remaining);\n    //node.warn(\"FIT benefit - \" + msg.fit + \"c - so slow charging\");\n    msg.decision = \"Getting late in the day, FIT is probably going to be higher later so not limiting charge rate now\";\n    msg.decisions.push(msg.decision)\n    msg.battery_w = 10000;\n    return [null, msg]\n}\nelse if (msg.battery >= 20 && msg.net_remaining > msg.charge_required) {\n    //node.warn(msg.net_remaining);\n    //node.warn(\"FIT benefit - \" + msg.fit + \"c - so slow charging\");\n    msg.decision = \"Enough generation remaining so limiting charge rate to 1kW, better to get some FIT\";\n    msg.decisions.push(msg.decision)\n    msg.battery_w = 1000;\n    return [null, msg]\n}\nelse if (msg.fit > 0.01 && msg.battery <= 15 && msg.net_remaining > msg.charge_required) {\n    //node.warn(msg.net_remaining);\n    //node.warn(\"FIT benefit but low battery - \" + msg.fit + \"c - so slow charging\");\n    msg.decision = \"Enough generation remaining but low battery setting charge rate to 10% of PV\";\n    msg.decisions.push(msg.decision)\n    let slow_charge = Math.round((msg.dc_power_now * .1)/100) * 100;\n    msg.battery_w = slow_charge > 100 ? slow_charge : 100;\n    return [null, msg]\n}\n//if the battery is almost full, you can customise the logic here\nelse if (msg.battery > 95 && msg.expected_generation_remaining > msg.charge_required && msg.net_remaining > msg.charge_required) {\n    //node.warn(msg.net_remaining);\n    //node.warn(\"FIT benefit and battery almost full - \" + msg.fit + \"c - so slow charging\");\n    msg.decision = \"Enough generation remaining and battery almost full so setting charge rate to 10% of PV\";\n    msg.decisions.push(msg.decision)\n    let slow_charge = Math.round((msg.dc_power_now * .1)/100) * 100;\n    msg.battery_w = slow_charge > 100 ? slow_charge : 100;\n    return [null, msg]\n}\n//there is some feed-in benefit but we are favouring battery charging\nelse {\n    //node.warn(msg.net_remaining);\n    //node.warn(\"Else - \" + msg.fit + \"c - so fast charging\");\n    msg.battery_w = 10000;\n    msg.decision = \"Feed-in benefit but not limiting charge rate\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\n",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -780,17 +675,17 @@
         "y": 140,
         "wires": [
             [
-                "8c2e115b98d19f22"
+                "b3b32c6d54454753"
             ],
             [
-                "ae9fdc02f999322e"
+                "ca8eb3d80453cd6d"
             ]
         ]
     },
     {
-        "id": "ae9fdc02f999322e",
+        "id": "ca8eb3d80453cd6d",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Slow or max charge rate (10kW)",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -812,16 +707,16 @@
         "y": 180,
         "wires": [
             [
-                "6e03dc183ced7dd9",
-                "347e0ae445145bab"
+                "1a51c2892e17f12d",
+                "34a1738dbfcb8475"
             ]
         ]
     },
     {
-        "id": "8c2e115b98d19f22",
+        "id": "b3b32c6d54454753",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
-        "name": "Charge at max rate (5kW)",
+        "z": "1f79901475e24239",
+        "name": "Charge at max rate (10kW)",
         "server": "5165f8c6.cc4798",
         "version": 5,
         "debugenabled": false,
@@ -832,25 +727,25 @@
         "entityId": [
             "input_number.set_sg_battery_max_charge_power"
         ],
-        "data": "{ \"value\": 5000 }",
+        "data": "{ \"value\": 10000 }",
         "dataType": "json",
         "mergeContext": "",
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 2170,
+        "x": 2160,
         "y": 100,
         "wires": [
             [
-                "6e03dc183ced7dd9",
-                "347e0ae445145bab"
+                "1a51c2892e17f12d",
+                "34a1738dbfcb8475"
             ]
         ]
     },
     {
-        "id": "66c6bcbd97a0be96",
+        "id": "0605e50b68899c29",
         "type": "http request",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "PV Forecast East",
         "method": "GET",
         "ret": "txt",
@@ -867,14 +762,14 @@
         "y": 1140,
         "wires": [
             [
-                "554dd7f75b4a026f"
+                "a821de789328e835"
             ]
         ]
     },
     {
-        "id": "ad80ce38e168d8a1",
+        "id": "4f85b5af156ee042",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "d": true,
         "name": "6am",
         "props": [
@@ -893,15 +788,15 @@
         "y": 1140,
         "wires": [
             [
-                "66c6bcbd97a0be96",
-                "66d62d3aa77f720f"
+                "0605e50b68899c29",
+                "48f9844a95125169"
             ]
         ]
     },
     {
-        "id": "593c075a4a95d705",
+        "id": "11763b208acb126a",
         "type": "file",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "",
         "filename": "filename",
         "filenameType": "msg",
@@ -913,14 +808,14 @@
         "y": 1140,
         "wires": [
             [
-                "fb1dcf6acc10ab18"
+                "fd446dfddd7e01ba"
             ]
         ]
     },
     {
-        "id": "bb2da5eb568c754f",
+        "id": "cb62b128e0135a13",
         "type": "file",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "",
         "filename": "filename",
         "filenameType": "msg",
@@ -932,14 +827,14 @@
         "y": 1220,
         "wires": [
             [
-                "de6c912ae391e5db"
+                "a6f8d9f298972fbc"
             ]
         ]
     },
     {
-        "id": "66d62d3aa77f720f",
+        "id": "48f9844a95125169",
         "type": "http request",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "PV Forecast West",
         "method": "GET",
         "ret": "txt",
@@ -956,14 +851,14 @@
         "y": 1220,
         "wires": [
             [
-                "039237367225b0f7"
+                "2c63c826bb2b349a"
             ]
         ]
     },
     {
-        "id": "fb1dcf6acc10ab18",
+        "id": "fd446dfddd7e01ba",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Debug East Forecast",
         "active": false,
         "tosidebar": true,
@@ -978,9 +873,9 @@
         "wires": []
     },
     {
-        "id": "de6c912ae391e5db",
+        "id": "a6f8d9f298972fbc",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Debug West Forecast",
         "active": false,
         "tosidebar": true,
@@ -995,38 +890,39 @@
         "wires": []
     },
     {
-        "id": "8ec56042b8217101",
+        "id": "b57a43727dd9c0e2",
         "type": "link in",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Import Decider",
         "links": [
-            "8c78dca6dfd9e6ed"
+            "0a032d105b8d9da9",
+            "18fe09f820d95363"
         ],
         "x": 45,
         "y": 520,
         "wires": [
             [
-                "9797a2c89819a60b"
+                "f36468c7fba6d8e9"
             ]
         ]
     },
     {
-        "id": "8c78dca6dfd9e6ed",
+        "id": "0a032d105b8d9da9",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "decide on import",
         "mode": "link",
         "links": [
-            "8ec56042b8217101"
+            "b57a43727dd9c0e2"
         ],
         "x": 1135,
-        "y": 380,
+        "y": 360,
         "wires": []
     },
     {
-        "id": "1eb8193133df66fd",
+        "id": "9ac26a457751b327",
         "type": "http request",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "PV Actuals East",
         "method": "GET",
         "ret": "txt",
@@ -1043,14 +939,14 @@
         "y": 1520,
         "wires": [
             [
-                "4bcbe01c268203cf"
+                "a8804c362b221513"
             ]
         ]
     },
     {
-        "id": "3c4a35a7a5190955",
+        "id": "9278706af01eab03",
         "type": "file",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "",
         "filename": "filename",
         "filenameType": "msg",
@@ -1062,14 +958,14 @@
         "y": 1520,
         "wires": [
             [
-                "6e2c681625a85775"
+                "0211ddc1e0e54f85"
             ]
         ]
     },
     {
-        "id": "ff1ef747c4f8b3eb",
+        "id": "c3a516c71a4a731f",
         "type": "file in",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Read East",
         "filename": "filename",
         "filenameType": "msg",
@@ -1082,14 +978,14 @@
         "y": 1620,
         "wires": [
             [
-                "8f3caefe2cca5837"
+                "421becbc48827b34"
             ]
         ]
     },
     {
-        "id": "8f3caefe2cca5837",
+        "id": "421becbc48827b34",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Parse East",
         "func": "msg.east = JSON.parse(msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1102,14 +998,14 @@
         "y": 1620,
         "wires": [
             [
-                "83639341510f4fb0"
+                "369ff755ea9da10b"
             ]
         ]
     },
     {
-        "id": "a469a3859b9fe05b",
+        "id": "a91677e1b2de012d",
         "type": "file",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "",
         "filename": "filename",
         "filenameType": "msg",
@@ -1121,14 +1017,14 @@
         "y": 1560,
         "wires": [
             [
-                "a3c0d768abaea7d0"
+                "148f65a2d2e22838"
             ]
         ]
     },
     {
-        "id": "ca0e1a580e62664c",
+        "id": "1127cf391b8f5c07",
         "type": "http request",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "PV Actuals West",
         "method": "GET",
         "ret": "txt",
@@ -1145,14 +1041,14 @@
         "y": 1560,
         "wires": [
             [
-                "323e72863cec9721"
+                "0d02081c62a0cb1a"
             ]
         ]
     },
     {
-        "id": "56ee063ef5628cb3",
+        "id": "036c736290879447",
         "type": "file in",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Read West",
         "filename": "filename",
         "filenameType": "msg",
@@ -1165,16 +1061,16 @@
         "y": 1620,
         "wires": [
             [
-                "ed3b67ac474d3d41"
+                "a48ab7d937bd29f6"
             ]
         ]
     },
     {
-        "id": "ed3b67ac474d3d41",
+        "id": "a48ab7d937bd29f6",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Parse and Add",
-        "func": "msg.west = JSON.parse(msg.payload);\nmsg.totals = {}\nmsg.actual_today = 0;\nmsg.actual_by_hour = [];\nmsg.actual_yesterday = 0;\nmsg.actual_yesterday_by_hour = [];\nmsg.total_parts = [];\nmsg.forecast_periods = [];\n\nlet today = new Date();\nlet yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);\nnode.warn(today);\nnode.warn(yesterday);\nlet max_items = Math.min(msg.west.estimated_actuals.length, msg.east.estimated_actuals.length);\nif (msg.west.estimated_actuals[0].period_end === msg.east.estimated_actuals[0].period_end) {\n    for (let i = 0; i < max_items; i++) {\n        let dp = msg.west.estimated_actuals[i].period_end.split(/\\D/);\n        let dateObj = new Date(Date.UTC(dp[0], dp[1]-1, dp[2], dp[3], dp[4], dp[5]));\n        let total = (msg.west.estimated_actuals[i].pv_estimate + msg.east.estimated_actuals[i].pv_estimate)/2;\n        if (today.getDate() === dateObj.getDate()) {\n            msg.actual_today += total;\n            if (msg.actual_by_hour[dateObj.getHours()]) {\n                msg.actual_by_hour[dateObj.getHours()] += total;\n            }\n            else {\n                msg.actual_by_hour[dateObj.getHours()] = total;\n            }\n            msg.total_parts.push(total);\n        }\n        if (yesterday.getDate() === dateObj.getDate()) {\n            msg.actual_yesterday += total;\n            if (msg.actual_yesterday_by_hour[dateObj.getHours()]) {\n                msg.actual_yesterday_by_hour[dateObj.getHours()] += total;\n            }\n            else {\n                msg.actual_yesterday_by_hour[dateObj.getHours()] = total;\n            }\n            msg.forecast_periods.push(total);\n        }\n        msg.totals[msg.west.estimated_actuals[i].period_end] = { total: total, date: dateObj };\n    }\n}\nelse {\n    node.error(\"files have different start times\", msg);\n}\nmsg.actual_yesterday = msg.actual_yesterday.toPrecision(3)\nmsg.actual_today = msg.actual_today.toPrecision(3)\nfor (let i = 0; i < msg.actual_yesterday_by_hour.length; i++) {\n    if (msg.actual_yesterday_by_hour[i] !== undefined) {\n        msg.actual_yesterday_by_hour[i] = msg.actual_yesterday_by_hour[i].toPrecision(2)\n    }\n}\nfor (let i = 0; i < msg.actual_by_hour.length; i++) {\n    if (msg.actual_by_hour[i] !== undefined) {\n        msg.actual_by_hour[i] = msg.actual_by_hour[i].toPrecision(2)\n    }\n}\nmsg.payload = {\n    \"actual_yesterday\": msg.actual_yesterday,\n    \"actual_yesterday_by_hour\": msg.actual_yesterday_by_hour,\n    \"actual_today\": msg.actual_today,\n    \"actual_by_hour\": msg.actual_by_hour,\n};\nmsg.filename = \"/config/node-red/solcast/actuals-\" + msg.hour + \"-\" + today.getDate() + \"-\" + (today.getMonth() + 1) + \"-\" + today.getFullYear() + \".json\"\n\nreturn msg;",
+        "func": "msg.west = JSON.parse(msg.payload);\nmsg.totals = {}\nmsg.actual_today = 0;\nmsg.actual_by_hour = [];\nmsg.actual_yesterday = 0;\nmsg.actual_yesterday_by_hour = [];\nmsg.total_parts = [];\nmsg.forecast_periods = [];\n\nlet today = new Date();\nlet yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);\n//node.warn(today);\n//node.warn(yesterday);\nlet max_items = Math.min(msg.west.estimated_actuals.length, msg.east.estimated_actuals.length);\nif (msg.west.estimated_actuals[0].period_end === msg.east.estimated_actuals[0].period_end) {\n    for (let i = 0; i < max_items; i++) {\n        let dp = msg.west.estimated_actuals[i].period_end.split(/\\D/);\n        let dateObj = new Date(Date.UTC(dp[0], dp[1]-1, dp[2], dp[3], dp[4], dp[5]));\n        let total = (msg.west.estimated_actuals[i].pv_estimate + msg.east.estimated_actuals[i].pv_estimate)/2;\n        if (today.getDate() === dateObj.getDate()) {\n            msg.actual_today += total;\n            if (msg.actual_by_hour[dateObj.getHours()]) {\n                msg.actual_by_hour[dateObj.getHours()] += total;\n            }\n            else {\n                msg.actual_by_hour[dateObj.getHours()] = total;\n            }\n            msg.total_parts.push(total);\n        }\n        if (yesterday.getDate() === dateObj.getDate()) {\n            msg.actual_yesterday += total;\n            if (msg.actual_yesterday_by_hour[dateObj.getHours()]) {\n                msg.actual_yesterday_by_hour[dateObj.getHours()] += total;\n            }\n            else {\n                msg.actual_yesterday_by_hour[dateObj.getHours()] = total;\n            }\n            msg.forecast_periods.push(total);\n        }\n        msg.totals[msg.west.estimated_actuals[i].period_end] = { total: total, date: dateObj };\n    }\n}\nelse {\n    node.error(\"files have different start times\", msg);\n}\nmsg.actual_yesterday = msg.actual_yesterday.toPrecision(3)\nmsg.actual_today = msg.actual_today.toPrecision(3)\nfor (let i = 0; i < msg.actual_yesterday_by_hour.length; i++) {\n    if (msg.actual_yesterday_by_hour[i] !== undefined) {\n        msg.actual_yesterday_by_hour[i] = msg.actual_yesterday_by_hour[i].toPrecision(2)\n    }\n}\nfor (let i = 0; i < msg.actual_by_hour.length; i++) {\n    if (msg.actual_by_hour[i] !== undefined) {\n        msg.actual_by_hour[i] = msg.actual_by_hour[i].toPrecision(2)\n    }\n}\nmsg.payload = {\n    \"actual_yesterday\": msg.actual_yesterday,\n    \"actual_yesterday_by_hour\": msg.actual_yesterday_by_hour,\n    \"actual_today\": msg.actual_today,\n    \"actual_by_hour\": msg.actual_by_hour,\n};\nmsg.filename = \"/config/node-red/solcast/actuals-\" + msg.hour + \"-\" + today.getDate() + \"-\" + (today.getMonth() + 1) + \"-\" + today.getFullYear() + \".json\"\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -1185,14 +1081,14 @@
         "y": 1620,
         "wires": [
             [
-                "4f58119a14cf397e"
+                "e21fedd444fbb157"
             ]
         ]
     },
     {
-        "id": "7214013fe58ea15a",
+        "id": "a3176718f2c6c782",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Debug Writing Actuals",
         "active": false,
         "tosidebar": true,
@@ -1207,9 +1103,9 @@
         "wires": []
     },
     {
-        "id": "4bcbe01c268203cf",
+        "id": "a8804c362b221513",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Filename",
         "func": "let today = new Date();\nlet datestamp = today.getDate() + \"-\" + (today.getMonth()+1) + \"-\" + today.getFullYear();\nmsg.filename = \"/config/node-red/solcast/actuals/\"+datestamp+\"/east.json\"\nreturn msg;",
         "outputs": 1,
@@ -1222,14 +1118,14 @@
         "y": 1520,
         "wires": [
             [
-                "3c4a35a7a5190955"
+                "9278706af01eab03"
             ]
         ]
     },
     {
-        "id": "6e2c681625a85775",
+        "id": "0211ddc1e0e54f85",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Debug East Actuals",
         "active": false,
         "tosidebar": true,
@@ -1244,9 +1140,9 @@
         "wires": []
     },
     {
-        "id": "323e72863cec9721",
+        "id": "0d02081c62a0cb1a",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Filename",
         "func": "let today = new Date();\nlet datestamp = today.getDate() + \"-\" + (today.getMonth()+1) + \"-\" + today.getFullYear();\nmsg.filename = \"/config/node-red/solcast/actuals/\"+datestamp+\"/west.json\"\nreturn msg;",
         "outputs": 1,
@@ -1259,14 +1155,14 @@
         "y": 1560,
         "wires": [
             [
-                "a469a3859b9fe05b"
+                "a91677e1b2de012d"
             ]
         ]
     },
     {
-        "id": "a3c0d768abaea7d0",
+        "id": "148f65a2d2e22838",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Debug West Actuals",
         "active": false,
         "tosidebar": true,
@@ -1281,9 +1177,9 @@
         "wires": []
     },
     {
-        "id": "dd20b9d1e54afc21",
+        "id": "b5e56aea5cc3c58f",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "East Filename",
         "func": "let today = new Date();\nlet datestamp = today.getDate() + \"-\" + (today.getMonth() + 1) + \"-\" + today.getFullYear();\nmsg.filename = \"/config/node-red/solcast/actuals/\" + datestamp + \"/east.json\";\nreturn msg;",
         "outputs": 1,
@@ -1296,14 +1192,14 @@
         "y": 1620,
         "wires": [
             [
-                "ff1ef747c4f8b3eb"
+                "c3a516c71a4a731f"
             ]
         ]
     },
     {
-        "id": "83639341510f4fb0",
+        "id": "369ff755ea9da10b",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "West Filename",
         "func": "let today = new Date();\nlet datestamp = today.getDate() + \"-\" + (today.getMonth() + 1) + \"-\" + today.getFullYear();\nmsg.filename = \"/config/node-red/solcast/actuals/\" + datestamp + \"/west.json\";\nreturn msg;",
         "outputs": 1,
@@ -1316,16 +1212,16 @@
         "y": 1620,
         "wires": [
             [
-                "56ee063ef5628cb3"
+                "036c736290879447"
             ]
         ]
     },
     {
-        "id": "121128ea0ae5ef52",
+        "id": "1536c70dc54852ad",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Preserve Battery?",
-        "func": "let today = new Date();\n// node.warn(\"hour now is \" + today.getHours());\n// node.warn(msg.current + \" and battery \" + msg.battery);\nif (today.getHours() >= 13) {\n    if (msg.current <= .05) {\n        // node.warn(\"After 2pm - preserving battery - grid cheaper than battery cycles\");\n        msg.decision = \"After 1pm, preserving battery - grid cheaper than battery cycles\";\n        msg.decisions.push(msg.decision)\n        return [null, msg]\n    }\n    else {\n        msg.decision = \"After 1pm - but not worth preserving battery at current price, use battery\";\n        msg.decisions.push(msg.decision)\n        // node.warn(\"Not worth preserving battery\");\n        return [msg, null]\n    }\n}\nelse {\n    msg.decision = \"Before 1pm, not worth preserving battery, use battery as required\";\n    msg.decisions.push(msg.decision)\n    // node.warn(\"Not worth preserving battery\");\n    return [msg, null]\n}\n",
+        "func": "let today = new Date();\n// node.warn(\"hour now is \" + today.getHours());\n// node.warn(msg.current + \" and battery \" + msg.battery);\nif (today.getHours() >= 13) {\n    if (msg.current <= .05 && msg.demand_interval == false) {\n        // node.warn(\"After 2pm - preserving battery - grid cheaper than battery cycles\");\n        msg.decision = \"After 1pm, preserving battery - grid cheaper than battery cycles\";\n        msg.decisions.push(msg.decision)\n        return [null, msg]\n    }\n    else {\n        msg.decision = \"After 1pm - but not worth preserving battery at current price (or demand period), use battery\";\n        msg.decisions.push(msg.decision)\n        // node.warn(\"Not worth preserving battery\");\n        return [msg, null]\n    }\n}\nelse {\n    msg.decision = \"Before 1pm, not worth preserving battery, use battery as required\";\n    msg.decisions.push(msg.decision)\n    // node.warn(\"Not worth preserving battery\");\n    return [msg, null]\n}\n",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -1336,17 +1232,17 @@
         "y": 520,
         "wires": [
             [
-                "3dbbdf4736d43c3a"
+                "ffb0a9ed461d153d"
             ],
             [
-                "8001451901b8e129"
+                "1ffa74b8dda65053"
             ]
         ]
     },
     {
-        "id": "8001451901b8e129",
+        "id": "1ffa74b8dda65053",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Limit battery discharge (100W)",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -1368,16 +1264,16 @@
         "y": 560,
         "wires": [
             [
-                "d6b8c6cfd7ded05f",
-                "e144633243a2e77e"
+                "8b6fd9398d2f317f",
+                "8560493c39f5b8e9"
             ]
         ]
     },
     {
-        "id": "3dbbdf4736d43c3a",
+        "id": "ffb0a9ed461d153d",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
-        "name": "No Limit on battery discharge (5kW)",
+        "z": "1f79901475e24239",
+        "name": "No Limit on battery discharge (10kW)",
         "server": "5165f8c6.cc4798",
         "version": 5,
         "debugenabled": false,
@@ -1388,25 +1284,25 @@
         "entityId": [
             "input_number.set_sg_battery_max_discharge_power"
         ],
-        "data": "{ \"value\": 5000 }",
+        "data": "{ \"value\": 10000 }",
         "dataType": "json",
         "mergeContext": "",
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 2730,
+        "x": 2740,
         "y": 480,
         "wires": [
             [
-                "d6b8c6cfd7ded05f",
-                "e144633243a2e77e"
+                "8b6fd9398d2f317f",
+                "8560493c39f5b8e9"
             ]
         ]
     },
     {
-        "id": "d6b8c6cfd7ded05f",
+        "id": "8b6fd9398d2f317f",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Debug Self-Consume",
         "active": false,
         "tosidebar": true,
@@ -1421,9 +1317,9 @@
         "wires": []
     },
     {
-        "id": "4f58119a14cf397e",
+        "id": "e21fedd444fbb157",
         "type": "file",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Write actuals",
         "filename": "filename",
         "filenameType": "msg",
@@ -1435,14 +1331,14 @@
         "y": 1620,
         "wires": [
             [
-                "7214013fe58ea15a"
+                "a3176718f2c6c782"
             ]
         ]
     },
     {
-        "id": "e53cc381a12c2e2d",
+        "id": "ae3afdd61dc9a8de",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Slower Export",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -1464,14 +1360,14 @@
         "y": 140,
         "wires": [
             [
-                "a9db63d1ef519e42"
+                "ffae156d12ee89f7"
             ]
         ]
     },
     {
-        "id": "7ecd7165aa12452a",
+        "id": "ae297f7198f7cda8",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Enable Power Limit Mode",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -1493,14 +1389,14 @@
         "y": 140,
         "wires": [
             [
-                "e53cc381a12c2e2d"
+                "ae3afdd61dc9a8de"
             ]
         ]
     },
     {
-        "id": "d3e48bd37399e092",
+        "id": "26095181237591c5",
         "type": "mqtt in",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get remaining kW",
         "topic": "remaining_kw",
         "qos": "2",
@@ -1514,16 +1410,16 @@
         "y": 1460,
         "wires": [
             [
-                "50caad30ce2211ea"
+                "87219a36a81fb30c"
             ]
         ]
     },
     {
-        "id": "50caad30ce2211ea",
+        "id": "87219a36a81fb30c",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Debug Forecast MQTT",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1536,9 +1432,9 @@
         "wires": []
     },
     {
-        "id": "96f5b885e46e8a54",
+        "id": "fb9bd28f3f4ae92c",
         "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get Current Generation",
         "server": "5165f8c6.cc4798",
         "version": 3,
@@ -1569,14 +1465,14 @@
         "y": 380,
         "wires": [
             [
-                "5450ca7101e9a8f0"
+                "8d1dae732f9cd52b"
             ]
         ]
     },
     {
-        "id": "5450ca7101e9a8f0",
+        "id": "8d1dae732f9cd52b",
         "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get Current Load",
         "server": "5165f8c6.cc4798",
         "version": 3,
@@ -1607,14 +1503,14 @@
         "y": 440,
         "wires": [
             [
-                "d72093bc62a81885"
+                "54a4906de409765a"
             ]
         ]
     },
     {
-        "id": "333b02da7200f559",
+        "id": "20088defeca33c6d",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "d": true,
         "name": "9pm",
         "props": [
@@ -1633,15 +1529,15 @@
         "y": 1540,
         "wires": [
             [
-                "1eb8193133df66fd",
-                "ca0e1a580e62664c"
+                "9ac26a457751b327",
+                "1127cf391b8f5c07"
             ]
         ]
     },
     {
-        "id": "f74d3457ea62467c",
+        "id": "397a8e62fd657fcb",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "d": true,
         "name": "9pm",
         "props": [
@@ -1660,14 +1556,14 @@
         "y": 1620,
         "wires": [
             [
-                "dd20b9d1e54afc21"
+                "b5e56aea5cc3c58f"
             ]
         ]
     },
     {
-        "id": "82aa630ccd6bf338",
+        "id": "f085d782edaac2ed",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "d": true,
         "name": "6am",
         "props": [
@@ -1686,14 +1582,14 @@
         "y": 1300,
         "wires": [
             [
-                "9bcdc5cf7e1f05b3"
+                "8092b7e5f7ea8c8a"
             ]
         ]
     },
     {
-        "id": "43904b806a4ce947",
+        "id": "74187efbcc1dbd7b",
         "type": "file in",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get baseline consumption",
         "filename": "/config/node-red/reference/baseline-consumption.csv",
         "filenameType": "str",
@@ -1706,14 +1602,14 @@
         "y": 1020,
         "wires": [
             [
-                "6afd64caada57266"
+                "62b9eefd4ed182cd"
             ]
         ]
     },
     {
-        "id": "6afd64caada57266",
+        "id": "62b9eefd4ed182cd",
         "type": "csv",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "",
         "sep": ",",
         "hdrin": "",
@@ -1729,14 +1625,14 @@
         "y": 1020,
         "wires": [
             [
-                "6eb13553c6cb7388"
+                "8978b7179746f97f"
             ]
         ]
     },
     {
-        "id": "eb616401a350cf12",
+        "id": "f9e223cc2d0ab404",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Debug Load Consumption",
         "active": false,
         "tosidebar": true,
@@ -1751,9 +1647,9 @@
         "wires": []
     },
     {
-        "id": "32a39e201c1b859c",
+        "id": "8ee5d0ef4b168462",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "d": true,
         "name": "Get Baseline Consumption",
         "props": [
@@ -1776,14 +1672,14 @@
         "y": 1020,
         "wires": [
             [
-                "43904b806a4ce947"
+                "74187efbcc1dbd7b"
             ]
         ]
     },
     {
-        "id": "6eb13553c6cb7388",
+        "id": "8978b7179746f97f",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Convert to Obj",
         "func": "let obj = {};\nfor (let i=0; i<msg.payload.length; i++) {\n    obj[\"\"+msg.payload[i].col1] = msg.payload[i].col2;\n}\nmsg.payload = obj;\nflow.set(\"baseline_consumption\", obj);\nreturn msg;",
         "outputs": 1,
@@ -1796,14 +1692,14 @@
         "y": 1020,
         "wires": [
             [
-                "eb616401a350cf12"
+                "f9e223cc2d0ab404"
             ]
         ]
     },
     {
-        "id": "3336caf3bd2ed74c",
+        "id": "c77df77d06687acd",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "d": true,
         "name": "10am",
         "props": [
@@ -1822,15 +1718,15 @@
         "y": 1180,
         "wires": [
             [
-                "66c6bcbd97a0be96",
-                "66d62d3aa77f720f"
+                "0605e50b68899c29",
+                "48f9844a95125169"
             ]
         ]
     },
     {
-        "id": "12dbb6285d8f8ca0",
+        "id": "42109ec2cb2362d4",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "d": true,
         "name": "2pm",
         "props": [
@@ -1849,15 +1745,15 @@
         "y": 1220,
         "wires": [
             [
-                "66c6bcbd97a0be96",
-                "66d62d3aa77f720f"
+                "0605e50b68899c29",
+                "48f9844a95125169"
             ]
         ]
     },
     {
-        "id": "caec791351315bf0",
+        "id": "dd77311af912a801",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "d": true,
         "name": "10am",
         "props": [
@@ -1876,14 +1772,14 @@
         "y": 1340,
         "wires": [
             [
-                "9bcdc5cf7e1f05b3"
+                "8092b7e5f7ea8c8a"
             ]
         ]
     },
     {
-        "id": "8a9abaeab0fbe840",
+        "id": "77706f99827d3924",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "d": true,
         "name": "2pm",
         "props": [
@@ -1902,14 +1798,14 @@
         "y": 1380,
         "wires": [
             [
-                "9bcdc5cf7e1f05b3"
+                "8092b7e5f7ea8c8a"
             ]
         ]
     },
     {
-        "id": "554dd7f75b4a026f",
+        "id": "a821de789328e835",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Filename",
         "func": "let today = new Date();\nlet datestamp = today.getDate() + \"-\" + (today.getMonth()+1) + \"-\" + today.getFullYear();\nmsg.filename = \"/config/node-red/solcast/data/\"+datestamp+\"/\" + msg.hour + \"-east.json\"\nreturn msg;\n",
         "outputs": 1,
@@ -1922,14 +1818,14 @@
         "y": 1140,
         "wires": [
             [
-                "593c075a4a95d705"
+                "11763b208acb126a"
             ]
         ]
     },
     {
-        "id": "039237367225b0f7",
+        "id": "2c63c826bb2b349a",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Filename",
         "func": "let today = new Date();\nlet datestamp = today.getDate() + \"-\" + (today.getMonth() + 1) + \"-\" + today.getFullYear();\nmsg.filename = \"/config/node-red/solcast/data/\"+datestamp+\"/\" + msg.hour + \"-west.json\"\nreturn msg;\n",
         "outputs": 1,
@@ -1942,14 +1838,14 @@
         "y": 1220,
         "wires": [
             [
-                "bb2da5eb568c754f"
+                "cb62b128e0135a13"
             ]
         ]
     },
     {
-        "id": "9bcdc5cf7e1f05b3",
+        "id": "8092b7e5f7ea8c8a",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "East Filename",
         "func": "let today = new Date();\nmsg.datestamp = today.getDate() + \"-\" + (today.getMonth() + 1) + \"-\" + today.getFullYear();\n//regenerate all files for today\nlet hours = [6,10,14];\nfor (let i=0; i<hours.length; i++) {\n    if (hours[i] <= today.getHours()) { //file should exist\n        msg.hour = hours[i];\n        msg.filename = \"/config/node-red/solcast/data/\"+msg.datestamp+\"/\" + msg.hour + \"-east.json\";\n        node.send(msg); \n    }\n    else {\n        // node.warn(\"skipping hour as not there yet: \"+hours[i])\n        // node.send([null,msg])\n    }\n}\n",
         "outputs": 1,
@@ -1962,14 +1858,14 @@
         "y": 1340,
         "wires": [
             [
-                "588ef90629e40ac9"
+                "357fa5cff94f7b65"
             ]
         ]
     },
     {
-        "id": "588ef90629e40ac9",
+        "id": "357fa5cff94f7b65",
         "type": "file in",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Read East",
         "filename": "filename",
         "filenameType": "msg",
@@ -1982,14 +1878,14 @@
         "y": 1340,
         "wires": [
             [
-                "b6ee99e90437fcd4"
+                "e4560c21c11cd27f"
             ]
         ]
     },
     {
-        "id": "b6ee99e90437fcd4",
+        "id": "e4560c21c11cd27f",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Parse East",
         "func": "msg.east = JSON.parse(msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -2002,14 +1898,14 @@
         "y": 1340,
         "wires": [
             [
-                "85a14f95f38e5920"
+                "6541e6c528d60c87"
             ]
         ]
     },
     {
-        "id": "85a14f95f38e5920",
+        "id": "6541e6c528d60c87",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "West Filename",
         "func": "msg.filename = \"/config/node-red/solcast/data/\"+msg.datestamp+\"/\" + msg.hour + \"-west.json\";\nreturn msg;",
         "outputs": 1,
@@ -2022,14 +1918,14 @@
         "y": 1340,
         "wires": [
             [
-                "de7a4dc9e21db693"
+                "7fe38b1c495b22aa"
             ]
         ]
     },
     {
-        "id": "de7a4dc9e21db693",
+        "id": "7fe38b1c495b22aa",
         "type": "file in",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Read West",
         "filename": "filename",
         "filenameType": "msg",
@@ -2042,14 +1938,14 @@
         "y": 1340,
         "wires": [
             [
-                "b0955ff974dcf5f2"
+                "b516e45804e58206"
             ]
         ]
     },
     {
-        "id": "b0955ff974dcf5f2",
+        "id": "b516e45804e58206",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Parse and Add",
         "func": "msg.west = JSON.parse(msg.payload);\nmsg.totals = {}\nmsg.remaining_today = 0;\nmsg.remaining_by_hour = [];\nmsg.forecast_tomorrow = 0;\nmsg.forecast_tomorrow_by_hour = [];\nmsg.total_parts = [];\nmsg.forecast_periods = [];\nlet today = new Date();\nlet datestamp = today.getDate() + \"-\" + (today.getMonth()+1) + \"-\" + today.getFullYear();\nlet tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);\n//node.warn(today);\n//node.warn(tomorrow);\nlet max_items = Math.min(msg.west.forecasts.length, msg.east.forecasts.length);\nlet peak_gen_time = new Date();\nlet peak_gen_kwh = 0;\nif (msg.west.forecasts[0].period_end === msg.east.forecasts[0].period_end) {\n    for (let i = 0; i < max_items; i++) {\n        let dp = msg.west.forecasts[i].period_end.split(/\\D/);\n        let dateObj = new Date(Date.UTC(dp[0], dp[1]-1, dp[2], dp[3], dp[4], dp[5]));\n        //set time back half an hour so the time is period start not end\n        dateObj.setTime(dateObj.getTime()-(30*60*1000))\n        let pv_estimate_west = (msg.west.forecasts[i].pv_estimate10 + msg.west.forecasts[i].pv_estimate90) / 2;\n        let pv_estimate_east = (msg.east.forecasts[i].pv_estimate10 + msg.east.forecasts[i].pv_estimate90) / 2;\n        let total = (pv_estimate_west + pv_estimate_east)/2;\n        if (today.getDate() === dateObj.getDate()) {\n            //node.warn(\"In if statement\");\n            msg.remaining_today += total;\n            if (msg.remaining_by_hour[dateObj.getHours()]) {\n                msg.remaining_by_hour[dateObj.getHours()] += total;\n                if (peak_gen_kwh < msg.remaining_by_hour[dateObj.getHours()]) {\n                    peak_gen_kwh = msg.remaining_by_hour[dateObj.getHours()];\n                    peak_gen_time = dateObj;\n                }\n            }\n            else {\n                msg.remaining_by_hour[dateObj.getHours()] = total;\n            }\n            msg.total_parts.push(total);\n        }\n        if (tomorrow.getDate() === dateObj.getDate()) {\n            msg.forecast_tomorrow += total;\n            if (msg.forecast_tomorrow_by_hour[dateObj.getHours()]) {\n                msg.forecast_tomorrow_by_hour[dateObj.getHours()] += total;\n            }\n            else {\n                msg.forecast_tomorrow_by_hour[dateObj.getHours()] = total;\n            }\n            msg.forecast_periods.push(total);\n        }\n        msg.totals[msg.east.forecasts[i].period_end] = { total: total, date: dateObj };\n    }\n}\nelse {\n    node.error(\"files have different start times\", msg);\n}\nmsg.remaining_today = msg.remaining_today.toPrecision(3)\n//node.warn(msg.remaining_today);\nmsg.forecast_tomorrow = msg.forecast_tomorrow.toPrecision(3)\nfor (let i = 0; i < msg.remaining_by_hour.length; i++) {\n    if (msg.remaining_by_hour[i] !== undefined) {\n        msg.remaining_by_hour[i] = msg.remaining_by_hour[i].toPrecision(2)\n    }\n}\n\nfor (let i = 0; i < msg.forecast_tomorrow_by_hour.length; i++) {\n    if (msg.forecast_tomorrow_by_hour[i] !== undefined) {\n        msg.forecast_tomorrow_by_hour[i] = msg.forecast_tomorrow_by_hour[i].toPrecision(2)\n    }\n}\nlet peak_gen_hm = peak_gen_time.getHours().toString().padStart(2, '0') + \":\" + peak_gen_time.getMinutes().toString().padStart(2, '0');\n\nflow.set(\"peak_gen_kwh\", peak_gen_kwh.toPrecision(3));\nflow.set(\"peak_gen_time\", peak_gen_hm);\nflow.set(\"remaining_today\", msg.remaining_by_hour);\nflow.set(\"expected_tomorrow\", msg.forecast_tomorrow);\n//if (today.getHours() < 10) {\n    flow.set(\"forecast_pv_today\",msg.remaining_today)\n//}\n\n//node.warn(peak_gen_kwh);\n//node.warn(peak_gen_time);\n//node.warn(msg.remaining_today);\n//node.warn(msg.remaining_by_hour);\n//node.warn(msg.forecast_tomorrow);\n//node.warn(msg.forecast_tomorrow_by_hour);\n\nmsg.payload = {\n    \"peak_gen_kwh\": peak_gen_kwh,\n    \"peak_gen_time\": peak_gen_time,\n    \"forecast_today\": msg.remaining_today,\n    \"forecast_by_hour\": msg.remaining_by_hour,\n    \"forecast_tomorrow\": msg.forecast_tomorrow,\n    \"forecast_tomorrow_by_hour\": msg.forecast_tomorrow_by_hour\n};\nmsg.filename = \"/config/node-red/solcast/forecasts/\"+datestamp+\"/\" + msg.hour + \".json\"\nreturn msg;",
         "outputs": 1,
@@ -2062,15 +1958,15 @@
         "y": 1340,
         "wires": [
             [
-                "1f55f226b805f77c",
-                "e4a451be4a841b52"
+                "e590f5e8457545e6",
+                "1a13d7171fc97e36"
             ]
         ]
     },
     {
-        "id": "1f55f226b805f77c",
+        "id": "e590f5e8457545e6",
         "type": "file",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Write forecast",
         "filename": "filename",
         "filenameType": "msg",
@@ -2082,14 +1978,14 @@
         "y": 1340,
         "wires": [
             [
-                "ea754940fa1af36f"
+                "55c4f1ce5d6294af"
             ]
         ]
     },
     {
-        "id": "e4a451be4a841b52",
+        "id": "1a13d7171fc97e36",
         "type": "mqtt out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Send Remaining kW",
         "topic": "remaining_kw",
         "qos": "1",
@@ -2105,11 +2001,11 @@
         "wires": []
     },
     {
-        "id": "ea754940fa1af36f",
+        "id": "55c4f1ce5d6294af",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Debug Writing Forecast",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -2122,9 +2018,9 @@
         "wires": []
     },
     {
-        "id": "6969f1db5a012e0d",
+        "id": "184cf02081a726de",
         "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Generation History",
         "server": "5165f8c6.cc4798",
         "version": 3,
@@ -2161,14 +2057,14 @@
         "y": 920,
         "wires": [
             [
-                "acf3dbf510dc5df6"
+                "ab4782e1f7f95fe4"
             ]
         ]
     },
     {
-        "id": "27a880493ef7ecbb",
+        "id": "dfb9d1a36b05ff1c",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "d": true,
         "name": "Check Generation",
         "props": [
@@ -2191,14 +2087,14 @@
         "y": 920,
         "wires": [
             [
-                "6969f1db5a012e0d"
+                "184cf02081a726de"
             ]
         ]
     },
     {
-        "id": "3944ea61641c9351",
+        "id": "ea51eed03a0044ec",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Debug PV Generation Logging",
         "active": false,
         "tosidebar": true,
@@ -2213,9 +2109,9 @@
         "wires": []
     },
     {
-        "id": "0a40e0832cf7db69",
+        "id": "91adc6a24b70f967",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Append to today file",
         "func": "let now = new Date();\nlet timestamp = now.getHours().toString().padStart(2, '0') + \":\" + now.getMinutes().toString().padStart(2, '0');\nlet datestamp = now.getDate().toString().padStart(2, '0') + \"-\" + (now.getMonth()+1).toString().padStart(2, '0') + \"-\" + now.getFullYear();\n\nmsg.filename = \"/config/node-red/solcast/generation/\"+datestamp+\".csv\";\nmsg.payload = timestamp + \",\" + msg.payload+\",\"+flow.get(\"curtailment\");\nreturn msg;",
         "outputs": 1,
@@ -2228,14 +2124,14 @@
         "y": 920,
         "wires": [
             [
-                "886e8141b772b80a"
+                "085f7886178e6430"
             ]
         ]
     },
     {
-        "id": "886e8141b772b80a",
+        "id": "085f7886178e6430",
         "type": "file",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "",
         "filename": "filename",
         "filenameType": "msg",
@@ -2247,14 +2143,14 @@
         "y": 920,
         "wires": [
             [
-                "3944ea61641c9351"
+                "ea51eed03a0044ec"
             ]
         ]
     },
     {
-        "id": "acf3dbf510dc5df6",
+        "id": "ab4782e1f7f95fe4",
         "type": "rbe",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "RBE",
         "func": "rbe",
         "gap": "",
@@ -2267,14 +2163,14 @@
         "y": 920,
         "wires": [
             [
-                "0a40e0832cf7db69"
+                "91adc6a24b70f967"
             ]
         ]
     },
     {
-        "id": "c91372affc87b424",
+        "id": "665ebca3a7b8ab6f",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Shutdown Inverter",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -2292,18 +2188,18 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 1250,
+        "x": 1410,
         "y": 580,
         "wires": [
             [
-                "16a590ce87ef12c1"
+                "04627e24103fd77b"
             ]
         ]
     },
     {
-        "id": "3eb73ad8a6256630",
+        "id": "1e0405e3b06bc673",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Enable Inverter",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -2325,14 +2221,14 @@
         "y": 460,
         "wires": [
             [
-                "f3d318ab61343e35"
+                "50d9e5e00a871b97"
             ]
         ]
     },
     {
-        "id": "c18ecd577c5a16c4",
+        "id": "143d940c9f69e862",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Enable Inverter",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -2354,14 +2250,14 @@
         "y": 520,
         "wires": [
             [
-                "65b234d730a3c595"
+                "3b5408452773ea23"
             ]
         ]
     },
     {
-        "id": "c0c9f79472130360",
+        "id": "2cf582a9c4c1ab3c",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Debug Shutdown",
         "active": false,
         "tosidebar": true,
@@ -2376,9 +2272,9 @@
         "wires": []
     },
     {
-        "id": "16a590ce87ef12c1",
+        "id": "04627e24103fd77b",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "EMS Self Consumption Mode",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -2397,17 +2293,17 @@
         "outputProperties": [],
         "queue": "none",
         "x": 1670,
-        "y": 620,
+        "y": 580,
         "wires": [
             [
-                "8dd1b9d80eb0747d"
+                "b16ff1e25c1edd7f"
             ]
         ]
     },
     {
-        "id": "8dd1b9d80eb0747d",
+        "id": "b16ff1e25c1edd7f",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Stop forced charge/discharge",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -2426,18 +2322,18 @@
         "outputProperties": [],
         "queue": "none",
         "x": 1960,
-        "y": 620,
+        "y": 580,
         "wires": [
             [
-                "03316701b31c3b7b"
+                "d6a33f55e51138c3"
             ]
         ]
     },
     {
-        "id": "03316701b31c3b7b",
+        "id": "d6a33f55e51138c3",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
-        "name": "5kW charge",
+        "z": "1f79901475e24239",
+        "name": "10kW charge",
         "server": "5165f8c6.cc4798",
         "version": 5,
         "debugenabled": false,
@@ -2448,55 +2344,45 @@
         "entityId": [
             "input_number.set_sg_forced_charge_discharge_power"
         ],
-        "data": "{ \"value\": 5000 }",
+        "data": "{ \"value\": 10000 }",
         "dataType": "json",
         "mergeContext": "",
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
         "x": 2210,
-        "y": 600,
+        "y": 580,
         "wires": [
             [
-                "c0c9f79472130360",
-                "d6458d1b41a84321"
+                "2cf582a9c4c1ab3c",
+                "d6a58eda9dc91ce3"
             ]
         ]
     },
     {
-        "id": "74e9fcaeb927bc30",
+        "id": "77afe9b15f189969",
         "type": "comment",
-        "z": "a22ceab4a91f8127",
-        "name": "Reset the EMS",
-        "info": "",
-        "x": 1540,
-        "y": 580,
-        "wires": []
-    },
-    {
-        "id": "10bc27b0d668bf2f",
-        "type": "comment",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get Solcast forecasts",
         "info": "",
         "x": 120,
-        "y": 1080,
+        "y": 1100,
         "wires": []
     },
     {
-        "id": "9d58194b508a3f76",
+        "id": "c84b52c674d6dc46",
         "type": "comment",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get Solcast actuals",
         "info": "",
-        "x": 130,
-        "y": 1480,
+        "x": 110,
+        "y": 1500,
         "wires": []
     },
     {
-        "id": "116d96141ab77b4b",
+        "id": "91feaea3e52c1e38",
         "type": "comment",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Log PV Generation",
         "info": "",
         "x": 110,
@@ -2504,9 +2390,9 @@
         "wires": []
     },
     {
-        "id": "efdbdac0020f9bab",
+        "id": "d03e05dd462b0a37",
         "type": "comment",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Load Expected Consumption",
         "info": "",
         "x": 140,
@@ -2514,30 +2400,30 @@
         "wires": []
     },
     {
-        "id": "e3e7484829cdcb70",
+        "id": "a7390269d6889937",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Calculate Inputs",
-        "func": "let remaining_generation = flow.get(\"remaining_today\");\nlet baseline_consumption = flow.get(\"baseline_consumption\");\nlet today = new Date();\nlet current_hour = today.getHours();\nmsg.decisions = []\nmsg.expected_consumption_remaining = 0;\nmsg.expected_generation_remaining = 0;\nlet consumption_minus_generating_remaining = 0;\nfor (let hour in baseline_consumption) {\n    //if (Number(hour) >= current_hour) {   // <- This takes all day to midnight, not just until sun goes down\n    // This may be appropriate if the battery is large enough to take you completely through the night, as you need to charge the battery up.\n    // However, if the battery is limited in capacity, then don't draw from grid to charge to 100% if there will be remaining solar to charge it to 100% anyway.\n    // If it is, then comment the below line, and uncomment line 10 above.\n    if (Number(hour) >= current_hour && Number(hour) <= 17) {\n        let consumption_this_hour = (baseline_consumption[hour] / 1000);\n        msg.expected_consumption_remaining += consumption_this_hour;\n        if (remaining_generation.hasOwnProperty(hour) && remaining_generation[hour]) {\n            msg.expected_generation_remaining += Number(remaining_generation[hour]);\n            consumption_minus_generating_remaining += Number(remaining_generation[hour]) - consumption_this_hour;\n        }\n    }\n}\n// node.warn(`baseline consumption remaining ${msg.expected_consumption_remaining.toPrecision(2)}kWh`);\n// node.warn(`generation remaining ${msg.expected_generation_remaining.toPrecision(2)}kWh`)\nmsg.net_remaining = (msg.expected_generation_remaining - msg.expected_consumption_remaining);\n// node.warn(`generation - consumption estimate ${msg.net_remaining.toPrecision(2)}kWh`);\nmsg.remaining_battery_kwh = (msg.battery / 100) * 19.2;\n// node.warn(`battery remaining ${msg.remaining_battery_kwh.toPrecision(3)}kWh`);\nmsg.charge_required = 19.2 - msg.remaining_battery_kwh;\n// node.warn(`battery deficit ${msg.charge_required.toPrecision(3)}kWh`);\n// node.warn(`Net generation minus consumption: ${consumption_minus_generating_remaining.toPrecision(2)}kWh`);\nreturn msg;",
+        "func": "let remaining_generation = flow.get(\"remaining_today\");\nlet baseline_consumption = flow.get(\"baseline_consumption\");\nlet today = new Date();\nlet current_hour = today.getHours();\nmsg.decisions = []\nmsg.expected_consumption_remaining = 0;\nmsg.expected_generation_remaining = 0;\nlet consumption_minus_generating_remaining = 0;\nfor (let hour in baseline_consumption) {\n    //if (Number(hour) >= current_hour) {   // <- original, but this takes all day to midnight, not just until sun goes down\n    // This may be appropriate if the battery is large enough to take you completely through the night, as you need to charge the battery up.\n    // However, if the battery is limited in capacity, then don't draw from grid to charge to 100% if there will be remaining solar to charge it to 100% anyway.\n    // If it is, then comment the below line, and uncomment line 10 above.\n    if (Number(hour) >= current_hour && Number(hour) <= 17) {\n        let consumption_this_hour = (baseline_consumption[hour] / 1000);\n        msg.expected_consumption_remaining += consumption_this_hour;\n        if (remaining_generation.hasOwnProperty(hour) && remaining_generation[hour]) {\n            msg.expected_generation_remaining += Number(remaining_generation[hour]);\n            consumption_minus_generating_remaining += Number(remaining_generation[hour]) - consumption_this_hour;\n        }\n    }\n}\n// node.warn(`baseline consumption remaining ${msg.expected_consumption_remaining.toPrecision(2)}kWh`);\n// node.warn(`generation remaining ${msg.expected_generation_remaining.toPrecision(2)}kWh`)\nmsg.net_remaining = (msg.expected_generation_remaining - msg.expected_consumption_remaining);\n// node.warn(`generation - consumption estimate ${msg.net_remaining.toPrecision(2)}kWh`);\nmsg.remaining_battery_kwh = (msg.battery / 100) * 19.2;\n// node.warn(`battery remaining ${msg.remaining_battery_kwh.toPrecision(3)}kWh`);\nmsg.charge_required = 19.2 - msg.remaining_battery_kwh;\n// node.warn(`battery deficit ${msg.charge_required.toPrecision(3)}kWh`);\n// node.warn(`Net generation minus consumption: ${consumption_minus_generating_remaining.toPrecision(2)}kWh`);\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 640,
+        "x": 660,
         "y": 240,
         "wires": [
             [
-                "df051123bcec61aa",
-                "3797e378b35fe5fe"
+                "bb5e56bffd985b70",
+                "6623170110326545"
             ]
         ]
     },
     {
-        "id": "48647c2c6d79945d",
+        "id": "6613c30d8e2004e1",
         "type": "debug",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Debug Decision Logging",
         "active": false,
         "tosidebar": true,
@@ -2552,34 +2438,9 @@
         "wires": []
     },
     {
-        "id": "32d8aee4fa4fa0c0",
-        "type": "function",
-        "z": "a22ceab4a91f8127",
-        "name": "Append to decision log",
-        "func": "let msg2 = {}\nlet now = new Date();\nlet timestamp = now.getHours().toString().padStart(2, '0') + \":\" + now.getMinutes().toString().padStart(2, '0');\nlet datestamp = now.getDate().toString().padStart(2, '0') + \"-\" + (now.getMonth()+1).toString().padStart(2, '0') + \"-\" + now.getFullYear();\n\nmsg.filename = \"/config/node-red/decision_logs/\"+datestamp+\".csv\";\n\nlet cheap_grid_start = \"\";\nif (msg.cheapest_grid_start){\n    let peak_gen_kwh = flow.get(\"peak_gen_kwh\");\n    let peak_gen_time = flow.get(\"peak_gen_time\");\n    let forecast_pv_today = flow.get(\"forecast_pv_today\");\n    //node.warn(forecast_pv_today);\n    let remaining_pv = msg.net_remaining.toPrecision(3);\n    // let remaining_pv_label = remaining_pv > 0 ? \"Spare PV\" : \"Needed from Grid\";\n    let solar_emoji = \"😕\";\n    if (forecast_pv_today > 70) {\n        solar_emoji = \"🔆 🙌\";\n    }\n    else if (forecast_pv_today > 50) {\n        solar_emoji = \"⛅️ 🆗\";\n    }\n    else if (forecast_pv_today > 40) {\n        solar_emoji = \"☁️ 🙁\";\n    }\n    else {\n        solar_emoji = \"💩 😭\";\n    }\n    let expected_tomorrow = flow.get(\"expected_tomorrow\");\n    let tomorrow_solar_emoji = \"😕\";\n    if (expected_tomorrow > 70) {\n        tomorrow_solar_emoji = \"🔆 🙌\";\n    }\n    else if (expected_tomorrow > 50) {\n        tomorrow_solar_emoji = \"⛅️ 🆗\";\n    }\n    else if (expected_tomorrow > 40) {\n        tomorrow_solar_emoji = \"☁️ 🙁\";\n    }\n    else {\n        tomorrow_solar_emoji = \"💩 😭\";\n    }\n//${remaining_pv_label}: ${remaining_pv}kWh\n\n\n    /// Below changed as time from LocalVolts is UTC/Zulu, so need to put in right hour. Most likely a better way to do this.\n    if(msg.cheapest_grid_start[0] >= 14) {\n        msg.cheapest_grid_start[0] = msg.cheapest_grid_start[0] - 14;\n        }\n    else {\n        msg.cheapest_grid_start[0] = msg.cheapest_grid_start[0] + 10;\n    }\n    // CY - End\n\n    cheap_grid_start = msg.cheapest_grid_start[0].toString().padStart(2, '0') + \":\" + msg.cheapest_grid_start[1].toString().padStart(2, '0');\n    // msg2 = { payload: `PV forecast: ${forecast_pv_today} kWh ${solar_emoji}\n* Peak PV ${peak_gen_kwh} kWh at ${peak_gen_time}\n* Cheapest grid ${msg.cheapest_grid}c around ${cheap_grid_start}\nTomorrow's PV forecast: ${expected_tomorrow} kWh ${tomorrow_solar_emoji}` }     <-- CY backup/original\n    msg2 = { payload: `PV forecast: ${forecast_pv_today} kWh ${solar_emoji}\n* Peak PV ${peak_gen_kwh} kWh at ${peak_gen_time}\n* Cheapest grid ${msg.cheapest_grid}c around ${cheap_grid_start}\nTomorrow's PV forecast: ${expected_tomorrow} kWh ${tomorrow_solar_emoji}`}\n}\n\nlet data = [timestamp];\nif (msg.battery_w) {\n    data.push(\"Curtailment\")\n}\nelse {\n    data.push(\"Other\")\n} \ndata.push(msg.fit)\ndata.push(msg.curtailment_percentage)\ndata.push(msg.current)\ndata.push(msg.forecast)\ndata.push(msg.dc_power_now)\ndata.push(msg.load_now)\ndata.push(msg.expected_generation_remaining.toPrecision(4))\ndata.push(msg.expected_consumption_remaining.toPrecision(4))\ndata.push(msg.battery)\ndata.push(msg.net_remaining.toPrecision(4))\ndata.push(msg.remaining_battery_kwh.toPrecision(4))\ndata.push(msg.charge_required.toPrecision(3))\ndata.push(msg.battery_w)\nif (msg.cheapest_grid_start){\n    data.push(cheap_grid_start)\n}\nelse {\n    data.push(\"\")\n}\ndata.push(msg.decisions.join(\" > \"))\n// data.push(msg.decision)\n\nmsg.payload = data.join(\"\t\");\n\nreturn [msg2,msg];",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 2670,
-        "y": 360,
-        "wires": [
-            [
-                "2290ec84fd9f1b73",
-                "c0c3a211424b4c9d",
-                "9b70894492a5cdbc"
-            ],
-            [
-                "04540541e71b25ea"
-            ]
-        ]
-    },
-    {
-        "id": "04540541e71b25ea",
+        "id": "66f7dd10543c5291",
         "type": "file",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "",
         "filename": "filename",
         "filenameType": "msg",
@@ -2591,134 +2452,134 @@
         "y": 420,
         "wires": [
             [
-                "48647c2c6d79945d"
+                "6613c30d8e2004e1"
             ]
         ]
     },
     {
-        "id": "072513d530b67f09",
+        "id": "8baa8f9994565d39",
         "type": "link in",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Decision Logger",
         "links": [
-            "6696e787e3440d2c",
-            "8e740e78c6556459",
-            "d6458d1b41a84321",
-            "e144633243a2e77e",
-            "347e0ae445145bab",
+            "d56aba185dbdfded",
+            "42517cc3802f7abc",
+            "d6a58eda9dc91ce3",
+            "8560493c39f5b8e9",
+            "34a1738dbfcb8475",
             "4137a97c634901e2",
-            "89ad62b720dbb20c",
-            "682726e3e78e07b8",
-            "e023decbb1edc98b",
-            "416038772a14a3e7",
-            "6bd2252f5a90c217",
-            "77e8510760e9d8b3"
+            "43982b2d88b457ce",
+            "e20f0f6fe3a1abfd",
+            "af255af7d76b3c79",
+            "3ab25e811ca04d9f",
+            "a80e81a1330618cb",
+            "fa96a59338706780"
         ],
-        "x": 2505,
-        "y": 360,
+        "x": 2495,
+        "y": 320,
         "wires": [
             [
-                "32d8aee4fa4fa0c0"
+                "062840f4143b168e"
             ]
         ]
     },
     {
-        "id": "e144633243a2e77e",
+        "id": "8560493c39f5b8e9",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "link out 2",
         "mode": "link",
         "links": [
-            "072513d530b67f09"
+            "8baa8f9994565d39"
         ],
         "x": 2975,
         "y": 460,
         "wires": []
     },
     {
-        "id": "d6458d1b41a84321",
+        "id": "d6a58eda9dc91ce3",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "link out 3",
         "mode": "link",
         "links": [
-            "072513d530b67f09"
+            "8baa8f9994565d39"
         ],
-        "x": 2365,
-        "y": 660,
+        "x": 2375,
+        "y": 640,
         "wires": []
     },
     {
-        "id": "6696e787e3440d2c",
+        "id": "d56aba185dbdfded",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "link out 4",
         "mode": "link",
         "links": [
-            "072513d530b67f09"
+            "8baa8f9994565d39"
         ],
         "x": 2195,
         "y": 420,
         "wires": []
     },
     {
-        "id": "8e740e78c6556459",
+        "id": "42517cc3802f7abc",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "link out 5",
         "mode": "link",
         "links": [
-            "072513d530b67f09"
+            "8baa8f9994565d39"
         ],
         "x": 1975,
         "y": 380,
         "wires": []
     },
     {
-        "id": "347e0ae445145bab",
+        "id": "34a1738dbfcb8475",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "link out 6",
         "mode": "link",
         "links": [
-            "072513d530b67f09"
+            "8baa8f9994565d39"
         ],
         "x": 2415,
         "y": 200,
         "wires": []
     },
     {
-        "id": "ab9d7a07a06ccb76",
+        "id": "d27c0181d5a1f6d4",
         "type": "link in",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Send Mobile Message",
         "links": [
-            "816d7aa504549c19",
+            "547820f8d93579f0",
             "90a1e55ed1fb5df8",
             "c196a08e4b245777",
             "33a751d9b831e996",
-            "31d2ab361ef61447",
-            "869481f4c6657e7a",
+            "4b68ad06a9a2449e",
+            "142ee85e4156e72c",
             "8e102a4b2283a0b7",
-            "0631afb8b644aa2f",
-            "bf0bd8078cdfcd47",
+            "9211f4cab454ee4c",
+            "91b66760d7c1e448",
             "634ccc30f857da01",
-            "3e2cc6794b7cc4ca",
-            "56a9b8003273d3c3",
+            "703d474406989b87",
+            "ba337f24e89baab7",
             "c8fc11728d5b5573"
         ],
         "x": 2855,
         "y": 200,
         "wires": [
             [
-                "62aa7ad97751c374"
+                "35dc0904370e76c5"
             ]
         ]
     },
     {
-        "id": "62aa7ad97751c374",
+        "id": "35dc0904370e76c5",
         "type": "rbe",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "RBE",
         "func": "rbe",
         "gap": "",
@@ -2731,27 +2592,27 @@
         "y": 200,
         "wires": [
             [
-                "c79be3db69c30328"
+                "1798c69f3b3a9896"
             ]
         ]
     },
     {
-        "id": "816d7aa504549c19",
+        "id": "547820f8d93579f0",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "link out 7",
         "mode": "link",
         "links": [
-            "ab9d7a07a06ccb76"
+            "d27c0181d5a1f6d4"
         ],
         "x": 3075,
         "y": 300,
         "wires": []
     },
     {
-        "id": "c79be3db69c30328",
+        "id": "1798c69f3b3a9896",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Notify phone",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -2774,9 +2635,9 @@
         ]
     },
     {
-        "id": "d72093bc62a81885",
+        "id": "54a4906de409765a",
         "type": "rbe",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "RBE",
         "func": "rbe",
         "gap": "",
@@ -2789,14 +2650,14 @@
         "y": 440,
         "wires": [
             [
-                "e3e7484829cdcb70"
+                "a7390269d6889937"
             ]
         ]
     },
     {
-        "id": "250df1596ab58f60",
+        "id": "cda1186bb65cf361",
         "type": "comment",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Set reserves on battery",
         "info": "",
         "x": 120,
@@ -2804,10 +2665,10 @@
         "wires": []
     },
     {
-        "id": "2d349426e4a27918",
+        "id": "f09d9788e1abfa65",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
-        "name": "Remove 15% battery reserve",
+        "z": "1f79901475e24239",
+        "name": "Remove night battery reserve",
         "server": "5165f8c6.cc4798",
         "version": 5,
         "debugenabled": false,
@@ -2831,18 +2692,18 @@
             }
         ],
         "queue": "none",
-        "x": 420,
+        "x": 430,
         "y": 1760,
         "wires": [
             [
-                "869481f4c6657e7a"
+                "142ee85e4156e72c"
             ]
         ]
     },
     {
-        "id": "b647352bdb233678",
+        "id": "d94aab512c0dc90b",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "d": true,
         "name": "10pm",
         "props": [
@@ -2861,89 +2722,53 @@
         "y": 1940,
         "wires": [
             [
-                "9a9ef7a9592ccf06"
+                "f56b9c005ec9afd6"
             ]
         ]
     },
     {
-        "id": "9a9ef7a9592ccf06",
-        "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
-        "name": "Set 15% battery reserve",
-        "server": "5165f8c6.cc4798",
-        "version": 5,
-        "debugenabled": false,
-        "domain": "input_number",
-        "service": "set_value",
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.set_sg_reserved_soc_for_backup"
-        ],
-        "data": "{\"value\":15}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [
-            {
-                "property": "payload",
-                "propertyType": "msg",
-                "value": "Battery reserve set at 15% until 5am",
-                "valueType": "str"
-            }
-        ],
-        "queue": "none",
-        "x": 330,
-        "y": 1940,
-        "wires": [
-            [
-                "31d2ab361ef61447"
-            ]
-        ]
-    },
-    {
-        "id": "31d2ab361ef61447",
+        "id": "4b68ad06a9a2449e",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Send message",
         "mode": "link",
         "links": [
-            "ab9d7a07a06ccb76"
+            "d27c0181d5a1f6d4"
         ],
-        "x": 505,
+        "x": 905,
         "y": 1940,
         "wires": []
     },
     {
-        "id": "869481f4c6657e7a",
+        "id": "142ee85e4156e72c",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Send message",
         "mode": "link",
         "links": [
-            "ab9d7a07a06ccb76"
+            "d27c0181d5a1f6d4"
         ],
         "x": 605,
         "y": 1760,
         "wires": []
     },
     {
-        "id": "0631afb8b644aa2f",
+        "id": "9211f4cab454ee4c",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Send message",
         "mode": "link",
         "links": [
-            "ab9d7a07a06ccb76"
+            "d27c0181d5a1f6d4"
         ],
-        "x": 505,
+        "x": 475,
         "y": 1820,
         "wires": []
     },
     {
-        "id": "115bf7e80def7def",
+        "id": "4926dab65f700d77",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Set 50% battery reserve",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -2968,18 +2793,18 @@
             }
         ],
         "queue": "none",
-        "x": 330,
+        "x": 290,
         "y": 1820,
         "wires": [
             [
-                "0631afb8b644aa2f"
+                "9211f4cab454ee4c"
             ]
         ]
     },
     {
-        "id": "5edf77b8d333ff1f",
+        "id": "408d89eb496c7341",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "d": true,
         "name": "12pm",
         "props": [
@@ -2998,14 +2823,14 @@
         "y": 1820,
         "wires": [
             [
-                "115bf7e80def7def"
+                "4926dab65f700d77"
             ]
         ]
     },
     {
-        "id": "d2619b0e55c63ecb",
+        "id": "ce868cc366f3a599",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "d": true,
         "name": "6pm",
         "props": [
@@ -3024,14 +2849,14 @@
         "y": 1880,
         "wires": [
             [
-                "0fcb11dc87dee752"
+                "e01960c7e090efd6"
             ]
         ]
     },
     {
-        "id": "0fcb11dc87dee752",
+        "id": "e01960c7e090efd6",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Remove 50% battery reserve",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3056,31 +2881,31 @@
             }
         ],
         "queue": "none",
-        "x": 340,
+        "x": 300,
         "y": 1880,
         "wires": [
             [
-                "bf0bd8078cdfcd47"
+                "91b66760d7c1e448"
             ]
         ]
     },
     {
-        "id": "bf0bd8078cdfcd47",
+        "id": "91b66760d7c1e448",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Send message",
         "mode": "link",
         "links": [
-            "ab9d7a07a06ccb76"
+            "d27c0181d5a1f6d4"
         ],
-        "x": 505,
+        "x": 475,
         "y": 1880,
         "wires": []
     },
     {
-        "id": "7979bf39095a6e60",
+        "id": "c4af8e6af0c99fb2",
         "type": "comment",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Notify if battery is low at 3pm",
         "info": "",
         "x": 820,
@@ -3088,9 +2913,10 @@
         "wires": []
     },
     {
-        "id": "e23aa4f96cbbbd37",
+        "id": "62dc07e97f573029",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
+        "d": true,
         "name": "3pm",
         "props": [
             {
@@ -3108,14 +2934,14 @@
         "y": 1760,
         "wires": [
             [
-                "c95a7738693d9690"
+                "79c13333702ecd83"
             ]
         ]
     },
     {
-        "id": "c95a7738693d9690",
+        "id": "79c13333702ecd83",
         "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get Battery Level",
         "server": "5165f8c6.cc4798",
         "version": 3,
@@ -3146,14 +2972,14 @@
         "y": 1760,
         "wires": [
             [
-                "b1dbaf3864a35c28"
+                "87f75f5816e2a18f"
             ]
         ]
     },
     {
-        "id": "6ab8c40128df18c1",
+        "id": "1d8dadb1f8604a17",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Notify phone",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3176,9 +3002,9 @@
         ]
     },
     {
-        "id": "b1dbaf3864a35c28",
+        "id": "87f75f5816e2a18f",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Prepare msg",
         "func": "if (msg.battery < 50) {\n    //node.warn(\"Not much battery charge left! Only \" + msg.battery)\n    msg.payload = \"WARNING: Battery level is currently at \" + msg.battery + \"%. CHARGE BATTERY!\";\n}\nelse {\n    //node.warn(\"Battery should be fine for demand period - is at \" + msg.battery)\n    msg.payload = \"Ok: Battery level is currently sufficient at \" + msg.battery + \"%\";\n}\n\n// Return the modified message\nreturn msg;",
         "outputs": 1,
@@ -3191,15 +3017,15 @@
         "y": 1760,
         "wires": [
             [
-                "6ab8c40128df18c1"
+                "1d8dadb1f8604a17"
             ]
         ]
     },
     {
-        "id": "c8e6f5e3b42b8ccd",
+        "id": "a9c28b0fcb112541",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
-        "name": "Export limit 0w",
+        "z": "1f79901475e24239",
+        "name": "Export limit 100w",
         "server": "5165f8c6.cc4798",
         "version": 5,
         "debugenabled": false,
@@ -3210,7 +3036,7 @@
         "entityId": [
             "input_number.set_sg_export_power_limit"
         ],
-        "data": "{ \"value\": 0}",
+        "data": "{ \"value\": 100}",
         "dataType": "json",
         "mergeContext": "",
         "mustacheAltTags": false,
@@ -3223,18 +3049,19 @@
             }
         ],
         "queue": "none",
-        "x": 980,
+        "x": 1250,
         "y": 1880,
         "wires": [
             [
-                "3e2cc6794b7cc4ca"
+                "703d474406989b87"
             ]
         ]
     },
     {
-        "id": "b6cebb19baaaccec",
+        "id": "17358c2a12d7b3ec",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
+        "d": true,
         "name": "7:30am",
         "props": [
             {
@@ -3248,41 +3075,42 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 780,
+        "x": 1040,
         "y": 1880,
         "wires": [
             [
-                "c8e6f5e3b42b8ccd"
+                "a9c28b0fcb112541"
             ]
         ]
     },
     {
-        "id": "8b0ac6b9d06f6290",
+        "id": "e3187b64026de51a",
         "type": "comment",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Export limits",
         "info": "",
-        "x": 770,
+        "x": 1030,
         "y": 1840,
         "wires": []
     },
     {
-        "id": "3e2cc6794b7cc4ca",
+        "id": "703d474406989b87",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Send message",
         "mode": "link",
         "links": [
-            "ab9d7a07a06ccb76"
+            "d27c0181d5a1f6d4"
         ],
-        "x": 1185,
+        "x": 1445,
         "y": 1880,
         "wires": []
     },
     {
-        "id": "8585c5a77ee4512a",
+        "id": "9c198c69f017bbd4",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
+        "d": true,
         "name": "5:30pm",
         "props": [
             {
@@ -3296,18 +3124,18 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 780,
+        "x": 1040,
         "y": 1940,
         "wires": [
             [
-                "3d256001cad2f2e5"
+                "d296b6710d275953"
             ]
         ]
     },
     {
-        "id": "3d256001cad2f2e5",
+        "id": "d296b6710d275953",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Export limit 5kW",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3332,42 +3160,42 @@
             }
         ],
         "queue": "none",
-        "x": 980,
+        "x": 1250,
         "y": 1940,
         "wires": [
             [
-                "56a9b8003273d3c3"
+                "ba337f24e89baab7"
             ]
         ]
     },
     {
-        "id": "56a9b8003273d3c3",
+        "id": "ba337f24e89baab7",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Send message",
         "mode": "link",
         "links": [
-            "ab9d7a07a06ccb76"
+            "d27c0181d5a1f6d4"
         ],
-        "x": 1185,
+        "x": 1445,
         "y": 1940,
         "wires": []
     },
     {
-        "id": "4cf70cf12e296319",
+        "id": "2b5d24213494b16e",
         "type": "comment",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Force Charge/Stop Buttons",
         "info": "",
-        "x": 150,
-        "y": 2000,
+        "x": 130,
+        "y": 2020,
         "wires": []
     },
     {
-        "id": "e122ea757cb3505e",
+        "id": "82191ad60e59fcb8",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
-        "name": "Export limit 5.5kW",
+        "z": "1f79901475e24239",
+        "name": "Export limit 5kW",
         "server": "5165f8c6.cc4798",
         "version": 5,
         "debugenabled": false,
@@ -3378,7 +3206,7 @@
         "entityId": [
             "input_number.set_sg_export_power_limit"
         ],
-        "data": "{ \"value\": 5500}",
+        "data": "{ \"value\": 5000}",
         "dataType": "json",
         "mergeContext": "",
         "mustacheAltTags": false,
@@ -3391,18 +3219,18 @@
             }
         ],
         "queue": "none",
-        "x": 350,
-        "y": 2040,
+        "x": 320,
+        "y": 2060,
         "wires": [
             [
-                "2dbc74842d7adc40"
+                "e4173165d700c2ce"
             ]
         ]
     },
     {
-        "id": "2dbc74842d7adc40",
+        "id": "e4173165d700c2ce",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Remove battery reserve",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3427,18 +3255,18 @@
             }
         ],
         "queue": "none",
-        "x": 590,
-        "y": 2040,
+        "x": 570,
+        "y": 2060,
         "wires": [
             [
-                "5b623cd5ae9f8a6e"
+                "f908d56f984fefdd"
             ]
         ]
     },
     {
-        "id": "5b623cd5ae9f8a6e",
+        "id": "f908d56f984fefdd",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "EMS Forced Mode",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3456,18 +3284,18 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 850,
-        "y": 2040,
+        "x": 830,
+        "y": 2060,
         "wires": [
             [
-                "358b94ef2f6ecbdd"
+                "c77872d31e4c360c"
             ]
         ]
     },
     {
-        "id": "358b94ef2f6ecbdd",
+        "id": "c77872d31e4c360c",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Force discharge",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3485,18 +3313,18 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 1060,
-        "y": 2040,
+        "x": 1040,
+        "y": 2060,
         "wires": [
             [
-                "a9319ed350d2cad2"
+                "5e17133385b60f52"
             ]
         ]
     },
     {
-        "id": "a9319ed350d2cad2",
+        "id": "5e17133385b60f52",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "8kw Discharge Limit",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3521,31 +3349,32 @@
             }
         ],
         "queue": "none",
-        "x": 1280,
-        "y": 2040,
+        "x": 1260,
+        "y": 2060,
         "wires": [
             [
-                "89ad62b720dbb20c"
+                "43982b2d88b457ce"
             ]
         ]
     },
     {
-        "id": "89ad62b720dbb20c",
+        "id": "43982b2d88b457ce",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "link out 8",
         "mode": "link",
         "links": [
-            "072513d530b67f09"
+            "8baa8f9994565d39"
         ],
-        "x": 1485,
-        "y": 2040,
+        "x": 1465,
+        "y": 2060,
         "wires": []
     },
     {
-        "id": "343612443c2350bc",
+        "id": "ca8d08f3ffd93afb",
         "type": "server-state-changed",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
+        "d": true,
         "name": "Force discharge now",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3587,18 +3416,18 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 130,
-        "y": 2040,
+        "x": 110,
+        "y": 2060,
         "wires": [
             [
-                "e122ea757cb3505e"
+                "82191ad60e59fcb8"
             ]
         ]
     },
     {
-        "id": "e1d8e552872ab561",
+        "id": "1059460ec46efeca",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Export limit 0w",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3623,18 +3452,18 @@
             }
         ],
         "queue": "none",
-        "x": 360,
-        "y": 2180,
+        "x": 340,
+        "y": 2200,
         "wires": [
             [
-                "9edae31f9c37b081"
+                "e5804da94ce16ea6"
             ]
         ]
     },
     {
-        "id": "9edae31f9c37b081",
+        "id": "e5804da94ce16ea6",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Add 15% battery reserve",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3659,18 +3488,18 @@
             }
         ],
         "queue": "none",
-        "x": 590,
-        "y": 2180,
+        "x": 570,
+        "y": 2200,
         "wires": [
             [
-                "c3f9fa5a7b7867a0"
+                "70d5761c1fb6333c"
             ]
         ]
     },
     {
-        "id": "c3f9fa5a7b7867a0",
+        "id": "70d5761c1fb6333c",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "EMS Self-Consumption Mode",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3688,18 +3517,18 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 850,
-        "y": 2180,
+        "x": 830,
+        "y": 2200,
         "wires": [
             [
-                "5b650cb80a1c2212"
+                "b4fc0e881c869958"
             ]
         ]
     },
     {
-        "id": "5b650cb80a1c2212",
+        "id": "b4fc0e881c869958",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Force discharge stop",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3717,18 +3546,18 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 1100,
-        "y": 2180,
+        "x": 1080,
+        "y": 2200,
         "wires": [
             [
-                "cedad323775de79c"
+                "c108a5b8d30d46a1"
             ]
         ]
     },
     {
-        "id": "cedad323775de79c",
+        "id": "c108a5b8d30d46a1",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Remove Discharge Rate",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3753,31 +3582,32 @@
             }
         ],
         "queue": "none",
-        "x": 1330,
-        "y": 2180,
+        "x": 1310,
+        "y": 2200,
         "wires": [
             [
-                "682726e3e78e07b8"
+                "e20f0f6fe3a1abfd"
             ]
         ]
     },
     {
-        "id": "682726e3e78e07b8",
+        "id": "e20f0f6fe3a1abfd",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "link out 9",
         "mode": "link",
         "links": [
-            "072513d530b67f09"
+            "8baa8f9994565d39"
         ],
-        "x": 1485,
-        "y": 2180,
+        "x": 1465,
+        "y": 2200,
         "wires": []
     },
     {
-        "id": "41abeae98747499a",
+        "id": "f55759404fa94ca1",
         "type": "server-state-changed",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
+        "d": true,
         "name": "Stop force discharge now",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3819,18 +3649,18 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 150,
-        "y": 2180,
+        "x": 130,
+        "y": 2200,
         "wires": [
             [
-                "e1d8e552872ab561"
+                "1059460ec46efeca"
             ]
         ]
     },
     {
-        "id": "df89f156f1a845ca",
+        "id": "9057350bc34e3e51",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Export limit 5kW",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3855,18 +3685,18 @@
             }
         ],
         "queue": "none",
-        "x": 360,
-        "y": 2300,
+        "x": 340,
+        "y": 2320,
         "wires": [
             [
-                "e32010be2c4e9537"
+                "a862699871b80429"
             ]
         ]
     },
     {
-        "id": "e32010be2c4e9537",
+        "id": "a862699871b80429",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Add 50% battery reserve",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3891,18 +3721,18 @@
             }
         ],
         "queue": "none",
-        "x": 590,
-        "y": 2300,
+        "x": 570,
+        "y": 2320,
         "wires": [
             [
-                "719c2249df5b3c60"
+                "ceb4367c9712c7ae"
             ]
         ]
     },
     {
-        "id": "719c2249df5b3c60",
+        "id": "ceb4367c9712c7ae",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "EMS Self-Consumption Mode",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3920,18 +3750,18 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 850,
-        "y": 2300,
+        "x": 830,
+        "y": 2320,
         "wires": [
             [
-                "9e661cd38c578d46"
+                "704a7768c1ee3e9c"
             ]
         ]
     },
     {
-        "id": "9e661cd38c578d46",
+        "id": "704a7768c1ee3e9c",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Force discharge stop",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3949,18 +3779,18 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 1100,
-        "y": 2300,
+        "x": 1080,
+        "y": 2320,
         "wires": [
             [
-                "4b052026187f2007"
+                "01befe94ce2ed57a"
             ]
         ]
     },
     {
-        "id": "4b052026187f2007",
+        "id": "01befe94ce2ed57a",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Remove Discharge Rate",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -3985,31 +3815,32 @@
             }
         ],
         "queue": "none",
-        "x": 1330,
-        "y": 2300,
+        "x": 1310,
+        "y": 2320,
         "wires": [
             [
-                "e023decbb1edc98b"
+                "af255af7d76b3c79"
             ]
         ]
     },
     {
-        "id": "e023decbb1edc98b",
+        "id": "af255af7d76b3c79",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "link out 10",
         "mode": "link",
         "links": [
-            "072513d530b67f09"
+            "8baa8f9994565d39"
         ],
-        "x": 1485,
-        "y": 2300,
+        "x": 1465,
+        "y": 2320,
         "wires": []
     },
     {
-        "id": "3712825f36428630",
+        "id": "19644c74cf74a548",
         "type": "server-state-changed",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
+        "d": true,
         "name": "Stop force discharge now",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -4051,18 +3882,18 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 150,
-        "y": 2300,
+        "x": 130,
+        "y": 2320,
         "wires": [
             [
-                "df89f156f1a845ca"
+                "9057350bc34e3e51"
             ]
         ]
     },
     {
-        "id": "32286c0a968384c0",
+        "id": "37a11b202c031ad2",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Export limit 5kW",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -4087,18 +3918,18 @@
             }
         ],
         "queue": "none",
-        "x": 360,
-        "y": 2360,
+        "x": 340,
+        "y": 2380,
         "wires": [
             [
-                "5ac32a474167d7f3"
+                "59f768d6fc630c1a"
             ]
         ]
     },
     {
-        "id": "5ac32a474167d7f3",
+        "id": "59f768d6fc630c1a",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Remove battery reserve",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -4123,18 +3954,18 @@
             }
         ],
         "queue": "none",
-        "x": 590,
-        "y": 2360,
+        "x": 570,
+        "y": 2380,
         "wires": [
             [
-                "734ae9f50db4de41"
+                "a77ae180564d8bcf"
             ]
         ]
     },
     {
-        "id": "734ae9f50db4de41",
+        "id": "a77ae180564d8bcf",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "EMS Self-Consumption Mode",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -4152,18 +3983,18 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 850,
-        "y": 2360,
+        "x": 830,
+        "y": 2380,
         "wires": [
             [
-                "47b8817a61002feb"
+                "26f10edc35ac614f"
             ]
         ]
     },
     {
-        "id": "47b8817a61002feb",
+        "id": "26f10edc35ac614f",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Force discharge stop",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -4181,18 +4012,18 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 1100,
-        "y": 2360,
+        "x": 1080,
+        "y": 2380,
         "wires": [
             [
-                "f591073473e2e778"
+                "8e3f1913b210b9e5"
             ]
         ]
     },
     {
-        "id": "f591073473e2e778",
+        "id": "8e3f1913b210b9e5",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Remove Discharge Rate",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -4217,31 +4048,32 @@
             }
         ],
         "queue": "none",
-        "x": 1330,
-        "y": 2360,
+        "x": 1310,
+        "y": 2380,
         "wires": [
             [
-                "416038772a14a3e7"
+                "3ab25e811ca04d9f"
             ]
         ]
     },
     {
-        "id": "416038772a14a3e7",
+        "id": "3ab25e811ca04d9f",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "link out 11",
         "mode": "link",
         "links": [
-            "072513d530b67f09"
+            "8baa8f9994565d39"
         ],
-        "x": 1485,
-        "y": 2360,
+        "x": 1465,
+        "y": 2380,
         "wires": []
     },
     {
-        "id": "0aec5533d7a2bc63",
+        "id": "f84da1f0c422d790",
         "type": "server-state-changed",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
+        "d": true,
         "name": "Stop force discharge now",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -4283,18 +4115,18 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 150,
-        "y": 2360,
+        "x": 130,
+        "y": 2380,
         "wires": [
             [
-                "32286c0a968384c0"
+                "37a11b202c031ad2"
             ]
         ]
     },
     {
-        "id": "5493b1652d4a39bd",
+        "id": "77770d855dd0222a",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Export limit 0w",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -4319,18 +4151,18 @@
             }
         ],
         "queue": "none",
-        "x": 360,
-        "y": 2240,
+        "x": 340,
+        "y": 2260,
         "wires": [
             [
-                "51efcf08a1310e6f"
+                "69f03be9b7c03a6a"
             ]
         ]
     },
     {
-        "id": "51efcf08a1310e6f",
+        "id": "69f03be9b7c03a6a",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Removed battery reserve",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -4355,18 +4187,18 @@
             }
         ],
         "queue": "none",
-        "x": 590,
-        "y": 2240,
+        "x": 570,
+        "y": 2260,
         "wires": [
             [
-                "f213255e2569fe94"
+                "5872eeb04572a2a8"
             ]
         ]
     },
     {
-        "id": "f213255e2569fe94",
+        "id": "5872eeb04572a2a8",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "EMS Self-Consumption Mode",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -4384,18 +4216,18 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 850,
-        "y": 2240,
+        "x": 830,
+        "y": 2260,
         "wires": [
             [
-                "1a35b6e8dfa8bd70"
+                "7a95433b813d999d"
             ]
         ]
     },
     {
-        "id": "1a35b6e8dfa8bd70",
+        "id": "7a95433b813d999d",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Force discharge stop",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -4413,18 +4245,18 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 1100,
-        "y": 2240,
+        "x": 1080,
+        "y": 2260,
         "wires": [
             [
-                "b3c7b67fcc53a05b"
+                "e006746b3c763c22"
             ]
         ]
     },
     {
-        "id": "b3c7b67fcc53a05b",
+        "id": "e006746b3c763c22",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Remove Discharge Rate",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -4449,31 +4281,32 @@
             }
         ],
         "queue": "none",
-        "x": 1330,
-        "y": 2240,
+        "x": 1310,
+        "y": 2260,
         "wires": [
             [
-                "6bd2252f5a90c217"
+                "a80e81a1330618cb"
             ]
         ]
     },
     {
-        "id": "6bd2252f5a90c217",
+        "id": "a80e81a1330618cb",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "link out 12",
         "mode": "link",
         "links": [
-            "072513d530b67f09"
+            "8baa8f9994565d39"
         ],
-        "x": 1485,
-        "y": 2240,
+        "x": 1465,
+        "y": 2260,
         "wires": []
     },
     {
-        "id": "ef0158681ca20771",
+        "id": "fc1ccfd52fb0e384",
         "type": "server-state-changed",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
+        "d": true,
         "name": "Stop force discharge now",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -4515,18 +4348,19 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 150,
-        "y": 2240,
+        "x": 130,
+        "y": 2260,
         "wires": [
             [
-                "5493b1652d4a39bd"
+                "77770d855dd0222a"
             ]
         ]
     },
     {
-        "id": "3a4458d821b37fb6",
+        "id": "b5fb9a0518062196",
         "type": "server-state-changed",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
+        "d": true,
         "name": "Sunrise Trigger (-1.25hrs)",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -4572,14 +4406,14 @@
         "y": 1760,
         "wires": [
             [
-                "2d349426e4a27918"
+                "f09d9788e1abfa65"
             ]
         ]
     },
     {
-        "id": "fd4264aa6847a51e",
+        "id": "1ff7ad2ca1d82a29",
         "type": "traffic",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "allow_or_stop",
         "property_allow": "payload",
         "filter_allow": "true",
@@ -4597,14 +4431,15 @@
         "y": 180,
         "wires": [
             [
-                "a07ffdffda776f6d"
+                "88971e4a8b4ea026"
             ]
         ]
     },
     {
-        "id": "639d82d8bb330af8",
+        "id": "98f4a87328908a96",
         "type": "ha-switch",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
+        "d": true,
         "name": "Energy_control_switch",
         "version": 0,
         "debugenabled": false,
@@ -4631,20 +4466,20 @@
         "y": 120,
         "wires": [
             [
-                "fd4264aa6847a51e"
+                "1ff7ad2ca1d82a29"
             ],
             [
-                "fd4264aa6847a51e"
+                "1ff7ad2ca1d82a29"
             ]
         ]
     },
     {
-        "id": "6de1b93561f257d5",
+        "id": "c94dc0e157e692bc",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Charge/discharge/shutdown",
-        "func": "let today = new Date();\n//node.warn(\"hour now is \" + today.getHours());\n//node.warn(msg.current + \" and battery \" + msg.battery);\n//node.warn(msg.net_remaining+\";\"+msg.charge_required)\n//node.warn(msg.forecast_obj)\n\nlet forecasts = msg.forecast_obj.attributes.forecast;\nmsg.grid_forecasts = []\nmsg.fit_forecasts = []\n\nmsg.cheapest_grid_start = undefined\nmsg.best_fit_start = undefined\n\nmsg.time_blocks_grid = {}\nmsg.time_blocks_fit = {}\nmsg.cheapest_grid = 1000\nmsg.best_fit = -1000\nmsg.cheapest_grid_time = undefined\nmsg.best_fit_time = undefined\n\nlet grid_buy_price_day = msg.grid_buy_price_day / 100;\nlet grid_buy_price_night_spike_prep = msg.grid_buy_price_night_spike_prep / 100;\nlet grid_sell_price_day = msg.grid_sell_price_day / 100;\nlet grid_sell_price_night = msg.grid_sell_price_night / 100;\nlet grid_buy_price_day_spike_prep = msg.grid_buy_price_day_spike_prep / 100;\n\nlet minbuy4hrs = msg.minbuy4hrs;\n\nfor (let i=0; i<forecasts.length-4; i++) {\n    msg.grid_forecasts.push(forecasts[i].costsFlexUp);\n    msg.fit_forecasts.push(forecasts[i].earningsFlexUp);\n    if (msg.cheapest_grid > forecasts[i].costsFlexUp) {\n        msg.cheapest_grid_time = forecasts[i].intervalStart;      \n        msg.cheapest_grid = forecasts[i].costsFlexUp;\n    }\n    if (msg.best_fit < forecasts[i].earningsFlexUp) {\n        msg.best_fit_time = forecasts[i].intervalStart;\n        msg.best_fit = forecasts[i].earningsFlexUp;\n    }\n    msg.time_blocks_grid[forecasts[i].intervalStart] = 0\n    msg.time_blocks_fit[forecasts[i].intervalStart] = 0\n    for (let j=0; j<4; j++) {\n        msg.time_blocks_grid[forecasts[i].intervalStart] += forecasts[i+j].costsFlexUp\n        msg.time_blocks_fit[forecasts[i].intervalStart] += forecasts[i+j].earningsFlexUp\n    }\n    msg.time_blocks_grid[forecasts[i].intervalStart] = Number((msg.time_blocks_grid[forecasts[i].intervalStart]/6).toPrecision(2))\n    msg.time_blocks_fit[forecasts[i].intervalStart] = Number((msg.time_blocks_fit[forecasts[i].intervalStart]/6).toPrecision(2))\n\n    //node.warn(\"time_blocks_grid: \" + msg.time_blocks_grid[forecasts[i].intervalStart]);\n}\nlet cheapest_grid_block = 1000\n\nfor (let block in msg.time_blocks_grid) {\n    //node.warn(\"time_blocks_grid: \" + block);\n    let [hour,minute] = block.split('T')[1].split(\"+\")[0].split(\":\").slice(0, 2)\n    if (Number(hour) < 18 && msg.time_blocks_grid[block] < cheapest_grid_block) {\n        msg.cheapest_grid_start = [Number(hour),Number(minute)];\n        cheapest_grid_block = msg.time_blocks_grid[block]\n    }\n    else {\n        // node.warn(cheapest_grid_block + \" is cheaper than or same as \" + msg.time_blocks_grid[block])\n    }\n}\nlet best_fit_block = -1000\nfor (let block in msg.time_blocks_fit) {\n    let [hour,minute] = block.split('T')[1].split(\"+\")[0].split(\":\").slice(0, 2)\n    if (Number(hour) < 18 && msg.time_blocks_fit[block] > best_fit_block) {\n        msg.best_fit_start = [Number(hour),Number(minute)];\n        best_fit_block = msg.time_blocks_fit[block]\n    }\n}\n\n// Charge up to 40% during the night if the price is cheapish (30c or less, roughly, from HASS slider) and upcoming sell price likely to be 60c or greater (from HASS), to get ready for potential morning shoulder higher feed-in tarrif\nif (today.getHours() >= 4 && today.getHours() < 5 && msg.current <= grid_buy_price_night_spike_prep && msg.battery < 40 && msg.maxsell4hrs > grid_sell_price_night) {\n    msg.decision = \"Opportunity to charge battery to 40% for shoulder period, battery is at\" + msg.battery + \"% and price is \" + msg.current\n    msg.decisions.push(msg.decision)\n    return [msg, null, null]\n}\n\n// node.warn(\"cheapest grid starting at \"+msg.cheapest_grid_start.join(\":\"));\n// node.warn(today.getHours() >= Number(msg.cheapcheapest_grid_startest_grid_start[0]))\n// node.warn(today.getMinutes() >= Number(msg.cheapest_grid_start[1]))\n// node.warn(msg)\n// less than or equal to 0 decisions\nif (msg.current <= 0) {\n    //if (msg.battery <= 98) {\n    //if (msg.battery <= 98 && (today.getHours() <16 || today.getHours() > 21)) {\n        // added next line to make sure that only buy when it is the cheapest part of the next 4 hrs (within 10% of the cheapest)\n    if (msg.battery <= 98 && msg.current <= (minbuy4hrs * .9) && (today.getHours() <16 || today.getHours() > 21)) {\n        // node.warn(\"FREE ELECTRICITY and battery <= 98\");\n        msg.decision = \"Free electricity from grid, cheap part of next 4 hrs, so fast charging\";\n        msg.decisions.push(msg.decision)\n        return [msg,null,null]\n    }\n    //shut down inverter\n    //else if (msg.current < -.03 && msg.forecast < 0) {\n    else if (msg.current < -.03 && msg.forecast < 0 && (today.getHours() < 16 || today.getHours() > 21)) {\n        // node.warn(\"Being paid more than 3c to use from grid, and forecast is negative too\");\n        msg.decision = \"Being paid more than 3c to use from grid, so shutting down inverter\";\n        msg.decisions.push(msg.decision)\n        return [null, null, msg]\n    }\n}\n\n// Check if battery is less than 50% charged at 3pm.\n// We need to prepare for the demand period at 6pm so get enough charge in the battery to get us through that peak.\nelse if (today.getHours() >= 14 && today.getHours() < 16 && msg.current <= grid_buy_price_day && msg.battery < 90) {\n    // If battery is under 90%, charge it up if the price is under roughly 25c/kWh (from HASS)\n    // node.warn(\"Need to charge battery to prepare for demand period since the battery is only at\" + msg.battery + \"%\")\n    msg.decision = \"Need to charge battery to 90% to prepare for upcomging demand period since the battery is only at\" + msg.battery +\"%\"\n    msg.decisions.push(msg.decision)\n    return [msg,null,null]\n}\n\n// Check if battery is less than 100% charged at 3pm and whether there is a major spike coming (definition, > $2/kWh sell price).\n// We need to prepare for this spike period, if true, so fully charge battery.\n// Will only charge if current price is 40c/kWh or below (defined in HASS)\nelse if (today.getHours() >= 15 && today.getHours() < 16 && msg.current <= grid_buy_price_day_spike_prep && msg.battery < 100 && msg.maxsell4hrs > grid_sell_price_day) {\n    // If battery is not fully charged, charge it up if the price is under roughly 40c/kWh (from HASS) because there is going to be a sell price of over roughly $2/kwh (from HASS) within the next 4 hours\n    // node.warn(\"Need to charge battery to prepare for demand period since the battery is only at\" + msg.battery + \"%\")\n    msg.decision = \"Need to charge battery to 100% to prepare for upcoming spike since the battery is only at\" + msg.battery + \"% and sell price expected to be up to $\" + msg.maxsell4hrs;\n    msg.decisions.push(msg.decision)\n    return [msg,null,null]\n}\n\n//very cheap power decisions\n//else if (msg.current <= .04 && msg.battery < 75 && today.getHours() > 12) {\nelse if (msg.current <= .04 && msg.battery < 75 && today.getHours() > 12 && (today.getHours() < 16 || today.getHours() >= 21)) {\n    // node.warn(\"very cheap charging and battery low for afternoon\")\n    msg.decision = \"After 1pm, very cheap grid, battery low, so force-charging\";\n    msg.decisions.push(msg.decision)\n    return [msg, null, null]\n}\nelse if (msg.current <= .04 && msg.battery < 30 && today.getHours() < 8) {\n    // node.warn(\"very cheap charging and battery low for morning\")\n    msg.decision = \"Before 7am, very cheap grid, battery low, so force-charging\";\n    msg.decisions.push(msg.decision)\n    return [msg, null, null]\n}\nelse if (msg.current < grid_buy_price_day && msg.battery < 100 && msg.net_remaining <= 0 && today.getHours() > 10 && today.getHours() < 16) {\n    // node.warn(\"Little generation left and price is cheap so force charging\");\n    // grid_buy_price_day is taken from HASS slider\n    msg.decision = \"Between 10am and 4pm, < \" + grid_buy_price_day  + \", battery < 100, low generation remaining, so force-charging\";\n    msg.decisions.push(msg.decision)\n    return [msg, null, null]\n}\n// else if (msg.current <= .15 && msg.battery < 85 && msg.net_remaining < 1 && today.getHours() > 14 && today.getHours() < 16) {\n//     // node.warn(\"Little generation left and price is cheap so force charging\");\n//     msg.decision = \"Between 2pm and 4pm, <= 15c grid, battery <85, low generation remaining, so force-charging\";\n//     msg.decisions.push(msg.decision)\n//     return [msg, null, null]1\n// }\n// msg.current < .10 && msg.battery < 100 && msg.net_remaining < 2 && \n// grid_buy_price_day is taken from HASS slider\nelse if (msg.current < grid_buy_price_day && msg.battery < 100 && msg.net_remaining < 1 && today.getHours() >= Number(msg.cheapest_grid_start[0]) && today.getHours() < (Number(msg.cheapest_grid_start[0])+3) && today.getMinutes() >= Number(msg.cheapest_grid_start[1])) {\n    if(today.getHours() > 8 && today.getHours() < 16) {\n    // node.warn(\"Not enough generation left to fully charge battery so force charging\");\n    msg.decision = \"In cheapest grid period, generation remaining not enough to charge battery, so force-charging\";\n    msg.decisions.push(msg.decision)\n    return [msg, null, null]\n    }\n}\n\nelse {\n    // node.warn(\"Not worth charging battery from grid, not worth shutting down inverter\");\n    msg.decision = \"Not worth charging battery from grid, not worth shutting down inverter\";\n    msg.decisions.push(msg.decision)\n    return [null, msg, null]\n}",
-        "outputs": 3,
+        "func": "let today = new Date();\n//node.warn(\"hour now is \" + today.getHours());\n//node.warn(msg.current + \" and battery \" + msg.battery);\n//node.warn(msg.net_remaining+\";\"+msg.charge_required)\n//node.warn(msg.forecast_obj)\n\nlet forecasts = msg.forecast_obj.attributes.forecast;\nmsg.grid_forecasts = []\nmsg.fit_forecasts = []\n\nmsg.cheapest_grid_start = undefined\nmsg.best_fit_start = undefined\n\nmsg.time_blocks_grid = {}\nmsg.time_blocks_fit = {}\nmsg.cheapest_grid = 1000\nmsg.best_fit = -1000\nmsg.cheapest_grid_time = undefined\nmsg.best_fit_time = undefined\n\nlet grid_buy_price_day = msg.grid_buy_price_day / 100;\nlet grid_buy_price_night_spike_prep = msg.grid_buy_price_night_spike_prep / 100;\nlet grid_sell_price_day = msg.grid_sell_price_day / 100;\nlet grid_sell_price_night = msg.grid_sell_price_night / 100;\nlet grid_buy_price_day_spike_prep = msg.grid_buy_price_day_spike_prep / 100;\n\nlet minbuy4hrs = msg.minbuy4hrs;\n\nfor (let i=0; i<forecasts.length-4; i++) {\n    msg.grid_forecasts.push(forecasts[i].costsFlexUp);\n    msg.fit_forecasts.push(forecasts[i].earningsFlexUp);\n    if (msg.cheapest_grid > forecasts[i].costsFlexUp) {\n        msg.cheapest_grid_time = forecasts[i].intervalStart;      \n        msg.cheapest_grid = forecasts[i].costsFlexUp;\n    }\n    if (msg.best_fit < forecasts[i].earningsFlexUp) {\n        msg.best_fit_time = forecasts[i].intervalStart;\n        msg.best_fit = forecasts[i].earningsFlexUp;\n    }\n    msg.time_blocks_grid[forecasts[i].intervalStart] = 0\n    msg.time_blocks_fit[forecasts[i].intervalStart] = 0\n    for (let j=0; j<4; j++) {\n        msg.time_blocks_grid[forecasts[i].intervalStart] += forecasts[i+j].costsFlexUp\n        msg.time_blocks_fit[forecasts[i].intervalStart] += forecasts[i+j].earningsFlexUp\n    }\n    msg.time_blocks_grid[forecasts[i].intervalStart] = Number((msg.time_blocks_grid[forecasts[i].intervalStart]/6).toPrecision(2))\n    msg.time_blocks_fit[forecasts[i].intervalStart] = Number((msg.time_blocks_fit[forecasts[i].intervalStart]/6).toPrecision(2))\n\n    //node.warn(\"time_blocks_grid: \" + msg.time_blocks_grid[forecasts[i].intervalStart]);\n}\nlet cheapest_grid_block = 1000\n\nfor (let block in msg.time_blocks_grid) {\n    //node.warn(\"time_blocks_grid: \" + block);\n    let [hour,minute] = block.split('T')[1].split(\"+\")[0].split(\":\").slice(0, 2)\n    if (Number(hour) < 18 && msg.time_blocks_grid[block] < cheapest_grid_block) {\n        msg.cheapest_grid_start = [Number(hour),Number(minute)];\n        cheapest_grid_block = msg.time_blocks_grid[block]\n    }\n}\nlet best_fit_block = -1000\nfor (let block in msg.time_blocks_fit) {\n    let [hour,minute] = block.split('T')[1].split(\"+\")[0].split(\":\").slice(0, 2)\n    if (Number(hour) < 18 && msg.time_blocks_fit[block] > best_fit_block) {\n        msg.best_fit_start = [Number(hour),Number(minute)];\n        best_fit_block = msg.time_blocks_fit[block]\n    }\n}\n\nif (today.getHours() >= 0 && today.getHours() <= 4 && msg.current > 1) {\n    msg.decision = \"Price is really high between midnight and 5am, releasing battery reserve. Better to use battery now than buy.\";\n    msg.decisions.push(msg.decision)\n    return [null,null,null,msg]\n}\n\n// Charge up to 40% during the night if the price is cheapish (30c or less, roughly, from HASS slider) and upcoming sell price likely to be 60c or greater (from HASS), to get ready for potential morning shoulder higher feed-in tarrif\nif (today.getHours() >= 4 && today.getHours() < 5 && msg.current <= grid_buy_price_night_spike_prep && msg.battery < 40 && msg.maxsell4hrs > grid_sell_price_night) {\n    msg.decision = \"Opportunity to charge battery to 40% for shoulder period, battery is at\" + msg.battery + \"% and price is \" + msg.current\n    msg.decisions.push(msg.decision)\n    return [msg, null, null,null]\n}\n\n// node.warn(\"cheapest grid starting at \"+msg.cheapest_grid_start.join(\":\"));\n// node.warn(today.getHours() >= Number(msg.cheapcheapest_grid_startest_grid_start[0]))\n// node.warn(today.getMinutes() >= Number(msg.cheapest_grid_start[1]))\n// node.warn(msg)\n// less than or equal to 0 decisions\nif (msg.current <= 0) {\n    //if (msg.battery <= 98) {\n    //if (msg.battery <= 98 && (today.getHours() <16 || today.getHours() > 21)) {\n        // added next line to make sure that only buy when it is the cheapest part of the next 4 hrs (within 10% of the cheapest)\n    if (msg.battery <= 98 && msg.current <= (minbuy4hrs * .9) && (today.getHours() <16 || today.getHours() > 21)) {\n        // node.warn(\"FREE ELECTRICITY and battery <= 98\");\n        msg.decision = \"Paid to take electricity from grid, also lowest part of next 4 hrs, so fast charging\";\n        msg.decisions.push(msg.decision)\n        return [msg,null,null,null]\n    }\n    //shut down inverter\n    //else if (msg.current < -.03 && msg.forecast < 0) {\n    else if (msg.current < -.03 && msg.forecast < 0 && (today.getHours() < 16 || today.getHours() > 21)) {\n        // node.warn(\"Being paid more than 3c to use from grid, and forecast is negative too\");\n        msg.decision = \"Being paid more than 3c to use from grid, so shutting down inverter\";\n        msg.decisions.push(msg.decision)\n        return [null, null, msg, null]\n    }\n}\n\n// Check if battery is less than 50% charged at 3pm.\n// We need to prepare for the demand period at 6pm so get enough charge in the battery to get us through that peak.\n\nelse if (today.getHours() >= 14 && today.getHours() < 16 && msg.current <= grid_buy_price_day && msg.battery < 90) {\n    // If battery is under 90%, charge it up if the price is under roughly 25c/kWh (from HASS)\n    // node.warn(\"Need to charge battery to prepare for demand period since the battery is only at\" + msg.battery + \"%\")\n    msg.decision = \"Need to charge battery to 90% to prepare for upcomging demand period since the battery is only at\" + msg.battery +\"%\"\n    msg.decisions.push(msg.decision)\n    return [msg,null,null,null]\n}\n\n// Check if battery is less than 100% charged at 3pm and whether there is a major spike coming (definition, > $2/kWh sell price).\n// We need to prepare for this spike period, if true, so fully charge battery.\n// Will only charge if current price is 40c/kWh or below (defined in HASS)\n\nelse if (today.getHours() >= 15 && today.getHours() < 16 && msg.current <= grid_buy_price_day_spike_prep && msg.battery < 100 && msg.maxsell4hrs > grid_sell_price_day) {\n    // If battery is not fully charged, charge it up if the price is under roughly 40c/kWh (from HASS) because there is going to be a sell price of over roughly $2/kwh (from HASS) within the next 4 hours\n    // node.warn(\"Need to charge battery to prepare for demand period since the battery is only at\" + msg.battery + \"%\")\n    msg.decision = \"Need to charge battery to 100% to prepare for upcoming spike since the battery is only at\" + msg.battery + \"% and sell price expected to be up to $\" + msg.maxsell4hrs;\n    msg.decisions.push(msg.decision)\n    return [msg,null,null,null]\n}\n\n//very cheap power decisions\nelse if (msg.current <= .04 && msg.battery < 75 && today.getHours() > 12 && (today.getHours() < 16 || today.getHours() >= 21)) {\n    // node.warn(\"very cheap charging and battery low for afternoon\")\n    msg.decision = \"After 1pm, very cheap grid, battery low, so force-charging\";\n    msg.decisions.push(msg.decision)\n    return [msg, null, null, null]\n}\nelse if (msg.current <= .02 && msg.battery < 30 && today.getHours() < 7) {\n    // node.warn(\"very cheap charging and battery low for morning\")\n    msg.decision = \"Before 7am, very cheap grid, battery low, so force-charging\";\n    msg.decisions.push(msg.decision)\n    return [msg, null, null, null]\n}\nelse if (msg.current < grid_buy_price_day && msg.battery < 100 && msg.net_remaining <= 0 && today.getHours() > 10 && today.getHours() < 16) {\n    // node.warn(\"Little generation left and price is cheap so force charging\");\n    // grid_buy_price_day is taken from HASS slider\n    msg.decision = \"Between 10am and 4pm, < \" + grid_buy_price_day  + \", battery < 100, low generation remaining, so force-charging\";\n    msg.decisions.push(msg.decision)\n    return [msg, null, null, null]\n}\n// else if (msg.current <= .15 && msg.battery < 85 && msg.net_remaining < 1 && today.getHours() > 14 && today.getHours() < 16) {\n//     // node.warn(\"Little generation left and price is cheap so force charging\");\n//     msg.decision = \"Between 2pm and 4pm, <= 15c grid, battery <85, low generation remaining, so force-charging\";\n//     msg.decisions.push(msg.decision)\n//     return [msg, null, null, null]\n// }\n// msg.current < .10 && msg.battery < 100 && msg.net_remaining < 2 && \n// grid_buy_price_day is taken from HASS slider\nelse if (msg.current < grid_buy_price_day && msg.battery < 100 && msg.net_remaining < 1 && today.getHours() >= Number(msg.cheapest_grid_start[0]) && today.getHours() < (Number(msg.cheapest_grid_start[0])+3) && today.getMinutes() >= Number(msg.cheapest_grid_start[1])) {\n    if(today.getHours() > 8 && today.getHours() < 16) {\n    // node.warn(\"Not enough generation left to fully charge battery so force charging\");\n    msg.decision = \"In cheapest grid period, generation remaining not enough to charge battery, so force-charging\";\n    msg.decisions.push(msg.decision)\n    return [msg, null, null, null]\n    }\n}\nelse {\n    // node.warn(\"Not worth charging battery from grid, not worth shutting down inverter\");\n    msg.decision = \"Not worth charging battery from grid, not worth shutting down inverter\";\n    msg.decisions.push(msg.decision)\n    return [null, msg, null, null]\n}\n",
+        "outputs": 4,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
@@ -4654,41 +4489,45 @@
         "y": 520,
         "wires": [
             [
-                "3eb73ad8a6256630"
+                "1e0405e3b06bc673"
             ],
             [
-                "c18ecd577c5a16c4"
+                "143d940c9f69e862"
             ],
             [
-                "c91372affc87b424"
+                "665ebca3a7b8ab6f"
+            ],
+            [
+                "a2bb25ccd14303cd"
             ]
         ]
     },
     {
-        "id": "d8179d09f5dd67f1",
+        "id": "40b6e7315decf964",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get forecast high/low sell price 4hrs",
-        "func": "let forecasts = msg.forecast_obj.attributes.forecast;\n\nlet sellprice = null;\nlet maxsellprice = null;\nlet minsellprice = null;\n\n// 48 = 4hrs of 5min intervals\n\n// temp\nmaxsellprice = forecasts[0].earningsFlexUp;\nminsellprice = forecasts[0].earningsFlexUp;\n\nfor (let i = 1; i <= 47; i++) {\n    sellprice = forecasts[i].earningsFlexUp;\n\n    if (sellprice > maxsellprice) {\n        maxsellprice = sellprice;\n    }\n    \n    if (sellprice < minsellprice) {\n        minsellprice = sellprice;\n    }\n}\n\nmsg.maxsell4hrs = maxsellprice;\nmsg.minsell4hrs = minsellprice;\n\nreturn msg;",
+        "func": "let forecasts = msg.forecast_obj.attributes.forecast;\n\nlet sellprice = null;\nlet maxsellprice = null;\nlet minsellprice = null;\n\n// 48 = 4hrs of 5min intervals\n\n// temp\nmaxsellprice = forecasts[0].earningsFlexUp;\nminsellprice = forecasts[0].earningsFlexUp;\n\n//for (let i = 0; i <= 47; i++) {\nfor (let i = 1; i <= 47; i++) {\n    sellprice = forecasts[i].earningsFlexUp;\n\n    if (sellprice > maxsellprice) {\n        maxsellprice = sellprice;\n    }\n    \n    if (sellprice < minsellprice) {\n        minsellprice = sellprice;\n    }\n}\n\nmsg.maxsell4hrs = maxsellprice;\nmsg.minsell4hrs = minsellprice;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 200,
+        "x": 260,
         "y": 580,
         "wires": [
             [
-                "ee0fc7f53c7c6dc2",
-                "c53a22e1ef3172f4"
+                "a84e2cbb7703af0e",
+                "7bc54d721e73b783"
             ]
         ]
     },
     {
-        "id": "933d03b7aeecf25a",
+        "id": "14b839f019218946",
         "type": "inject",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
+        "d": true,
         "name": "Every 15 mins",
         "props": [
             {
@@ -4710,16 +4549,16 @@
         "y": 800,
         "wires": [
             [
-                "b4c6eb0385f02477"
+                "c9961168023432ac"
             ]
         ]
     },
     {
-        "id": "f2a577dea0c55490",
+        "id": "1bc71fad617d964a",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Full Battery Hour",
-        "func": "let remaining_generation = flow.get(\"remaining_today\");\nlet baseline_consumption = flow.get(\"baseline_consumption\");\n\nlet battery_charge = msg.battery_charge;\nlet battery_charge_required = null;\nlet battery_capacity = 19.2;\nlet battery_level = msg.battery_level;\n\nlet battery_full_hour = null;\n\nlet today = new Date();\nlet current_hour = today.getHours();\nlet sundown_hour = 17;\n\nmsg.expected_consumption_remaining = 0;\nmsg.expected_generation_remaining = 0;\n\nbattery_charge_required = battery_capacity - battery_charge;\n\nlet consumption_minus_generating_remaining = 0;\n\nfor (let hour in baseline_consumption) {\n    if (Number(hour) >= current_hour && Number(hour) < sundown_hour) {\n        let consumption_this_hour = (baseline_consumption[hour] / 1000);\n        msg.expected_consumption_remaining += consumption_this_hour;\n        if (remaining_generation.hasOwnProperty(hour) && remaining_generation[hour]) {\n            msg.expected_generation_remaining += Number(remaining_generation[hour]);\n            consumption_minus_generating_remaining += Number(remaining_generation[hour]) - consumption_this_hour;\n\n            // Work out what hour we will have a 100% battery\n            battery_charge_required = battery_charge_required - remaining_generation[hour];\n\n            if(battery_charge_required <= 0)\n                {\n                battery_full_hour = Number(hour) + 1;\n                break;\n                }\n        }\n    }\n    else\n    {\n        battery_full_hour = 99;\n    }\n}\n\n// This is a bit of a mess, need to work on this to get it better (won't be hard, this is quick and dirty)\nswitch (battery_full_hour) {\n    case 10:\n        msg.battery_full_hour = \"10am\";\n        break;\n    case 11:\n        msg.battery_full_hour = \"11am\";\n        break;\n    case 12:\n        msg.battery_full_hour = \"12pm\";\n        break;\n    case 13:\n        msg.battery_full_hour = \"1pm\";\n        break;\n    case 14:\n        msg.battery_full_hour = \"2pm\";\n        break;\n    case 15:\n        msg.battery_full_hour = \"3pm\";\n        break;\n    case 16:\n        msg.battery_full_hour = \"4pm\";\n        break;\n    case 17:\n        msg.battery_full_hour = \"5pm\";\n        break;\n    case 99:\n        msg.battery_full_hour = \"99\";\n        break;\n    default:\n        msg.battery_full_hour = \"Full\";\n}\n\nmsg.payload = {\n    data: {\n        state: msg.battery_full_hour,\n        entity_id: `sensor.battery_hour_full`,\n        attributes: {\n            'name': 'battery_hour_full',\n            'entries': [\n                {'title': 'BATTERY_HOUR_FULL', battery_full_hour}\n            ],\n            friendly_name: 'Battery hour when full',\n            icon: 'mdi:battery-high'\n        }\n    }\n};\n\nreturn [{payload: msg.payload, entity_id: 'sensor.battery_hour_full'}];",
+        "func": "let remaining_generation = flow.get(\"remaining_today\");\nlet baseline_consumption = flow.get(\"baseline_consumption\");\n\nlet battery_charge = msg.battery_charge;\nlet battery_charge_required = null;\nlet battery_capacity = 19.2;\nlet battery_level = msg.battery_level;\n\nlet battery_full_hour = null;\n\nlet today = new Date();\nlet current_hour = today.getHours();\nlet sundown_hour = 17;\n\nmsg.expected_consumption_remaining = 0;\nmsg.expected_generation_remaining = 0;\n\nbattery_charge_required = battery_capacity - battery_charge;\n\nlet consumption_minus_generating_remaining = 0;\n\nfor (let hour in baseline_consumption) {\n    if (Number(hour) >= current_hour && Number(hour) < sundown_hour) {\n        let consumption_this_hour = (baseline_consumption[hour] / 1000);\n        msg.expected_consumption_remaining += consumption_this_hour;\n        if (remaining_generation.hasOwnProperty(hour) && remaining_generation[hour]) {\n            msg.expected_generation_remaining += Number(remaining_generation[hour]);\n            consumption_minus_generating_remaining += Number(remaining_generation[hour]) - consumption_this_hour;\n\n            // Work out what hour we will have a 100% battery\n            battery_charge_required = battery_charge_required - remaining_generation[hour];\n\n            if(battery_charge_required <= 0)\n                {\n                battery_full_hour = Number(hour) + 1;\n                break;\n                }\n        }\n    }\n    else\n    {\n        battery_full_hour = 99;\n    }\n}\n\nmsg.battery_full_hour = battery_full_hour;\n\nmsg.payload = {\n    data: {\n        state: msg.battery_full_hour,\n        entity_id: `sensor.battery_hour_full`,\n        attributes: {\n            'name': 'battery_hour_full',\n            'entries': [\n                {'title': 'BATTERY_HOUR_FULL', battery_full_hour}\n            ],\n            friendly_name: 'Battery hour when full',\n            icon: 'mdi:battery-high'\n        }\n    }\n};\n\nreturn [{payload: msg.payload, entity_id: 'sensor.battery_hour_full'}];",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4730,14 +4569,14 @@
         "y": 800,
         "wires": [
             [
-                "2e030b56cac4a4e0"
+                "d0ceaa410fd94c99"
             ]
         ]
     },
     {
-        "id": "b4c6eb0385f02477",
+        "id": "c9961168023432ac",
         "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get Battery Charge",
         "server": "5165f8c6.cc4798",
         "version": 3,
@@ -4768,14 +4607,14 @@
         "y": 800,
         "wires": [
             [
-                "39148a569414d571"
+                "3ac6ae0cdf20548f"
             ]
         ]
     },
     {
-        "id": "2e030b56cac4a4e0",
+        "id": "d0ceaa410fd94c99",
         "type": "ha-api",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "sensor",
         "server": "5165f8c6.cc4798",
         "version": 1,
@@ -4801,9 +4640,9 @@
         ]
     },
     {
-        "id": "a70ae704aa2382fb",
+        "id": "8b89de6195a27565",
         "type": "comment",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "When will battery be fully charged?",
         "info": "",
         "x": 1300,
@@ -4811,71 +4650,10 @@
         "wires": []
     },
     {
-        "id": "2290ec84fd9f1b73",
+        "id": "2eca2b582c69e8ed",
         "type": "within-time-switch",
-        "z": "a22ceab4a91f8127",
-        "name": "6pm-6:30pm",
-        "nameInt": "",
-        "positionConfig": "5e71c4ffa9baa60b",
-        "startTime": "18:00",
-        "startTimeType": "entered",
-        "startOffset": 0,
-        "startOffsetType": "none",
-        "startOffsetMultiplier": 60000,
-        "endTime": "18:30",
-        "endTimeType": "entered",
-        "endOffset": 0,
-        "endOffsetType": "none",
-        "endOffsetMultiplier": 60000,
-        "timeRestrictions": 0,
-        "timeRestrictionsType": "none",
-        "timeDays": "*",
-        "timeOnlyOddDays": false,
-        "timeOnlyEvenDays": false,
-        "timeOnlyOddWeeks": false,
-        "timeOnlyEvenWeeks": false,
-        "timeMonths": "*",
-        "timedatestart": "",
-        "timedateend": "",
-        "propertyStart": "",
-        "propertyStartType": "none",
-        "propertyStartCompare": "true",
-        "propertyStartThreshold": "",
-        "propertyStartThresholdType": "num",
-        "startTimeAlt": "",
-        "startTimeAltType": "entered",
-        "startOffsetAlt": 0,
-        "startOffsetAltType": "none",
-        "startOffsetAltMultiplier": 60000,
-        "propertyEnd": "",
-        "propertyEndType": "none",
-        "propertyEndCompare": "true",
-        "propertyEndThreshold": "",
-        "propertyEndThresholdType": "num",
-        "endTimeAlt": "",
-        "endTimeAltType": "entered",
-        "endOffsetAlt": 0,
-        "endOffsetAltType": "none",
-        "endOffsetAltMultiplier": 60000,
-        "withinTimeValue": "",
-        "withinTimeValueType": "msgInput",
-        "outOfTimeValue": "false",
-        "outOfTimeValueType": "msgInput",
-        "tsCompare": "0",
-        "x": 2910,
-        "y": 360,
-        "wires": [
-            [
-                "816d7aa504549c19"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "c0c3a211424b4c9d",
-        "type": "within-time-switch",
-        "z": "a22ceab4a91f8127",
-        "name": "8am-8:30am",
+        "z": "1f79901475e24239",
+        "name": "8am-8:05am",
         "nameInt": "",
         "positionConfig": "5e71c4ffa9baa60b",
         "startTime": "08:00",
@@ -4883,7 +4661,7 @@
         "startOffset": 0,
         "startOffsetType": "none",
         "startOffsetMultiplier": 60000,
-        "endTime": "08:30",
+        "endTime": "08:05",
         "endTimeType": "entered",
         "endOffset": 0,
         "endOffsetType": "none",
@@ -4924,19 +4702,19 @@
         "outOfTimeValueType": "msgInput",
         "tsCompare": "0",
         "x": 2910,
-        "y": 240,
+        "y": 280,
         "wires": [
             [
-                "816d7aa504549c19"
+                "547820f8d93579f0"
             ],
             []
         ]
     },
     {
-        "id": "9b70894492a5cdbc",
+        "id": "b94be246755eb502",
         "type": "within-time-switch",
-        "z": "a22ceab4a91f8127",
-        "name": "12pm-12:30pm",
+        "z": "1f79901475e24239",
+        "name": "12pm-12:05pm",
         "nameInt": "",
         "positionConfig": "5e71c4ffa9baa60b",
         "startTime": "12:00",
@@ -4944,7 +4722,7 @@
         "startOffset": 0,
         "startOffsetType": "none",
         "startOffsetMultiplier": 60000,
-        "endTime": "12:30",
+        "endTime": "12:05",
         "endTimeType": "entered",
         "endOffset": 0,
         "endOffsetType": "none",
@@ -4985,18 +4763,19 @@
         "outOfTimeValueType": "msgInput",
         "tsCompare": "0",
         "x": 2920,
-        "y": 300,
+        "y": 340,
         "wires": [
             [
-                "816d7aa504549c19"
+                "547820f8d93579f0"
             ],
             []
         ]
     },
     {
-        "id": "2e95b5ffe1c9b389",
+        "id": "1c4d3dd270178eb5",
         "type": "server-state-changed",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
+        "d": true,
         "name": "Force charge now",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -5038,18 +4817,18 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 130,
-        "y": 2100,
+        "x": 110,
+        "y": 2120,
         "wires": [
             [
-                "a1d85bc63957ae20"
+                "7ee7d1c2a836ad2a"
             ]
         ]
     },
     {
-        "id": "a1d85bc63957ae20",
+        "id": "7ee7d1c2a836ad2a",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "EMS Forced Mode",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -5067,18 +4846,18 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 350,
-        "y": 2100,
+        "x": 330,
+        "y": 2120,
         "wires": [
             [
-                "fa35501e7f3192c9"
+                "b87c4b540e8a49c3"
             ]
         ]
     },
     {
-        "id": "fa35501e7f3192c9",
+        "id": "b87c4b540e8a49c3",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Force charge",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -5096,18 +4875,18 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 550,
-        "y": 2100,
+        "x": 530,
+        "y": 2120,
         "wires": [
             [
-                "086d17fad48f3ae2"
+                "e0dcf5ea0015dca5"
             ]
         ]
     },
     {
-        "id": "086d17fad48f3ae2",
+        "id": "e0dcf5ea0015dca5",
         "type": "api-call-service",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "10kw Charge Limit",
         "server": "5165f8c6.cc4798",
         "version": 5,
@@ -5132,31 +4911,31 @@
             }
         ],
         "queue": "none",
-        "x": 850,
-        "y": 2100,
+        "x": 830,
+        "y": 2120,
         "wires": [
             [
-                "77e8510760e9d8b3"
+                "fa96a59338706780"
             ]
         ]
     },
     {
-        "id": "77e8510760e9d8b3",
+        "id": "fa96a59338706780",
         "type": "link out",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "link out 13",
         "mode": "link",
         "links": [
-            "072513d530b67f09"
+            "8baa8f9994565d39"
         ],
-        "x": 1005,
-        "y": 2100,
+        "x": 985,
+        "y": 2120,
         "wires": []
     },
     {
-        "id": "9af53b0aa71d57ad",
+        "id": "83a462cd6ec30a9e",
         "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get buy price for prep (day)",
         "server": "5165f8c6.cc4798",
         "version": 3,
@@ -5187,14 +4966,14 @@
         "y": 700,
         "wires": [
             [
-                "bf3b6c9c3997a31e"
+                "fee6bd8e19c9b4ad"
             ]
         ]
     },
     {
-        "id": "bf3b6c9c3997a31e",
+        "id": "fee6bd8e19c9b4ad",
         "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get buy price for spike prep (night)",
         "server": "5165f8c6.cc4798",
         "version": 3,
@@ -5221,18 +5000,18 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 760,
+        "x": 620,
         "y": 640,
         "wires": [
             [
-                "cd53228df097f099"
+                "441e81bd777ee6ac"
             ]
         ]
     },
     {
-        "id": "1961b0432ea10eac",
+        "id": "fd271ddeb3679d0d",
         "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get sell price for spike (night)",
         "server": "5165f8c6.cc4798",
         "version": 3,
@@ -5263,14 +5042,14 @@
         "y": 580,
         "wires": [
             [
-                "c9ba4bb21628fced"
+                "fd225c35e0949eea"
             ]
         ]
     },
     {
-        "id": "c9ba4bb21628fced",
+        "id": "fd225c35e0949eea",
         "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get sell price for spile (Day)",
         "server": "5165f8c6.cc4798",
         "version": 3,
@@ -5301,14 +5080,14 @@
         "y": 580,
         "wires": [
             [
-                "60cdc0e41a150751"
+                "8fd0959b9343441b"
             ]
         ]
     },
     {
-        "id": "cd53228df097f099",
+        "id": "441e81bd777ee6ac",
         "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get buy price for spike prep (day)",
         "server": "5165f8c6.cc4798",
         "version": 3,
@@ -5335,20 +5114,20 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 1080,
+        "x": 940,
         "y": 640,
         "wires": [
             [
-                "1961b0432ea10eac"
+                "fd271ddeb3679d0d"
             ]
         ]
     },
     {
-        "id": "ee0fc7f53c7c6dc2",
+        "id": "a84e2cbb7703af0e",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get forecast high/low buy price 4hrs",
-        "func": "let forecasts = msg.forecast_obj.attributes.forecast;\nlet buyprice = null;\nlet minbuyprice = null;\nlet maxbuyprice = null;\n\nmaxbuyprice = forecasts[0].costsFlexUp;\nminbuyprice = forecasts[0].costsFlexUp;\n\n// 48 = 4hrs of 5min intervals\nfor (let i = 1; i <= 47; i++) {\n    buyprice = forecasts[i].costsFlexUp;\n\n    if (buyprice < minbuyprice) {\n        minbuyprice = buyprice;\n    }\n    if (buyprice > maxbuyprice) {\n        maxbuyprice = buyprice;\n    }\n}\n \nmsg.minbuy4hrs = minbuyprice;\nmsg.maxbuy4hrs = maxbuyprice;\n\nreturn msg;",
+        "func": "let forecasts = msg.forecast_obj.attributes.forecast;\nlet buyprice = null;\nlet minbuyprice = null;\nlet maxbuyprice = null;\n\nmaxbuyprice = forecasts[0].costsFlexUp;\nminbuyprice = forecasts[0].costsFlexUp;\n\n// 48 = 4hrs of 5min intervals\nfor (let i = 1; i <= 47; i++) {\n    buyprice = forecasts[i].costsFlexUp;\n\n    if (buyprice < minbuyprice) {\n        minbuyprice = buyprice;\n    }\n    if (buyprice > maxbuyprice) {\n        maxbuyprice = buyprice;\n    }\n}\n\n//msg.realminbuy4hrs = minbuyprice;\n//msg.realmaxbuy4hrs = maxbuyprice;\n\n//if (minbuyprice < 0) {\n//    // take 80% of the lowest price as we don't want to wait for the exact lowest, as it may only be for 5 mins!\n//    // so treat 80% of the lowest price as an ok price to buy at\n//    minbuyprice = minbuyprice * .8; // get 80% of minimum, price ok then as lowest may not stay\n//    }\n// Keep min buy price as is, if above zero\n \nmsg.minbuy4hrs = minbuyprice;\nmsg.maxbuy4hrs = maxbuyprice;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -5359,15 +5138,15 @@
         "y": 700,
         "wires": [
             [
-                "9af53b0aa71d57ad",
-                "0e786c6e0a9778d8"
+                "83a462cd6ec30a9e",
+                "d10c298c52ddfd40"
             ]
         ]
     },
     {
-        "id": "0e786c6e0a9778d8",
+        "id": "d10c298c52ddfd40",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Update buy sensors",
         "func": "let lowestbuy4hrs = msg.minbuy4hrs;\nlet highestbuy4hrs = msg.maxbuy4hrs;\n\nmsg.payloadlow = {\n    data: {\n        state: msg.minbuy4hrs,\n        entity_id: `sensor.lowestbuy4hrs`,\n        attributes: {\n            'name': 'lowest_buy_4hrs',\n            'entries': [\n                {'title': 'LOWEST_BUY_4HRS', lowestbuy4hrs}\n            ],\n            friendly_name: 'Lowest buy price in next 4hrs',\n            icon: 'mdi:currency-usd'\n        }\n    }\n}\n\nmsg.payloadhigh = {\n    data: {\n        state: msg.maxbuy4hrs,\n        entity_id: `sensor.highestbuy4hrs`,\n        attributes: {\n            'name': 'highest_buy_4hrs',\n            'entries': [\n                { 'title': 'HIGHEST_BUY_4HRS', highestbuy4hrs }\n            ],\n            friendly_name: 'Highest buy price in next 4hrs',\n            icon: 'mdi:currency-usd'\n        }\n    }\n}\n    \nreturn [\n    {payload: msg.payloadlow, entity_id: 'sensor.lowestbuy4hrs'},\n    {payload: msg.payloadhigh, entity_id: 'sensor.highestbuy4hrs'}\n    ];",
         "outputs": 2,
@@ -5377,20 +5156,20 @@
         "finalize": "",
         "libs": [],
         "x": 500,
-        "y": 740,
+        "y": 760,
         "wires": [
             [
-                "0e947c316948d545"
+                "f7a0641fa8750436"
             ],
             [
-                "0e947c316948d545"
+                "f7a0641fa8750436"
             ]
         ]
     },
     {
-        "id": "0e947c316948d545",
+        "id": "f7a0641fa8750436",
         "type": "ha-api",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "sensor",
         "server": "5165f8c6.cc4798",
         "version": 1,
@@ -5410,15 +5189,15 @@
             }
         ],
         "x": 690,
-        "y": 740,
+        "y": 760,
         "wires": [
             []
         ]
     },
     {
-        "id": "c53a22e1ef3172f4",
+        "id": "7bc54d721e73b783",
         "type": "function",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Update sell sensors",
         "func": "let highestsell4hrs = msg.maxsell4hrs\nlet lowestsell4hrs = msg.minsell4hrs\n\nmsg.payloadhigh = {\n    data: {\n        state: msg.maxsell4hrs,\n        entity_id: `sensor.highestsell4hrs`,\n        attributes: {\n            'name': 'highest_sell_4hrs',\n            'entries': [\n                {'title': 'HIGHEST_SELL_4HRS', highestsell4hrs}\n            ],\n            friendly_name: 'Highest sell price in next 4hrs',\n            icon: 'mdi:currency-usd'\n        }\n    }\n}\n\nmsg.payloadlow = {\n    data: {\n        state: msg.minsell4hrs,\n        entity_id: `sensor.lowestsell4hrs`,\n        attributes: {\n            'name': 'lowest_sell_4hrs',\n            'entries': [\n                {'title': 'LOWEST_SELL_4HRS', lowestsell4hrs}\n            ],\n            friendly_name: 'Lowest sell price in next 4hrs',\n            icon: 'mdi:currency-usd'\n        }\n    }\n}\n\nreturn [\n    {payload: msg.payloadhigh, entity_id: 'sensor.highestsell4hrs'},\n    {payload: msg.payloadlow, entity_id: 'sensor.lowestsell4hrs'}\n];",
         "outputs": 2,
@@ -5427,21 +5206,21 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 130,
-        "y": 620,
+        "x": 150,
+        "y": 640,
         "wires": [
             [
-                "bc7f20259a7db60f"
+                "c5ccf1f087bac790"
             ],
             [
-                "bc7f20259a7db60f"
+                "c5ccf1f087bac790"
             ]
         ]
     },
     {
-        "id": "bc7f20259a7db60f",
+        "id": "c5ccf1f087bac790",
         "type": "ha-api",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "sensor",
         "server": "5165f8c6.cc4798",
         "version": 1,
@@ -5460,16 +5239,16 @@
                 "valueType": "results"
             }
         ],
-        "x": 310,
-        "y": 620,
+        "x": 330,
+        "y": 640,
         "wires": [
             []
         ]
     },
     {
-        "id": "39148a569414d571",
+        "id": "3ac6ae0cdf20548f",
         "type": "api-current-state",
-        "z": "a22ceab4a91f8127",
+        "z": "1f79901475e24239",
         "name": "Get Battery Level",
         "server": "5165f8c6.cc4798",
         "version": 3,
@@ -5500,7 +5279,375 @@
         "y": 800,
         "wires": [
             [
-                "f2a577dea0c55490"
+                "1bc71fad617d964a"
+            ]
+        ]
+    },
+    {
+        "id": "c3f646536cb33408",
+        "type": "function",
+        "z": "1f79901475e24239",
+        "name": "battery reserve",
+        "func": "let forecast_tomorrow = msg.forecast_tomorrow;\n\nif (forecast_tomorrow >= 65) {\n    msg.battery_reserve = 12;\n}\nelse {\n    msg.battery_reserve = 15;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 1940,
+        "wires": [
+            [
+                "3759548e39a2c10e"
+            ]
+        ]
+    },
+    {
+        "id": "f56b9c005ec9afd6",
+        "type": "api-current-state",
+        "z": "1f79901475e24239",
+        "name": "Check tomorrow solar forecast",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.solcast_pv_forecast_forecast_tomorrow",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "forecast_tomorrow",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 310,
+        "y": 1940,
+        "wires": [
+            [
+                "c3f646536cb33408"
+            ]
+        ]
+    },
+    {
+        "id": "3759548e39a2c10e",
+        "type": "api-call-service",
+        "z": "1f79901475e24239",
+        "name": "Set night battery reserve",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_reserved_soc_for_backup"
+        ],
+        "data": "{\"value\": {{battery_reserve}} }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery reserve set until 5am'ish",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 750,
+        "y": 1940,
+        "wires": [
+            [
+                "4b68ad06a9a2449e"
+            ]
+        ]
+    },
+    {
+        "id": "8de58ce7a9236290",
+        "type": "function",
+        "z": "1f79901475e24239",
+        "name": "export from battery?",
+        "func": "let today = new Date();\n//node.warn(\"hour now is \" + today.getHours());\n\nmsg.baseline_consumption = flow.get(\"baseline_consumption\");\n// node.warn(\"baseline consumption=\" + msg.baseline_consumption)\n\nlet forecasts = msg.forecast_obj.attributes.forecast;\nlet aggressive_buy_sell_diff = msg.aggressive_buy_sell_diff / 100;\nlet basesellprice = msg.fit - aggressive_buy_sell_diff;\n//node.warn(aggressive_buy_sell_diff);\n//node.warn(basesellprice);\n\nif(msg.aggressive_mode = \"on\" && today.getHours() >= 16 && today.getHours() <= 23) {\n    // AGGRESSIVE MODE\n    // Aggressively sell between 4pm and 12 midnight, **IF** the predicted buy price roughly between 12-4am is going to be 15c (configurable) lower than the sell price at the present time.\n    // It is better to sell the energy now and just use from the grid if you can get more money for it now, and it's cheaper later. It's not going to recharge the battery as\n    // that would increase the daily cycles of the battery. It is only going to sell to get more more money now because we'll pay less to replace the already discharged energy. \n    // energy later on.\n    //\n    // It will only do this if there is sufficient battery remaining to get you through to the small hours when the price should be cheaper.\n    //\n    // This logic will be skipped if the pricing during the night is too expensive, as it is better to use your own energy to get you through the more expensive period.\n    // Unlikely though, but still possible.\n    let summed = 0;\n    let buyaverage = 0;\n    let buyprice = 0;\n    let aggressive_buy_sell_diff = msg.aggressive_buy_sell_diff / 100;\n    let basesellprice = msg.fit - aggressive_buy_sell_diff;\n  \n    if (today.getHours() >= 16 && today.getHours() < 17 && msg.battery >= 70) {\n        // 12 = 1hr of 5min intervals\n        // If the time now is 4pm, that is 8hrs until midnight, so 12*8 = 96 iterations before we get to midnight. Add on 4hrs (48 iterations).\n        for (let i = 97; i < 145; i++) {\n            buyprice = forecasts[i].costsFlexUp;\n            summed = summed + buyprice;\n        }\n        buyaverage = summed / 48;\n\n        if(basesellprice >= buyaverage) {\n            // It is worth selling now as it is still 15c higher per kW than what it will cost to buy it between 12-4am when the battery will most likely be depleted.\n            //node.warn(\"Fit is \" + msg.fit + \", Average buy during night is \" + buyaverage + \" - exporting\");\n            msg.decision = \"FIT is higher now than buy during night (\" + msg.fit + \"c vs \" + buyaverage + \"c), so forcing export\";\n            msg.decisions.push(msg.decision)\n            return [msg, null]\n        }\n    }\n    else if (today.getHours() >= 17 && today.getHours() < 18 && msg.battery >= 60) {\n        // 12 = 1hr of 5min intervals\n        // If the time now is 5pm, that is 7hrs until midnight, so 12*7 = 84 iterations before we get to midnight. Add on 4hrs (48 iterations).\n        for (let i = 85; i < 133; i++) {\n            buyprice = forecasts[i].costsFlexUp;\n            summed = summed + buyprice;\n        }\n        buyaverage = summed / 48;\n\n        if(basesellprice >= buyaverage) {\n            // It is worth selling now as it is still 15c higher per kW than what it will cost to buy it between 12-4am when the battery will most likely be depleted.\n            //node.warn(\"Fit is \" + msg.fit + \", Average buy during night is \" + buyaverage + \" - exporting\");\n            msg.decision = \"FIT is higher now than buy during night (\" + msg.fit + \"c vs \" + buyaverage + \"c), so forcing export\";\n            msg.decisions.push(msg.decision)\n            return [msg, null]\n        }\n    }\n    else if (today.getHours() >= 18 && today.getHours() < 19 && msg.battery >= 45) {\n        // 12 = 1hr of 5min intervals\n        // If the time now is 6pm, that is 6hrs until midnight, so 12*6 = 72 iterations before we get to midnight. Add on 4hrs (48 iterations).\n        for (let i = 73; i < 121; i++) {\n            buyprice = forecasts[i].costsFlexUp;\n            summed = summed + buyprice;\n        }\n        buyaverage = summed / 48;\n\n        if(basesellprice >= buyaverage) {\n            // It is worth selling now as it is still 15c higher per kW than what it will cost to buy it between 12-4am when the battery will most likely be depleted.\n            //node.warn(\"Fit is \" + msg.fit + \", Average buy during night is \" + buyaverage + \" - exporting\");\n            msg.decision = \"FIT is higher now than buy during night (\" + msg.fit + \"c vs \" + buyaverage + \"c), so forcing export\";\n            msg.decisions.push(msg.decision)\n            return [msg, null]\n        }\n    }\n    else if (today.getHours() >= 19 && today.getHours() < 20 && msg.battery >= 42) {\n        // 12 = 1hr of 5min intervals\n        // If the time now is 7pm, that is 5hrs until midnight, so 12*5 = 60 iterations before we get to midnight. Add on 4hrs (48 iterations).\n        for (let i = 61; i < 109; i++) {\n            buyprice = forecasts[i].costsFlexUp;\n            summed = summed + buyprice;\n        }\n        buyaverage = summed / 48;\n\n        if(basesellprice >= buyaverage) {\n            // It is worth selling now as it is still 15c higher per kW than what it will cost to buy it between 12-4am when the battery will most likely be depleted.\n            //node.warn(\"Fit is \" + msg.fit + \", Average buy during night is \" + buyaverage + \" - exporting\");\n            msg.decision = \"FIT is higher now than buy during night (\" + msg.fit + \"c vs \" + buyaverage + \"c), so forcing export\";\n            msg.decisions.push(msg.decision)\n            return [msg, null]\n        }\n    }\n    else if (today.getHours() >= 20 && today.getHours() < 21 && msg.battery >= 40) {\n        // 12 = 1hr of 5min intervals\n        // If the time now is 8pm, that is 4hrs until midnight, so 12*4 = 48 iterations before we get to midnight. Add on 4hrs (48 iterations).\n        for (let i = 49; i < 97; i++) {\n            buyprice = forecasts[i].costsFlexUp;\n            summed = summed + buyprice;\n        }\n        buyaverage = summed / 48;\n\n        if(basesellprice >= buyaverage) {\n            // It is worth selling now as it is still 15c higher per kW than what it will cost to buy it between 12-4am when the battery will most likely be depleted.\n            //node.warn(\"Fit is \" + msg.fit + \", Average buy during night is \" + buyaverage + \" - exporting\");\n            msg.decision = \"FIT is higher now than buy during night (\" + msg.fit + \"c vs \" + buyaverage + \"c), so forcing export\";\n            msg.decisions.push(msg.decision)\n            return [msg, null]\n        }\n    }\n    else if (today.getHours() >= 21 && today.getHours() < 22 && msg.battery >= 30) {\n        // 12 = 1hr of 5min intervals\n        // If the time now is 9pm, that is 3hrs until midnight, so 12*3 = 36 iterations before we get to midnight. Add on 4hrs (48 iterations).\n        for (let i = 37; i < 85; i++) {\n            buyprice = forecasts[i].costsFlexUp;\n            summed = summed + buyprice;\n        }\n        buyaverage = summed / 48;\n\n        if(basesellprice >= buyaverage) {\n            // It is worth selling now as it is still 15c higher per kW than what it will cost to buy it between 12-4am when the battery will most likely be depleted.\n            //node.warn(\"Fit is \" + msg.fit + \", Average buy during night is \" + buyaverage + \" - exporting\");\n            msg.decision = \"FIT is higher now than buy during night (\" + msg.fit + \"c vs \" + buyaverage + \"c), so forcing export\";\n            msg.decisions.push(msg.decision)\n            return [msg, null]\n        }\n    }\n    else if (today.getHours() >= 22 && today.getHours() < 23 && msg.battery >= 25) {\n        // 12 = 1hr of 5min intervals\n        // If the time now is 10pm, that is 2hrs until midnight, so 12*2 = 24 iterations before we get to midnight. Add on 4hrs (48 iterations).\n        for (let i = 25; i < 73; i++) {\n            buyprice = forecasts[i].costsFlexUp;\n            summed = summed + buyprice;\n        }\n        buyaverage = summed / 48;\n\n        if(basesellprice >= buyaverage) {\n            // It is worth selling now as it is still 15c higher per kW than what it will cost to buy it between 12-4am when the battery will most likely be depleted.\n            //node.warn(\"Fit is \" + msg.fit + \", Average buy during night is \" + buyaverage + \" - exporting\");\n            msg.decision = \"FIT is higher now than buy during night (\" + msg.fit + \"c vs \" + buyaverage + \"c), so forcing export\";\n            msg.decisions.push(msg.decision)\n            return [msg, null]\n        }\n    }\n    else if (today.getHours() == 23  && msg.battery >= 20) {\n        // 12 = 1hr of 5min intervals\n        // If the time now is 11pm, that is 1hr until midnight, so 12*1 = 12 iterations before we get to midnight. Add on 4hrs (48 iterations).\n        for (let i = 13; i < 61; i++) {\n            buyprice = forecasts[i].costsFlexUp;\n            summed = summed + buyprice;\n        }\n        buyaverage = summed / 48;\n\n        if(basesellprice >= buyaverage) {\n            // It is worth selling now as it is still 15c higher per kW than what it will cost to buy it between 12-4am when the battery will most likely be depleted.\n            //node.warn(\"Fit is \" + msg.fit + \", Average buy during night is \" + buyaverage + \" - exporting\");\n            msg.decision = \"FIT is higher now than buy during night (\" + msg.fit + \"c vs \" + buyaverage + \"c), so forcing export\";\n            msg.decisions.push(msg.decision)\n            return [msg, null]\n        }\n    }\n    else if (today.getHours() >= 16 && today.getHours() <= 23) {\n        //node.warn(\"Not worth exporting from battery: \" + msg.fit + \" battery: \" + msg.battery);\n        msg.decision = \"Not worth exporting from battery.\";\n        msg.decisions.push(msg.decision)\n        return [null,msg]\n    }\n}\n\n// Continue with the following and see if other criteria are met, e.g., during other times of day\nif (msg.fit >= .3 && msg.battery > 10 && today.getHours() >= 6 && today.getHours() < 8) {\n    // node.warn(\"Morning peak occurring, battery at \" + msg.battery + \"%, between 6-8am, FIT \" + msg.fit);\n    msg.decision = \"Morning peak occurring (>=30c,>10%), battery at \" + msg.battery + \"%, between 6-8am, FIT \" + msg.fit;\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse if (msg.fit > 1 && msg.battery > 40) {\n    // node.warn(\"Extremely high FIT and limited capacity: \" + msg.fit);\n    msg.decision = \"Extremely high FIT (>=$1,>40%), so forcing discharge\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse if (msg.fit >= .6 && msg.battery > 50) {\n    // node.warn(\"Very high FIT and some capacity: \" + msg.fit);\n    msg.decision = \"Very high FIT (>=60c,>50%), so forcing discharge\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse if (msg.fit >= .5 && msg.battery > 60) {\n    // node.warn(\"Great FIT and available capacity: \" + msg.fit);\n    msg.decision = \"High FIT (>=50c,>60%), so forcing discharge\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse if (msg.fit >= .4 && msg.battery > 70) {\n    // node.warn(\"Reasonable FIT and available capacity: \"+msg.fit);\n    msg.decision = \"Moderate FIT (>=40c,>70%), so forcing discharge\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse if (msg.fit >= .3 && msg.battery > 80) {\n    // node.warn(\"Tolerable FIT and available capacity: \" + msg.fit);\n    msg.decision = \"Acceptable FIT (>=30c,>80%), so forcing discharge\";\n    msg.decisions.push(msg.decision)\n    return [msg, null]\n}\nelse {\n    // node.warn(\"Not worth exporting from battery: \" + msg.fit);\n    msg.decision = \"Not worth exporting from battery.\";\n    msg.decisions.push(msg.decision)\n    return [null,msg]\n}\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 380,
+        "wires": [
+            [
+                "5d74e58926c8af7a"
+            ],
+            [
+                "0a032d105b8d9da9"
+            ]
+        ]
+    },
+    {
+        "id": "6623170110326545",
+        "type": "api-current-state",
+        "z": "1f79901475e24239",
+        "name": "Get Forecast",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.forecast",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "forecast",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "forecast_obj",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 890,
+        "y": 200,
+        "wires": [
+            [
+                "0b3677b9c3adf193"
+            ]
+        ]
+    },
+    {
+        "id": "f037f8209abd4d95",
+        "type": "ha-switch",
+        "z": "1f79901475e24239",
+        "name": "Agressive mode switch",
+        "version": 0,
+        "debugenabled": false,
+        "inputs": 0,
+        "outputs": 2,
+        "entityConfig": "d4db2a13c2eff92e",
+        "enableInput": false,
+        "outputOnStateChange": false,
+        "outputProperties": [
+            {
+                "property": "outputType",
+                "propertyType": "msg",
+                "value": "state change",
+                "valueType": "str"
+            },
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 560,
+        "y": 60,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "0b3677b9c3adf193",
+        "type": "api-current-state",
+        "z": "1f79901475e24239",
+        "name": "Aggressive state",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "switch.aggressive_mode",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "aggressive_mode",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 910,
+        "y": 260,
+        "wires": [
+            [
+                "210241cbc1a29fb5"
+            ]
+        ]
+    },
+    {
+        "id": "210241cbc1a29fb5",
+        "type": "api-current-state",
+        "z": "1f79901475e24239",
+        "name": "Get aggressive buy-sell diff",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_number.aggressive_sell_buy_diff",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "aggressive_buy_sell_diff",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 940,
+        "y": 320,
+        "wires": [
+            [
+                "8de58ce7a9236290"
+            ]
+        ]
+    },
+    {
+        "id": "a2bb25ccd14303cd",
+        "type": "api-call-service",
+        "z": "1f79901475e24239",
+        "name": "Remove battery reserve",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_reserved_soc_for_backup"
+        ],
+        "data": "{\"value\":0}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "Battery reserve removed",
+                "valueType": "str"
+            }
+        ],
+        "queue": "none",
+        "x": 1230,
+        "y": 640,
+        "wires": [
+            [
+                "143d940c9f69e862"
+            ]
+        ]
+    },
+    {
+        "id": "062840f4143b168e",
+        "type": "function",
+        "z": "1f79901475e24239",
+        "name": "Append to decision log",
+        "func": "let msg2 = {}\nlet now = new Date();\nlet timestamp = now.getHours().toString().padStart(2, '0') + \":\" + now.getMinutes().toString().padStart(2, '0');\nlet datestamp = now.getDate().toString().padStart(2, '0') + \"-\" + (now.getMonth()+1).toString().padStart(2, '0') + \"-\" + now.getFullYear();\n\nmsg.filename = \"/config/node-red/decision_logs/\"+datestamp+\".csv\";\n\nlet cheap_grid_start = \"\";\nif (msg.cheapest_grid_start){\n    let peak_gen_kwh = flow.get(\"peak_gen_kwh\");\n    let peak_gen_time = flow.get(\"peak_gen_time\");\n    let forecast_pv_today = flow.get(\"forecast_pv_today\");\n    //node.warn(forecast_pv_today);\n    let remaining_pv = msg.net_remaining.toPrecision(3);\n    // let remaining_pv_label = remaining_pv > 0 ? \"Spare PV\" : \"Needed from Grid\";\n    let solar_emoji = \"😕\";\n    if (forecast_pv_today > 65) {\n        solar_emoji = \"🔆 🙌\";\n    }\n    else if (forecast_pv_today > 50) {\n        solar_emoji = \"⛅️ 🆗\";\n    }\n    else if (forecast_pv_today > 40) {\n        solar_emoji = \"☁️ 🙁\";\n    }\n    else {\n        solar_emoji = \"💩 😭\";\n    }\n    let expected_tomorrow = flow.get(\"expected_tomorrow\");\n    let tomorrow_solar_emoji = \"😕\";\n    if (expected_tomorrow > 65) {\n        tomorrow_solar_emoji = \"🔆 🙌\";\n    }\n    else if (expected_tomorrow > 50) {\n        tomorrow_solar_emoji = \"⛅️ 🆗\";\n    }\n    else if (expected_tomorrow > 40) {\n        tomorrow_solar_emoji = \"☁️ 🙁\";\n    }\n    else {\n        tomorrow_solar_emoji = \"💩 😭\";\n    }\n//${remaining_pv_label}: ${remaining_pv}kWh\n\n\n    // Time from LocalVolts is UTC/Zulu, so need to put in right hour\n    if(msg.cheapest_grid_start[0] >= 14) {\n        msg.cheapest_grid_start[0] = msg.cheapest_grid_start[0] - 14;\n        }\n    else {\n        msg.cheapest_grid_start[0] = msg.cheapest_grid_start[0] + 10;\n    }\n\n    cheap_grid_start = msg.cheapest_grid_start[0].toString().padStart(2, '0') + \":\" + msg.cheapest_grid_start[1].toString().padStart(2, '0');\n    msg2 = { payload: `PV forecast: ${forecast_pv_today} kWh ${solar_emoji}\n* Peak PV ${peak_gen_kwh} kWh at ${peak_gen_time}\n* Cheapest grid ${msg.cheapest_grid}c around ${cheap_grid_start}\nTomorrow's PV forecast: ${expected_tomorrow} kWh ${tomorrow_solar_emoji}`}\n}\n\nlet data = [timestamp];\nif (msg.battery_w) {\n    data.push(\"Curtailment\")\n}\nelse {\n    data.push(\"Other\")\n} \ndata.push(msg.fit)\ndata.push(msg.curtailment_percentage)\ndata.push(msg.current)\ndata.push(msg.forecast)\ndata.push(msg.dc_power_now)\ndata.push(msg.load_now)\ndata.push(msg.expected_generation_remaining.toPrecision(4))\ndata.push(msg.expected_consumption_remaining.toPrecision(4))\ndata.push(msg.battery)\ndata.push(msg.net_remaining.toPrecision(4))\ndata.push(msg.remaining_battery_kwh.toPrecision(4))\ndata.push(msg.charge_required.toPrecision(3))\ndata.push(msg.battery_w)\nif (msg.cheapest_grid_start){\n    data.push(cheap_grid_start)\n}\nelse {\n    data.push(\"\")\n}\ndata.push(msg.decisions.join(\" > \"))\n// data.push(msg.decision)\n\nmsg.payload = data.join(\"\t\");\n\nreturn [msg2,msg];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2640,
+        "y": 320,
+        "wires": [
+            [
+                "2eca2b582c69e8ed",
+                "b94be246755eb502"
+            ],
+            [
+                "66f7dd10543c5291"
+            ]
+        ]
+    },
+    {
+        "id": "dfc1b7afe3f42a9f",
+        "type": "api-current-state",
+        "z": "1f79901475e24239",
+        "name": "Get Demand",
+        "server": "5165f8c6.cc4798",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "binary_sensor.demand_interval",
+        "state_type": "habool",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "demand_interval",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 370,
+        "y": 520,
+        "wires": [
+            [
+                "40b6e7315decf964"
             ]
         ]
     },
@@ -5522,7 +5669,7 @@
         "id": "814a6af6675ecbdc",
         "type": "mqtt-broker",
         "name": "MQTT Broker",
-        "broker": "192.168.1.83",
+        "broker": "xxx.xxx.xxx.xxx",
         "port": "1883",
         "clientid": "",
         "autoConnect": true,
@@ -5593,5 +5740,38 @@
         "stateTimeFormat": "3",
         "stateDateFormat": "12",
         "contextStore": ""
+    },
+    {
+        "id": "d4db2a13c2eff92e",
+        "type": "ha-entity-config",
+        "server": "5165f8c6.cc4798",
+        "deviceConfig": "",
+        "name": "agressive_mode_switch",
+        "version": "6",
+        "entityType": "switch",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "Aggressive Mode"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:gauge-full"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": "switch"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
     }
 ]
