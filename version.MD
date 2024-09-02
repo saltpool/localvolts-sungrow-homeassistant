@@ -1,4 +1,4 @@
-#Version history:
+# Version history:
 ## 1.1
 - Addition of an optional "aggressive mode" to force more energy out of your battery, to potentially maximise financial return
 - Alert if Localvolts API is not behaving correctly (too many "forecasts" and no "Expected"), and puts inverter into "no export" mode
