@@ -5,7 +5,7 @@ Control your **Sungrow** Hybrid inverter with **LocalVolts** through **Home Assi
 > Note: You MUST have solar and a battery for this management system, unless you want to perform a lot of modifications to it.
 
 > [!NOTE]
-> What's new:
+> What's new in v1.1:
 > - Addition of an "aggressive mode" to force more energy out of your battery, to potentially maximise financial return
 > - Alert if Localvolts API is not behaving correctly (too many "forecasts" and no "Expected"), and puts inverter into "no export" mode
 > - Added a check for demand pricing and will limit taking from grid if the price is really cheap if within demand period
