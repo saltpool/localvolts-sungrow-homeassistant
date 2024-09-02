@@ -28,23 +28,25 @@ The decision logic that these flows take are based around what personally fit fo
 
 5. Close the palette and then from the hamburger menu again, select import
 
-6. Copy the contents from the [energy_control.yaml](flows/energy_control.json) file to your clipboard (view it as raw before you copy it)
+6. Copy the contents from the [energy_control.json](flows/energy_control.json) file to your clipboard (view it as raw before you copy it)
 
-7. Paste the contents of your clipboard to the import nodes text area
+*Note, if you do not have a solar array, you can opt to use the [energy_control_battery_only.json](flows/energy_control_battery_only.json) instead.*
+
+8. Paste the contents of your clipboard to the import nodes text area
 <img src="images/node-red-energy-1.png" />
 
-8. Select "new flow" (bottom left) and then "Import". If you are told that some of the nodes already exist in your workspace, click on "View nodes..." and then "Import selected". This will leave out the duplicated "Home Assistant" node that came with the Localvolts flow import.
+9. Select "new flow" (bottom left) and then "Import". If you are told that some of the nodes already exist in your workspace, click on "View nodes..." and then "Import selected". This will leave out the duplicated "Home Assistant" node that came with the Localvolts flow import.
 
-9. A large number of nodes will be imported, all with blue dots above them. You should perform the following, and then once done, click on deploy:
+10. A large number of nodes will be imported, all with blue dots above them. You should perform the following, and then once done, click on deploy:
     1. Confirm the inverter sizing is appropriate for you. Anywhere there is an export of 5kW, confirm that is correct for your situation.
     2. The "Slow battery charge?" node contains msg.battery_w that you should update appropriately. It is mostly set to import from the grid at 10kW.
     3. The "Full Battery Hour" node has a hard-coded battery capacity, you should update this.
-    4. "PV Forecast East" and "PV Forecast West" will need your Solcast.com details added to them. Replace {site} and {key} appropriately.
+    4. "PV Forecast East", "PV Forecast West", "PV Actuals East" and "PV Actuals West" will need your Solcast.com details added to them. Replace {site} and {key} appropriately.
     5. If you don't have EAST or WEST facing PV arrays, you can rename the node names but you'll need to update the code in the appropriate nodes as well.
     6. "PV Actuals East" and "PV Actuals West" will need to be updated, like the above East and West forecast nodes.
     7. Update the MQTT Broker node appropriately for your MQTT broker (installed previously). Click on the edit button inside the node and change the server to the IP address of your HASS server. Keep everything else as it is. Remember to click on Deploy to deploy the changes.
 
-10. Using terminal, browse to the location _/addon_configs/a0d7b954_nodered/node-red/_ and create firstly a folder called _reference_ and then create and edit a file called **baseline-consumption.csv** (the following assumes Linux)
+11. Using terminal, browse to the location _/addon_configs/a0d7b954_nodered/node-red/_ and create firstly a folder called _reference_ and then create and edit a file called **baseline-consumption.csv** (the following assumes Linux)
 ```
 cd /addon_configs/a0d7b954_nodered/node-red/
 mkdir reference
@@ -162,6 +164,17 @@ Maximum value: 100
 Step size: 1
 Unit of measurement: c
 ```
+
+```
+Type: Number
+Name: Aggressive Sell-Buy Diff
+Icon: mdi:currency-usd
+Minimum value: 0
+Maximum value: 30
+Step size: 1
+Unit of measurement: c
+```
+
 5. Once done, save the dashboard. You should see a dashboard like this with buttons on it - this is your manual control page.
 
 <img src="images/grid-control-1.png" />
@@ -171,7 +184,8 @@ Unit of measurement: c
     2. "Grid Sell Price (Night)": 50
     3. "Grid Buy Price (Day)": 4
     4. "Grid Buy Price (Day-Spike-Prep)": 49
-    5. "Grid Sell Price (Day)": 199
+    5. "Grid Sell Price (Day)": 198
+    6. "Aggressive Sell-Buy Diff": 15
   
 7. Your buttons will appear similar to the following:
 
@@ -189,6 +203,7 @@ An explanation of the buy and sell price settings are as follows:
 - Grid Buy Price (Day) - This is the highest price that you want to force charge your battery during the day, if the solar forecast indicates that you wont have enough charge come the demand period, starting 4pm.
 - Grid Buy Price (Day-Spike-Prep) - This is the highest price that you are willing to pay up to should a evening spike be detected from the upcoming 4hr forecast, if your battery is not already full. The current settings (as above) sets the management system to charge your battery to 100% at any price of 49c or under per kWh.
 - Grid Sell Price (Day) - This is the price that defines an evening demand period "spike". This is NOT the price that the inverter will start discharging at, just what the predicted sell price is seen as being a "spike". The logic in the Node-Red flows will still discharge the battery as coded.
+- Aggressive Sell-Buy Diff - When aggressive mode is enabled, between 4pm-midnight each night the energy control system will actively check what the average buy price is predicted to be between midnight and 4am, and if the current sell price is above the predicted buy price by the amount this slider is set to, then it will discharge/export to the grid. In the above screenshot the difference is set to 15c, but you should change this to what suits your aggression appetite. In this example, if the predicted average buy price was 20c between midnight and 4am, and if the current sell/FIT price was 35c or above, then it would start exporting your power to the grid. Note that in the flow code there are various battery levels that you can set so that it doesn't just go wild and export everything, as you will most likely want to keep some battery for your own use later on.
 
 ### Battery Cycles sensor
 If you browse to the PV dashboard, to the second tab, you will notice that an entity is not available - "sensor.battery_cycles_per_day".  We'll create this sensor now. It is a helper, just like the previous work you've just performed.

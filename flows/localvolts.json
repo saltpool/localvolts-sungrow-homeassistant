@@ -12,15 +12,15 @@
         "type": "function",
         "z": "3984eacf3f486b92",
         "name": "Process Data",
-        "func": "// Data from Localvolts API \nlet dataIn = msg.payload;\n\n// Output data structure\nlet dataOut = {\n    intervalStart: null,\n    intervalEnd: null,\n    intervalDuration: null,\n    exportsAll: null,\n    importsAll: null,\n    demandMain: null,\n    demandPeriod: null,\n    demandInterval: null,\n    earningsAll: null,\n    earningsAllVar: null,\n    earningsAllFixed: null,\n    earningsAllVarRate: null,\n    earningsFlexUp: null,\n    earningsFlexDown: null,\n    costsAll: null,\n    costsAllVar: null,\n    costsAllFixed: null,\n    costsDemandMain: null,\n    costsAllVarRate: null,\n    costsFlexUp: null,\n    costsFlexDown: null,\n    exportsAllEmissions: null,\n    importsAllEmissions: null,\n    exportsAllZeroEE: null,\n    importsAllZeroEE: null,\n    quality: null,\n    forecast: []\n};\n\nlet forecastProperties = [\n    \"exportsAll\",\n    \"importsAll\",\n    \"demandMain\",\n    \"demandPeriod\",\n    \"demandInterval\",\n    \"earningsAll\",\n    \"earningsAllVar\",\n    \"earningsAllFixed\",\n    \"earningsAllVarRate\",\n    \"earningsFlexUp\",\n    \"earningsFlexDown\",\n    \"costsAll\",\n    \"costsAllVar\",\n    \"costsAllFixed\",\n    \"costsAllVarRate\",\n    \"costsFlexUp\",\n    \"costsFlexDown\",\n    \"exportsAllEmissions\",\n    \"importsAllEmissions\",\n    \"exportsAllZeroEE\",\n    \"importsAllZeroEE\"\n];\n\n//node.warn(dataIn);\n\n// Loop through all items to build forecast\nlet firstItem = true;\nfor (const property in dataIn) {\n\n    //Create item with normalised units\n    let dataItem = dataIn[property];\n    let itemOut = {};\n    for (const itemProperty in dataOut) {\n        if (firstItem && itemProperty != \"forecast\" && dataItem[itemProperty] != \"N/A\") {\n            dataOut[itemProperty] = normaliseValue(dataItem, itemProperty);\n        }\n\n        if (forecastProperties.includes(itemProperty) && dataItem[itemProperty] != \"N/A\") {\n            itemOut[itemProperty] = normaliseValue(dataItem, itemProperty);\n        }\n    }\n    firstItem = false;\n\n    // Calculate start of interval\n    let endTime = new Date(dataItem.intervalEnd);\n    let startTime = new Date(endTime);\n    startTime.setMinutes(endTime.getMinutes() - dataItem.intervalDuration);\n    itemOut.intervalStart = startTime;\n    itemOut.intervalEnd = endTime;\n\n    // Add item to forecast\n    dataOut.forecast.push(itemOut);\n}\n\n// Set start and end interval\ndataOut.intervalStart = dataOut.forecast[0].intervalStart;\ndataOut.intervalEnd = dataOut.forecast[0].intervalEnd;\n\n// Set flow context variable for end of the duration\nflow.set(\"lastIntervalMillis\", dataOut.intervalEnd.getTime());\nflow.set(\"dataIn\", dataIn);\nflow.set(\"localvolts\", dataOut);\n\n// Normalise values to a consistent unit\nfunction normaliseValue(item, property) {\n    let adjustedVal = item[property];\n\n    if (\n        property == \"earningsAllVarRate\" && item.earningsAllVarRateUnits == \"$/MWh\" ||\n        property == \"costsAllVarRate\" && item.costsAllVarRateUnits == \"$/MWh\" ||\n        property == \"exportsAllEmissions\" && item.exportsAllEmissionsUnits == \"kg-CO2e\" ||\n        property == \"importsAllEmissions\" && item.importsAllEmissionsUnits == \"kg-CO2e\"\n    ) { adjustedVal = item[property] * 1000; }\n    \n    else if (\n        property == \"exportsAll\" && item.exportsAllUnits == \"Wh\" ||\n        property == \"importsAll\" && item.importsAllUnits == \"Wh\" ||\n        property == \"demandMain\" && item.demandMainUnits == \"W\" \n    ) { adjustedVal = item[property] / 1000; }\n\n    else if (\n        property == \"earningsAll\" && item.earningsAllUnits == \"cents\" ||\n        property == \"earningsAllVar\" && item.earningsAllVarUnits == \"cents\" ||\n        property == \"earningsAllFixed\" && item.earningsAllFixedUnits == \"cents\" ||\n        property == \"earningsAllVarRate\" && item.earningsAllVarRateUnits == \"c/kWh\" ||\n        property == \"earningsFlexUp\" && item.earningsFlexUnits == \"c/kWh\" ||\n        property == \"earningsFlexDown\" && item.earningsFlexUnits == \"c/kWh\" ||\n        property == \"costsAll\" && item.costsAllUnits == \"cents\" ||\n        property == \"costsAllVar\" && item.costsAllVarUnits == \"cents\" ||\n        property == \"costsAllFixed\" && item.costsAllFixedUnits == \"cents\" ||\n        property == \"costsAllVarRate\" && item.costsAllVarRateUnits == \"c/kWh\" ||\n        property == \"costsFlexUp\" && item.costsFlexUnits == \"c/kWh\" ||\n        property == \"costsFlexDown\" && item.costsFlexUnits == \"c/kWh\" \n    ) { adjustedVal = item[property] / 100; }\n\n    else if (property == \"quality\") {\n        if (item[property] == \"Act\")        adjustedVal = \"Actual\"\n        else if (item[property] == \"Exp\")   adjustedVal = \"Expected\"\n        else if (item[property] == \"Fcst\")  adjustedVal = \"Forecast\"\n    }\n\n    return adjustedVal;\n}\n\nmsg.localvolts = dataOut;\nreturn msg;",
+        "func": "// Data from Localvolts API \nlet dataIn = msg.payload;\n\n// Output data structure\nlet dataOut = {\n    intervalStart: null,\n    intervalEnd: null,\n    intervalDuration: null,\n    exportsAll: null,\n    importsAll: null,\n    demandMain: null,\n    demandPeriod: null,\n    demandInterval: null,\n    earningsAll: null,\n    earningsAllVar: null,\n    earningsAllFixed: null,\n    earningsAllVarRate: null,\n    earningsFlexUp: null,\n    earningsFlexDown: null,\n    costsAll: null,\n    costsAllVar: null,\n    costsAllFixed: null,\n    costsDemandMain: null,\n    costsAllVarRate: null,\n    costsFlexUp: null,\n    costsFlexDown: null,\n    exportsAllEmissions: null,\n    importsAllEmissions: null,\n    exportsAllZeroEE: null,\n    importsAllZeroEE: null,\n    quality: null,\n    forecast: []\n};\n\nlet forecastProperties = [\n    \"exportsAll\",\n    \"importsAll\",\n    \"demandMain\",\n    \"demandInterval\",\n    \"earningsAll\",\n    \"earningsAllVar\",\n    \"earningsAllFixed\",\n    \"earningsAllVarRate\",\n    \"earningsFlexUp\",\n    \"earningsFlexDown\",\n    \"costsAll\",\n    \"costsAllVar\",\n    \"costsAllFixed\",\n    \"costsAllVarRate\",\n    \"costsFlexUp\",\n    \"costsFlexDown\",\n    \"exportsAllEmissions\",\n    \"importsAllEmissions\",\n    \"exportsAllZeroEE\",\n    \"importsAllZeroEE\"\n];\n\n//node.warn(dataIn);\n\n// Loop through all items to build forecast\nlet firstItem = true;\nfor (const property in dataIn) {\n\n    //Create item with normalised units\n    let dataItem = dataIn[property];\n    let itemOut = {};\n    for (const itemProperty in dataOut) {\n        if (firstItem && itemProperty != \"forecast\" && dataItem[itemProperty] != \"N/A\") {\n            dataOut[itemProperty] = normaliseValue(dataItem, itemProperty);\n        }\n\n        if (forecastProperties.includes(itemProperty) && dataItem[itemProperty] != \"N/A\") {\n            itemOut[itemProperty] = normaliseValue(dataItem, itemProperty);\n        }\n    }\n    firstItem = false;\n\n    // Calculate start of interval\n    let endTime = new Date(dataItem.intervalEnd);\n    let startTime = new Date(endTime);\n    startTime.setMinutes(endTime.getMinutes() - dataItem.intervalDuration);\n    itemOut.intervalStart = startTime;\n    itemOut.intervalEnd = endTime;\n\n    // Add item to forecast\n    dataOut.forecast.push(itemOut);\n}\n\n// Set start and end interval\ndataOut.intervalStart = dataOut.forecast[0].intervalStart;\ndataOut.intervalEnd = dataOut.forecast[0].intervalEnd;\n\n// Set flow context variable for end of the duration\nflow.set(\"lastIntervalMillis\", dataOut.intervalEnd.getTime());\nflow.set(\"dataIn\", dataIn);\nflow.set(\"localvolts\", dataOut);\n\n// Normalise values to a consistent unit\nfunction normaliseValue(item, property) {\n    let adjustedVal = item[property];\n\n    if (\n        property == \"earningsAllVarRate\" && item.earningsAllVarRateUnits == \"$/MWh\" ||\n        property == \"costsAllVarRate\" && item.costsAllVarRateUnits == \"$/MWh\" ||\n        property == \"exportsAllEmissions\" && item.exportsAllEmissionsUnits == \"kg-CO2e\" ||\n        property == \"importsAllEmissions\" && item.importsAllEmissionsUnits == \"kg-CO2e\"\n    ) { adjustedVal = item[property] * 1000; }\n    \n    else if (\n        property == \"exportsAll\" && item.exportsAllUnits == \"Wh\" ||\n        property == \"importsAll\" && item.importsAllUnits == \"Wh\" ||\n        property == \"demandMain\" && item.demandMainUnits == \"W\" \n    ) { adjustedVal = item[property] / 1000; }\n\n    else if (\n        property == \"earningsAll\" && item.earningsAllUnits == \"cents\" ||\n        property == \"earningsAllVar\" && item.earningsAllVarUnits == \"cents\" ||\n        property == \"earningsAllFixed\" && item.earningsAllFixedUnits == \"cents\" ||\n        property == \"earningsAllVarRate\" && item.earningsAllVarRateUnits == \"c/kWh\" ||\n        property == \"earningsFlexUp\" && item.earningsFlexUnits == \"c/kWh\" ||\n        property == \"earningsFlexDown\" && item.earningsFlexUnits == \"c/kWh\" ||\n        property == \"costsAll\" && item.costsAllUnits == \"cents\" ||\n        property == \"costsAllVar\" && item.costsAllVarUnits == \"cents\" ||\n        property == \"costsAllFixed\" && item.costsAllFixedUnits == \"cents\" ||\n        property == \"costsAllVarRate\" && item.costsAllVarRateUnits == \"c/kWh\" ||\n        property == \"costsFlexUp\" && item.costsFlexUnits == \"c/kWh\" ||\n        property == \"costsFlexDown\" && item.costsFlexUnits == \"c/kWh\" \n    ) { adjustedVal = item[property] / 100; }\n\n    else if (property == \"quality\") {\n        if (item[property] == \"Act\")        adjustedVal = \"Actual\"\n        else if (item[property] == \"Exp\")   adjustedVal = \"Expected\"\n        else if (item[property] == \"Fcst\")  adjustedVal = \"Forecast\"\n    }\n\n    return adjustedVal;\n}\n\nmsg.localvolts = dataOut;\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 310,
-        "y": 400,
+        "x": 420,
+        "y": 520,
         "wires": [
             [
                 "c5f3e4eea29c685e",
@@ -29,9 +29,9 @@
                 "b4a727634a8ec4e3",
                 "1ebf43599b090f38",
                 "d84e93e438be0ff4",
-                "34693f84c4e40964",
                 "2a029a680d983b43",
-                "7557ffe2ec90c013"
+                "7557ffe2ec90c013",
+                "34693f84c4e40964"
             ]
         ]
     },
@@ -89,15 +89,15 @@
         "type": "inject",
         "z": "3984eacf3f486b92",
         "d": true,
-        "name": "Every 15 seconds",
+        "name": "Every 10 seconds",
         "props": [
             {
                 "p": "payload"
             }
         ],
-        "repeat": "15",
+        "repeat": "10",
         "crontab": "",
-        "once": false,
+        "once": true,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
@@ -144,7 +144,7 @@
         "wires": [
             [
                 "b807dccce650a840",
-                "b6f942f4c3c493e2"
+                "5c8217adbede59b2"
             ]
         ]
     },
@@ -741,7 +741,7 @@
         ],
         "inputOverride": "allow",
         "outputProperties": [],
-        "x": 800,
+        "x": 780,
         "y": 540,
         "wires": [
             [
@@ -761,16 +761,24 @@
                 "t": "neq",
                 "v": "Fcst",
                 "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "Exp",
+                "vt": "str"
             }
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 1,
-        "x": 320,
-        "y": 340,
+        "outputs": 2,
+        "x": 400,
+        "y": 460,
         "wires": [
             [
                 "f3d8e75e1aa09d62"
+            ],
+            [
+                "e81ccc4016f25d09"
             ]
         ]
     },
@@ -839,7 +847,7 @@
         "attributes": [],
         "inputOverride": "allow",
         "outputProperties": [],
-        "x": 990,
+        "x": 980,
         "y": 540,
         "wires": [
             []
@@ -857,7 +865,7 @@
         "overwriteFile": "false",
         "encoding": "none",
         "x": 940,
-        "y": 600,
+        "y": 640,
         "wires": [
             [
                 "619aad086e86a9d3"
@@ -898,7 +906,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1180,
-        "y": 600,
+        "y": 640,
         "wires": []
     },
     {
@@ -929,7 +937,7 @@
         "scope": null,
         "uncaught": false,
         "x": 100,
-        "y": 460,
+        "y": 780,
         "wires": [
             [
                 "c14bd960fd24594e"
@@ -949,9 +957,202 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 290,
-        "y": 460,
+        "x": 270,
+        "y": 780,
         "wires": []
+    },
+    {
+        "id": "7769ea374bab304d",
+        "type": "counter",
+        "z": "3984eacf3f486b92",
+        "name": "Count forecast",
+        "init": "0",
+        "step": "1",
+        "lower": null,
+        "upper": null,
+        "mode": "increment",
+        "outputs": "1",
+        "x": 360,
+        "y": 400,
+        "wires": [
+            [
+                "b6f942f4c3c493e2"
+            ]
+        ]
+    },
+    {
+        "id": "5c8217adbede59b2",
+        "type": "function",
+        "z": "3984eacf3f486b92",
+        "name": "Set forecast increment",
+        "func": "let quality = null;\nquality = msg.payload[0].quality;\n\nif (quality == \"Fcst\") {\n    msg.increment = true;\n    return [msg,null];\n}\nelse if (quality == \"Exp\") {\n    msg.reset = true;\n    return [null,msg];\n}\nelse {\n    msg.increment = true;\n    return [msg,null]\n}",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 340,
+        "wires": [
+            [
+                "7769ea374bab304d"
+            ],
+            [
+                "7769ea374bab304d"
+            ]
+        ]
+    },
+    {
+        "id": "e81ccc4016f25d09",
+        "type": "function",
+        "z": "3984eacf3f486b92",
+        "name": "Forecast counter too high",
+        "func": "if(msg.count > 30) {\n    //node.warn(\"Counter too high!\");\n    msg.exportlimit = true;\n    return msg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 150,
+        "y": 520,
+        "wires": [
+            [
+                "85e8498ea6f77e10"
+            ]
+        ]
+    },
+    {
+        "id": "901095b0976ab1c1",
+        "type": "api-call-service",
+        "z": "3984eacf3f486b92",
+        "name": "Limit Export to 100W",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.set_sg_export_power_limit"
+        ],
+        "data": "{\"value\":100}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 140,
+        "y": 640,
+        "wires": [
+            [
+                "9d19107541e9544f",
+                "253a5086d4453eaf"
+            ]
+        ]
+    },
+    {
+        "id": "a8403d5ae41abc53",
+        "type": "api-call-service",
+        "z": "3984eacf3f486b92",
+        "name": "Enable Power Limit Mode",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.set_sg_export_power_limit_mode"
+        ],
+        "data": "{ \"option\": \"Enabled\" }",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 310,
+        "y": 580,
+        "wires": [
+            [
+                "901095b0976ab1c1"
+            ]
+        ]
+    },
+    {
+        "id": "9d19107541e9544f",
+        "type": "api-call-service",
+        "z": "3984eacf3f486b92",
+        "name": "Notify phone",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": true,
+        "domain": "notify",
+        "service": "mobile_app_sm_g990e",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "data": "{\"message\":\"Export curtailed, management disabled\",\"title\":\"BAD API\"}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 370,
+        "y": 640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "85e8498ea6f77e10",
+        "type": "rbe",
+        "z": "3984eacf3f486b92",
+        "name": "RBE",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "exportlimit",
+        "topi": "payload",
+        "x": 90,
+        "y": 580,
+        "wires": [
+            [
+                "a8403d5ae41abc53"
+            ]
+        ]
+    },
+    {
+        "id": "253a5086d4453eaf",
+        "type": "api-call-service",
+        "z": "3984eacf3f486b92",
+        "name": "Disable energy management",
+        "server": "5165f8c6.cc4798",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "switch",
+        "service": "turn_off",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.energy_control_on_off"
+        ],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 420,
+        "y": 700,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "a5bd6e132be9a821",
