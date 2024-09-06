@@ -3,6 +3,8 @@
 - Changed logic with whether to discharge from the battery or import from the grid in "Preserve battery?" energy control flow
     - Decreased when to pull from grid from 5c to 2c
     - Applies now from 10am, not 1pm, and not during demand period
+- Solcast actuals fix
+    - Filename update
 
 ## 1.1
 - Addition of an optional "aggressive mode" to force more energy out of your battery, to potentially maximise financial return
