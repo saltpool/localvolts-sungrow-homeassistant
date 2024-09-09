@@ -4,6 +4,14 @@
     - Decreased when to pull from grid from 5c to 2c
     - Applies now from 10am, not 1pm, and not during demand period
 - Solcast actuals/forecasts/generation filename format change to YYYY-MM-DD
+- 5 minute usage logging
+    - Buy price
+    - Sell price
+    - Current usage
+    - Battery charge
+    - Generation
+    - kWh export last 5 mins
+    - kWh import last 5 mins
 
 ## 1.1
 - Addition of an optional "aggressive mode" to force more energy out of your battery, to potentially maximise financial return
