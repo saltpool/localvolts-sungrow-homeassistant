@@ -12,6 +12,8 @@
     - Generation
     - kWh export last 5 mins
     - kWh import last 5 mins
+- Update to logic
+    - If buy price is under 3c and battery is full, turn off inverter and draw from grid instead, but only outside of demain period
 
 ## 1.1
 - Addition of an optional "aggressive mode" to force more energy out of your battery, to potentially maximise financial return
