@@ -1,5 +1,5 @@
 # Version history:
-## 1.1.1
+## 1.2
 - Changed logic with whether to discharge from the battery or import from the grid in "Preserve battery?" energy control flow
     - Decreased when to pull from grid from 5c to 2c
     - Applies now from 10am, not 1pm, and not during demand period
@@ -14,6 +14,10 @@
     - kWh import last 5 mins
 - Update to logic
     - If buy price is under 3c and battery is full, turn off inverter and draw from grid instead, but only outside of demain period
+- Added notifications for price alerts
+    - Notification if buy price is under -$0.03 (paid to use power, turn on appliances)
+    - Notification if sell price is over $0.50 (price spike)
+    - Notification if difference between buy and sell is under 3c (possibly an API problem)
 
 ## 1.1
 - Addition of an optional "aggressive mode" to force more energy out of your battery, to potentially maximise financial return
