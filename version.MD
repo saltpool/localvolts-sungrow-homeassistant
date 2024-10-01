@@ -18,6 +18,9 @@
     - Notification if buy price is under -$0.03 (paid to use power, turn on appliances)
     - Notification if sell price is over $0.50 (price spike)
     - Notification if difference between buy and sell is under 3c (possibly an API problem)
+- Changed all 5kW export to 10kW
+- Changed base battery from 19.2kWh to 38.4kWh
+- Changed force charge from 90% down to 80% in preparation for upcoming demand period (due to increase of battery size)
 
 ## 1.1
 - Addition of an optional "aggressive mode" to force more energy out of your battery, to potentially maximise financial return
