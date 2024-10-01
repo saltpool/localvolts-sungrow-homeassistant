@@ -6,14 +6,7 @@ Control your **Sungrow** Hybrid inverter with **LocalVolts** through **Home Assi
 
 > [!NOTE]
 > What's new:
-> - Addition of an "aggressive mode" to force more energy out of your battery, to potentially maximise financial return
-> - Alert if Localvolts API is not behaving correctly (too many "forecasts" and no "Expected"), and puts inverter into "no export" mode
-> - Added a check for demand pricing and will limit taking from grid if the price is really cheap if within demand period
-> - Updated Grafana dashboard to show
->     - Whether solar is currently being curtailed or not
->     - Daily buy and sell totals
->     - Monthly "so far" buy and sell totals
->     - Last 12hrs buy sell kWh on same graph as last 24hrs buy and sell prices
+> - Read "version.MD" for what's new information.
 
 This repository depends on a number of great repositories, some of which have been customised for my own personal use. 
 I have forked these repositories, since I have updated some content, so all instructions are based on my own forks, though you should be able to get the originals working yourself with some minor updates.
@@ -57,16 +50,16 @@ The following is the logic behind the coding in the Node-Red flows. Note that al
 
 | FIT | Battery Level | Time | Rate | Decision |
 |---|---|---|---|---|
-| > $1.00 | > 40% | Any | 5kW | Export, has excellent FIT |
-| > $0.60 | > 50% | Any | 5kW | Export, has great FIT |
-| > $0.50 | > 60% | Any | 5kW | Exort, has good FIT |
-| > $0.40 | > 70% | Any | 5kW | Export, has good FIT |
-| > $0.30 | > 80% | Any | 5kW | Export, has ok FIT |
-| > $0.30 | > 8% | 6-8am | 5kW | Export, has ok FIT |
-| > $0.00 | = 100% | Any | 5kW | Export, +ve FIT |
-| = $0.00 | = 100% | Any | 2.5kW | Export, why not? |
+| > $1.00 | > 20% | Any | 10kW | Export, has excellent FIT |
+| > $0.60 | > 30% | Any | 10kW | Export, has great FIT |
+| > $0.50 | > 40% | Any | 10kW | Exort, has good FIT |
+| > $0.40 | > 50% | Any | 10kW | Export, has good FIT |
+| > $0.30 | > 60% | Any | 10kW | Export, has ok FIT |
+| > $0.30 | > 5% | 6-8am | 10kW | Export, has ok FIT |
+| > $0.00 | = 100% | Any | 10kW | Export, +ve FIT |
+| = $0.00 | = 100% | Any | 5kW | Export at 50%, why not? |
 | < $0.00 | = 100% | Any | 0kW[^1] | Curtailed, it costs to export |
-| < $0.00 | < 100% | Any | 8.5kW[^2] | Import, free power! |
+| < $0.00 | < 100% | Any | 10kW[^2] | Import, free power! |
 
 [^1]: In reality, this should be set to 100W as 0kW may be seen as no setting.
 
@@ -74,13 +67,13 @@ The following is the logic behind the coding in the Node-Red flows. Note that al
 
 | Cost | Battery Level | Time | Rate | Decision |
 |---|---|---|---|---|
-| < $0.25 | < 40% | 4-5am | 10kW | Import, prepare for morning shoulder if export forecast to be > $0.50 FIT [^4] | 
+| < $0.25 | < 20% | 4-5am | 10kW | Import, prepare for morning shoulder if export forecast to be > $0.50 FIT [^4] | 
 | < $0.00 | < 98% | < 4pm, > 9pm[^2] | 10kW | Import, free power, if in cheapest part of next 4hrs forecast | 
 | < -$0.03 | < 100% | < 4pm, > 9pm | 0kW | Import, shut down intervert, paid to import | 
 | < $0.49[^4] | <100%  | 3-4pm | 10kW | Import, prepare for evening spike if export forecast to be > $2 FIT |
-| < $0.25[^4] | < 80% | > 3pm | 10kW | Import, not much solar, need to store for peak | 
-| < $0.04[^4] | < 30% | < 8am | 10kW | Import if early as cheap, but only until solar gens | 
-| < $0.04 | < 75% | 12-4pm or > 4pm | 10kW | Import, low battery, cheap power |
+| < $0.25[^4] | < 70% | > 3pm | 10kW | Import, not much solar, need to store for peak | 
+| < $0.04[^4] | < 20% | < 8am | 10kW | Import if early as cheap, but only until solar gens | 
+| < $0.04 | < 65% | 12-4pm or > 4pm | 10kW | Import, low battery, cheap power |
 | < $0.04 | < 100% | 10am-4pm | 10kW | If little solar, import | 
 | < $0.04 | < 100% | Cheapest period | 10kW | Cheapest period, not enough solar forecast, import | 
 
