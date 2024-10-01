@@ -42,7 +42,7 @@ Some very high level features are:
   - Grafana based dashboard showing current buy and sell prices, current import and export, charge and discharge, battery level, plus more
 
 # Logic behind management
-The following is the logic behind the coding in the Node-Red flows. Note that all of these can be customised to suit your particular situation, battery size, solar PV size, typical daily usage, etc.  For example, if you are able to export more than 5kW (perhaps you are on a plan that allows a 10kW export and you have a suitably sized inverter), then you should definitely update this decision matrix. You should probably change these decisions based on the seasons too.  These are coded in Javascript within the Node-Red flows.
+The following is the logic behind the coding in the Node-Red flows. Note that all of these can be customised to suit your particular situation, battery size, solar PV size, typical daily usage, etc.  For example, if you are able to export more than 10kW (perhaps you are on 3-phase and you have a suitably sized inverter, or can only export 5kW), then you should definitely update this decision matrix. You should probably change these decisions based on the seasons too.  These are coded in Javascript within the Node-Red flows. This based on 10kW export limit with a 38.4kWh battery - but your mileage may vary greatly, depending on details like how much power you use during the day and during the night).
 
 ## "Standard" logic (as opposed to "Aggressive", see below)
 
