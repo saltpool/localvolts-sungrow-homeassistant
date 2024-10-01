@@ -21,6 +21,7 @@
 - Changed all 5kW export to 10kW
 - Changed base battery from 19.2kWh to 38.4kWh
 - Changed force charge from 90% down to 80% in preparation for upcoming demand period (due to increase of battery size)
+- Changed the logic of when to charge and discharge, due to larger battery size
 
 ## 1.1
 - Addition of an optional "aggressive mode" to force more energy out of your battery, to potentially maximise financial return
