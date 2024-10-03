@@ -11,7 +11,7 @@ I have made forks of all the great repositories that I have used to get this wor
 > 
 > - Inverter: Sungrow SH10RS (Single phase 10kW Hybrid)
 > - Solar: 16.7kW PV array
-> - Battery: Sungrow SBR192 (19.2kW storage)
+> - Battery: Sungrow 2x SBR192 (38.4kW storage)
 > - Modbus connection: Sungrow WiFi dongle (yes, WiFi)
 > - Home Assistant: Virtualised on the vmware hypervisor
 
