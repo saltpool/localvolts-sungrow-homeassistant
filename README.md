@@ -1,4 +1,4 @@
-# Localvolts Sungrow Home Assistant Manager
+# Localvolts Sungrow Home Assistant Energy Manager
 Control your **Sungrow** Hybrid inverter with **LocalVolts** through **Home Assistant** using **NodeRed**
 
 > [!IMPORTANT]
