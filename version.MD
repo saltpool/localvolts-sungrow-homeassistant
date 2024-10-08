@@ -1,4 +1,4 @@
-# Version history:
+# Version history: {yet to be committed to code}
 ## 1.2
 - Changed logic with whether to discharge from the battery or import from the grid in "Preserve battery?" energy control flow
     - Decreased when to pull from grid from 5c to 2c
