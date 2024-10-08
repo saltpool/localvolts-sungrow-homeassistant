@@ -23,6 +23,9 @@
 - Changed force charge from 90% down to 80% in preparation for upcoming demand period (due to increase of battery size)
 - Changed the logic of when to charge and discharge, due to larger battery size
 - Added notification to phone if it is detected that any power is being imported during a demand window.
+- Added "Storm" mode
+    - Will not sell power at the lower prices so that it is kept in case of power outages
+    - Toggled through an HA button
 
 ## 1.1
 - Addition of an optional "aggressive mode" to force more energy out of your battery, to potentially maximise financial return
