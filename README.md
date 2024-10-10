@@ -55,9 +55,9 @@ The following is the logic behind the coding in the Node-Red flows. Note that al
 | > $1.00 | > 20% | Any | 10kW | Export, has excellent FIT |
 | > $0.60 | > 25% | Any | 10kW | Export, has great FIT |
 | > $0.50 | > 30% | Any | 10kW | Exort, has good FIT |
-| > $0.40 | > 35% | Any | 10kW | Export, has good FIT |
+| > $0.40 | > 45% | Any | 10kW | Export, has good FIT |
 | > $0.30 | > 50% | Any | 10kW | Export, has ok FIT |
-| > $0.25 | > 60% | Any | 10kW | Export, has tolerable FIT |
+| > $0.25 | > 70% | Any | 10kW | Export, has tolerable FIT |
 | > $0.30 | > 5% | 6-8am | 10kW | Export, has ok FIT |
 | > $0.00 | = 100% | Any | 10kW | Export, +ve FIT |
 | = $0.00 | = 100% | Any | 5kW | Export at 50%, why not? |
