@@ -1,5 +1,6 @@
 # Localvolts Sungrow Home Assistant Energy Manager
 Control your **Sungrow** Hybrid inverter with **LocalVolts** through **Home Assistant** using **NodeRed**
+**UPDATES TO THE CODE OF DEV COMING SOON**
 
 > [!IMPORTANT]
 > Note: You MUST have solar and a battery for this management system, unless you want to perform a lot of modifications to it.
