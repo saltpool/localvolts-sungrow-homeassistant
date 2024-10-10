@@ -25,7 +25,8 @@
 - Added notification to phone if it is detected that any power is being imported during a demand window.
 - Added "Storm" mode
     - Will not sell power at the lower prices so that it is kept in case of power outages
-    - Toggled through an HA button
+    - Can be toggled through an HA button
+    - Detects the weather through BOM and enables by default if a storm is detected
 
 ## 1.1
 - Addition of an optional "aggressive mode" to force more energy out of your battery, to potentially maximise financial return
